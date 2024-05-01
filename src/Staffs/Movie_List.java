@@ -12,7 +12,8 @@ import javax.swing.*;
  */
 public class Movie_List extends javax.swing.JFrame {
 
-    Seat_Management sm = new Seat_Management();
+    //Seat_Management sm = new Seat_Management();
+    //Payment_Method pm= new Payment_Method();
     public Movie_List() {
         initComponents();
         setLocationRelativeTo(null);
@@ -287,8 +288,8 @@ public class Movie_List extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
-        this.setVisible(false);
-        sm.setVisible(true);
+        new Movie_List().setVisible(false);
+        new Seat_Management().setVisible(true);
     }//GEN-LAST:event_jLabel5MouseClicked
 
 
