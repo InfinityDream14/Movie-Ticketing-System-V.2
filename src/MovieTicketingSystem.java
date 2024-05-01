@@ -9,7 +9,7 @@
  * @author cdgan
  */
 import Admin.Admin;
-import LogIn.LogIn;
+import java.awt.Toolkit;
 public class MovieTicketingSystem {
 
     /**
@@ -18,6 +18,8 @@ public class MovieTicketingSystem {
     public static void main(String[] args) {
 //        LogIn.main(args);
         Admin.main(args);
+//        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("src/Resources/AAG Movie Ticketing System Logo.png")));
+//        Image img = new ImageIcon(this.getClass().getResource("src/Resources/AAG Movie Ticketing System Logo.png")).getImage();
     }
     
 }
