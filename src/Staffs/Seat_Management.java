@@ -47,7 +47,7 @@ public class Seat_Management extends javax.swing.JFrame {
         Cart_label = new javax.swing.JLabel();
         right_main_panel = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
-        jPanel7 = new javax.swing.JPanel();
+        panel_for_seats = new javax.swing.JPanel();
         left_seat_panel = new javax.swing.JPanel();
         jRadioButton1 = new javax.swing.JRadioButton();
         jRadioButton2 = new javax.swing.JRadioButton();
@@ -61,8 +61,6 @@ public class Seat_Management extends javax.swing.JFrame {
         jRadioButton10 = new javax.swing.JRadioButton();
         jRadioButton11 = new javax.swing.JRadioButton();
         jRadioButton12 = new javax.swing.JRadioButton();
-        jRadioButton51 = new javax.swing.JRadioButton();
-        jRadioButton52 = new javax.swing.JRadioButton();
         mid_seat_panel = new javax.swing.JPanel();
         jRadioButton13 = new javax.swing.JRadioButton();
         jRadioButton14 = new javax.swing.JRadioButton();
@@ -85,9 +83,6 @@ public class Seat_Management extends javax.swing.JFrame {
         jRadioButton31 = new javax.swing.JRadioButton();
         jRadioButton32 = new javax.swing.JRadioButton();
         jRadioButton33 = new javax.swing.JRadioButton();
-        jRadioButton34 = new javax.swing.JRadioButton();
-        jRadioButton35 = new javax.swing.JRadioButton();
-        jRadioButton36 = new javax.swing.JRadioButton();
         right_seat_panel = new javax.swing.JPanel();
         jRadioButton37 = new javax.swing.JRadioButton();
         jRadioButton38 = new javax.swing.JRadioButton();
@@ -101,8 +96,6 @@ public class Seat_Management extends javax.swing.JFrame {
         jRadioButton46 = new javax.swing.JRadioButton();
         jRadioButton47 = new javax.swing.JRadioButton();
         jRadioButton48 = new javax.swing.JRadioButton();
-        jRadioButton49 = new javax.swing.JRadioButton();
-        jRadioButton50 = new javax.swing.JRadioButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
@@ -191,7 +184,8 @@ public class Seat_Management extends javax.swing.JFrame {
 
         jPanel4.setBackground(new java.awt.Color(204, 204, 204));
 
-        jPanel7.setBackground(new java.awt.Color(204, 204, 204));
+        panel_for_seats.setBackground(new java.awt.Color(204, 204, 204));
+        panel_for_seats.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 204, 102), 2));
 
         left_seat_panel.setBackground(new java.awt.Color(204, 204, 255));
         left_seat_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
@@ -243,14 +237,6 @@ public class Seat_Management extends javax.swing.JFrame {
         jRadioButton12.setText("S01");
         jRadioButton12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
         left_seat_panel.add(jRadioButton12);
-
-        jRadioButton51.setText("S01");
-        jRadioButton51.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
-        left_seat_panel.add(jRadioButton51);
-
-        jRadioButton52.setText("S01");
-        jRadioButton52.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
-        left_seat_panel.add(jRadioButton52);
 
         mid_seat_panel.setBackground(new java.awt.Color(204, 204, 255));
         mid_seat_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
@@ -339,18 +325,6 @@ public class Seat_Management extends javax.swing.JFrame {
         jRadioButton33.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
         mid_seat_panel.add(jRadioButton33);
 
-        jRadioButton34.setText("S01");
-        jRadioButton34.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
-        mid_seat_panel.add(jRadioButton34);
-
-        jRadioButton35.setText("S01");
-        jRadioButton35.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
-        mid_seat_panel.add(jRadioButton35);
-
-        jRadioButton36.setText("S01");
-        jRadioButton36.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
-        mid_seat_panel.add(jRadioButton36);
-
         right_seat_panel.setBackground(new java.awt.Color(204, 204, 255));
         right_seat_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
@@ -402,33 +376,28 @@ public class Seat_Management extends javax.swing.JFrame {
         jRadioButton48.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
         right_seat_panel.add(jRadioButton48);
 
-        jRadioButton49.setText("S01");
-        jRadioButton49.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
-        right_seat_panel.add(jRadioButton49);
-
-        jRadioButton50.setText("S01");
-        jRadioButton50.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
-        right_seat_panel.add(jRadioButton50);
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(left_seat_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+        javax.swing.GroupLayout panel_for_seatsLayout = new javax.swing.GroupLayout(panel_for_seats);
+        panel_for_seats.setLayout(panel_for_seatsLayout);
+        panel_for_seatsLayout.setHorizontalGroup(
+            panel_for_seatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_for_seatsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(left_seat_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(mid_seat_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(right_seat_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(right_seat_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(left_seat_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(mid_seat_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(right_seat_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        panel_for_seatsLayout.setVerticalGroup(
+            panel_for_seatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_for_seatsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_for_seatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(right_seat_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
+                    .addComponent(mid_seat_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(left_seat_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -436,12 +405,12 @@ public class Seat_Management extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(panel_for_seats, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panel_for_seats, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         right_main_panel.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 140, 510, 290));
@@ -544,7 +513,6 @@ public class Seat_Management extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton10;
     private javax.swing.JRadioButton jRadioButton11;
@@ -572,9 +540,6 @@ public class Seat_Management extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton31;
     private javax.swing.JRadioButton jRadioButton32;
     private javax.swing.JRadioButton jRadioButton33;
-    private javax.swing.JRadioButton jRadioButton34;
-    private javax.swing.JRadioButton jRadioButton35;
-    private javax.swing.JRadioButton jRadioButton36;
     private javax.swing.JRadioButton jRadioButton37;
     private javax.swing.JRadioButton jRadioButton38;
     private javax.swing.JRadioButton jRadioButton39;
@@ -588,11 +553,7 @@ public class Seat_Management extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton46;
     private javax.swing.JRadioButton jRadioButton47;
     private javax.swing.JRadioButton jRadioButton48;
-    private javax.swing.JRadioButton jRadioButton49;
     private javax.swing.JRadioButton jRadioButton5;
-    private javax.swing.JRadioButton jRadioButton50;
-    private javax.swing.JRadioButton jRadioButton51;
-    private javax.swing.JRadioButton jRadioButton52;
     private javax.swing.JRadioButton jRadioButton6;
     private javax.swing.JRadioButton jRadioButton7;
     private javax.swing.JRadioButton jRadioButton8;
@@ -600,6 +561,7 @@ public class Seat_Management extends javax.swing.JFrame {
     private javax.swing.JPanel left_seat_panel;
     private javax.swing.JLabel log_out;
     private javax.swing.JPanel mid_seat_panel;
+    private javax.swing.JPanel panel_for_seats;
     private javax.swing.JLabel profile_icon;
     private javax.swing.JPanel right_main_panel;
     private javax.swing.JPanel right_seat_panel;
