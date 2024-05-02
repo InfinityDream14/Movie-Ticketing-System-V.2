@@ -29,7 +29,7 @@ public class Main_Staff {
        }catch(SQLException e){
            e.printStackTrace();
        }
-        //new Movie_List().setVisible(true);
+        new Movie_List().setVisible(true);
         //new Seat_Management().setVisible(true);
         //new Payment_Method().setVisible(true);
     }

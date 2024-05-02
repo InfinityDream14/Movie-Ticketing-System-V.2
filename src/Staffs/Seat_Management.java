@@ -3,25 +3,32 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Staffs;
+import java.awt.event.*;
 import javax.swing.*;
 /**
  *
  * @author Administrator
  */
-public class Seat_Management extends javax.swing.JFrame {
+public class Seat_Management extends javax.swing.JFrame implements MouseListener{
 
     Movie_List mlst = new Movie_List();
     public Seat_Management() {
         initComponents();
         setLocationRelativeTo(null);
-        add_seat_button();
+        add_lseat_button(lcount);
+        add_mseat_button(mcount);
+        add_rseat_button(rcount);
     }
     
-    int scount =12;
-    void add_seat_button(){
+    int lcount =12;
+    int mcount = 21;
+    int rcount = 12;
+    
+    //this methods add JRadioButton for seat_management
+    void add_lseat_button( int sc){
         String cn="";
         ImageIcon seat_icon = new ImageIcon("seat.png");
-        for(int i=1; i<=scount;i++){
+        for(int i=1; i<=sc;i++){
             if(i<=9){
                 cn = "0" + Integer.toString(i);
             }
@@ -30,6 +37,34 @@ public class Seat_Management extends javax.swing.JFrame {
             }
             JRadioButton jr = new JRadioButton(cn,seat_icon);
             left_seat_panel.add(jr);
+        }
+    }
+    void add_mseat_button( int sc){
+        String cn="";
+        ImageIcon seat_icon = new ImageIcon("seat.png");
+        for(int i=1; i<=sc;i++){
+            if(i<=9){
+                cn = "0" + Integer.toString(i);
+            }
+            else{
+                cn = Integer.toString(i);
+            }
+            JRadioButton jr = new JRadioButton(cn,seat_icon);
+            mid_seat_panel.add(jr);
+        }
+    }
+    void add_rseat_button( int sc){
+        String cn="";
+        ImageIcon seat_icon = new ImageIcon("seat.png");
+        for(int i=1; i<=sc;i++){
+            if(i<=9){
+                cn = "0" + Integer.toString(i);
+            }
+            else{
+                cn = Integer.toString(i);
+            }
+            JRadioButton jr = new JRadioButton(cn,seat_icon);
+            right_seat_panel.add(jr);
         }
     }
     
@@ -139,6 +174,7 @@ public class Seat_Management extends javax.swing.JFrame {
 
         getContentPane().add(Left_yellow_Panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
 
+        right_main_panel.setBackground(new java.awt.Color(204, 204, 204));
         right_main_panel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         panel_for_seats.setBackground(new java.awt.Color(204, 204, 204));
@@ -289,4 +325,29 @@ public class Seat_Management extends javax.swing.JFrame {
     private javax.swing.JPanel right_seat_panel;
     private javax.swing.JLabel staff_name;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
