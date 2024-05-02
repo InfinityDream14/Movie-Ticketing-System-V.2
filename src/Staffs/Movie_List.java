@@ -18,6 +18,12 @@ public class Movie_List extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
     }
+    
+    public String mt,gr,duration,av_time1,av_time2;
+    public double mprc;
+    public void get_movie_details(){
+    
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -111,7 +117,7 @@ public class Movie_List extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(112, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addGap(112, 112, 112))
         );
