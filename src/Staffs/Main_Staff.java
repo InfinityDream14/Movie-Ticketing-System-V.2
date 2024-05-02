@@ -10,8 +10,8 @@ public class Main_Staff {
         
        try{
            String hostname = "localhost";
-            String sqlInstanceName = "USER\\MTS"; //computer name 
-            String sqlDatabase = "MTS";  //sql server database name
+            String sqlInstanceName = "MTS"; //computer name 
+            String sqlDatabase = "movieticketsystem";  //sql server database name
             String sqlUser = "sa";
             String sqlPassword = "Java"; //passwrod sa account
 
@@ -24,6 +24,8 @@ public class Main_Staff {
 
             Connection conn = DriverManager.getConnection(connectURL, sqlUser, sqlPassword);
             System.out.println("Connect to database successful!!");
+            
+            
        }catch(SQLException e){
            e.printStackTrace();
        }
