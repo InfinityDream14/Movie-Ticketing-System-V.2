@@ -164,6 +164,12 @@ public class Movie_List extends javax.swing.JFrame {
 
         jPanel4.setBackground(new java.awt.Color(246, 246, 246));
 
+        jPanel5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel5MouseClicked(evt);
+            }
+        });
+
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
         jLabel8.setText("Movie Title");
 
@@ -608,7 +614,6 @@ public class Movie_List extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(108, 108, 108)
                         .addComponent(jLabel5))
@@ -649,6 +654,11 @@ public class Movie_List extends javax.swing.JFrame {
         new Movie_List().setVisible(false);
         new Seat_Management().setVisible(true);
     }//GEN-LAST:event_jLabel5MouseClicked
+
+    private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
+        new Movie_List().setVisible(false);
+        new Seat_Management().setVisible(true);
+    }//GEN-LAST:event_jPanel5MouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
