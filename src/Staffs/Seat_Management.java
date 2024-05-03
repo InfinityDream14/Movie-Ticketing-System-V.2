@@ -28,6 +28,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     int mcount = 21;
     int rcount;
     String mvt = "The Avengers";
+    
     void retreive_seat_count() throws SQLException{
         Main_Staff ms = new Main_Staff();
         
