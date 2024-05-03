@@ -21,7 +21,7 @@ public class Movie_List extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         create_movie_list_panel();
     }
-    String title_to_sm;
+    static String title_to_sm;
     public void create_movie_list_panel() throws SQLException{
         Main_Staff ms = new Main_Staff();
         
@@ -53,8 +53,8 @@ public class Movie_List extends javax.swing.JFrame {
                         try {
                             JLabel jt = (JLabel)movie_panel1.getComponent(1);
                             title_to_sm = jt.getText();
-                            System.out.println(title_to_sm);
                             Seat_Management sm = new Seat_Management();
+                            new Movie_List().setVisible(false);
                             sm.setVisible(true);
                         } catch (SQLException ex) {
                             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);

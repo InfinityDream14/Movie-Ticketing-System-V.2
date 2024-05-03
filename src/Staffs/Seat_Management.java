@@ -14,7 +14,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
 
     //Movie_List mlst = new Movie_List();
 
-    //Movie_List mlst = new Movie_List();
+    Movie_List mlst = new Movie_List();
     public Seat_Management() throws SQLException {
         initComponents();
         setLocationRelativeTo(null);
@@ -29,7 +29,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     int lcount;
     int mcount = 21;
     int rcount;
-    String mvt = "The Avengers";
+    String mvt = mlst.title_to_sm;
     
     //this method will get the exact seat count of a cinema where a movie will be played
     void retreive_seat_count() throws SQLException{
