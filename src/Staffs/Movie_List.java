@@ -1,9 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package Staffs;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -667,12 +667,20 @@ public class Movie_List extends javax.swing.JFrame {
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         new Movie_List().setVisible(false);
-        new Seat_Management().setVisible(true);
+        try {
+            new Seat_Management().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
         new Movie_List().setVisible(false);
-        new Seat_Management().setVisible(true);
+        try {
+            new Seat_Management().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jPanel5MouseClicked
 
 
