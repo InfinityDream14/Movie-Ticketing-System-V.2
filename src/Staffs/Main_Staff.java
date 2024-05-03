@@ -2,14 +2,16 @@
 package Staffs;
 
 import java.sql.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Main_Staff {
-    
+    static Connection mc;
     public static void main(String[] args) throws ClassNotFoundException {
         
        try{
-           String hostname = "localhost";
+            String hostname = "localhost";
             String sqlInstanceName = "MTS"; //computer name 
             String sqlDatabase = "movieticketsystem";  //sql server database name
             String sqlUser = "sa";
@@ -24,14 +26,19 @@ public class Main_Staff {
 
             Connection conn = DriverManager.getConnection(connectURL, sqlUser, sqlPassword);
             System.out.println("Connect to database successful!!");
-            
+            mc=conn;
             
        }catch(SQLException e){
            e.printStackTrace();
        }
-        new Movie_List().setVisible(true);
-        //new Seat_Management().setVisible(true);
-        //new Payment_Method().setVisible(true);
+        try {
+            new Movie_List().setVisible(true);
+            //new Seat_Management().setVisible(true);
+            //new Payment_Method().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Main_Staff.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
     
 }

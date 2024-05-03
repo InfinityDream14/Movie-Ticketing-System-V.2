@@ -11,7 +11,7 @@ import javax.swing.*;
  */
 public class Seat_Management extends javax.swing.JFrame implements MouseListener{
 
-    Movie_List mlst = new Movie_List();
+    //Movie_List mlst = new Movie_List();
     public Seat_Management() {
         initComponents();
         setLocationRelativeTo(null);
@@ -293,7 +293,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.setVisible(false);
-        mlst.setVisible(true);
+        //mlst.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
