@@ -29,6 +29,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     int rcount;
     String mvt = "The Avengers";
     
+    //this method will get the exact seat count of a cinema where a movie will be played
     void retreive_seat_count() throws SQLException{
         Main_Staff ms = new Main_Staff();
         
