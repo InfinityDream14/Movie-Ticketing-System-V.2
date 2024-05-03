@@ -13,8 +13,8 @@ import java.sql.*;
 public class Seat_Management extends javax.swing.JFrame implements MouseListener{
 
     //Movie_List mlst = new Movie_List();
-    public Seat_Management() {
-    Movie_List mlst = new Movie_List();
+
+    //Movie_List mlst = new Movie_List();
     public Seat_Management() throws SQLException {
         initComponents();
         setLocationRelativeTo(null);
