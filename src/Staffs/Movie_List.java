@@ -2,8 +2,7 @@
 package Staffs;
 
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,7 +21,7 @@ public class Movie_List extends javax.swing.JFrame implements MouseListener {
         setLocationRelativeTo(null);
         create_movie_list_panel();
     }
-    
+    String title_to_sm;
     public void create_movie_list_panel() throws SQLException{
         Main_Staff ms = new Main_Staff();
         
@@ -47,6 +46,21 @@ public class Movie_List extends javax.swing.JFrame implements MouseListener {
                 movie_panel1.add(gr);
                 
                 movie_panel.add(movie_panel1);
+                
+                movie_panel1.addMouseListener(new MouseAdapter(){
+                    @Override
+                    public void mouseClicked(MouseEvent e){
+                        try {
+                            JLabel jt = (JLabel)movie_panel1.getComponent(1);
+                            title_to_sm = jt.getText();
+                            System.out.println(title_to_sm);
+                            Seat_Management sm = new Seat_Management();
+                            sm.setVisible(true);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                });
             }
             
             main_panel.add(movie_panel);
