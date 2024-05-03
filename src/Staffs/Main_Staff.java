@@ -8,7 +8,8 @@ import java.util.logging.Logger;
 
 public class Main_Staff {
     static Connection mc;
-    public static void main(String[] args) throws ClassNotFoundException {
+  
+    public static void main(String[] args) throws ClassNotFoundException, SQLException {
         
        try{
             String hostname = "localhost";
@@ -27,17 +28,14 @@ public class Main_Staff {
             Connection conn = DriverManager.getConnection(connectURL, sqlUser, sqlPassword);
             System.out.println("Connect to database successful!!");
             mc=conn;
-            
+
        }catch(SQLException e){
            e.printStackTrace();
        }
-        try {
-            new Movie_List().setVisible(true);
-            //new Seat_Management().setVisible(true);
+       
+            //new Movie_List().setVisible(true);
+            new Seat_Management().setVisible(true);
             //new Payment_Method().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Main_Staff.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
     }
     

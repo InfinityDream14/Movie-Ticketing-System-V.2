@@ -5,6 +5,7 @@
 package Staffs;
 import java.awt.event.*;
 import javax.swing.*;
+import java.sql.*;
 /**
  *
  * @author Administrator
@@ -13,16 +14,38 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
 
     //Movie_List mlst = new Movie_List();
     public Seat_Management() {
+    Movie_List mlst = new Movie_List();
+    public Seat_Management() throws SQLException {
         initComponents();
         setLocationRelativeTo(null);
+        retreive_seat_count();
         add_lseat_button(lcount);
         add_mseat_button(mcount);
         add_rseat_button(rcount);
+        
     }
     
-    int lcount =12;
+    int scount;
+    int lcount;
     int mcount = 21;
-    int rcount = 12;
+    int rcount;
+    String mvt = "The Avengers";
+    
+    void retreive_seat_count() throws SQLException{
+        Main_Staff ms = new Main_Staff();
+        
+        Statement stmt = ms.mc.createStatement();
+            
+        String qry = "select * from movieshowtime_cinemadesig";
+        ResultSet rs = stmt.executeQuery(qry);
+        while(rs.next()){
+            if(rs.getString(1).trim().equals(mvt)){
+                scount = Integer.parseInt(rs.getString(7));
+            }
+        }
+        lcount =(scount-21)/2;
+        rcount = lcount;
+    }
     
     //this methods add JRadioButton for seat_management
     void add_lseat_button( int sc){
@@ -30,10 +53,10 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         ImageIcon seat_icon = new ImageIcon("seat.png");
         for(int i=1; i<=sc;i++){
             if(i<=9){
-                cn = "0" + Integer.toString(i);
+                cn = "L0" + Integer.toString(i);
             }
             else{
-                cn = Integer.toString(i);
+                cn = "L"+Integer.toString(i);
             }
             JRadioButton jr = new JRadioButton(cn,seat_icon);
             left_seat_panel.add(jr);
@@ -44,10 +67,10 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         ImageIcon seat_icon = new ImageIcon("seat.png");
         for(int i=1; i<=sc;i++){
             if(i<=9){
-                cn = "0" + Integer.toString(i);
+                cn = "M0" + Integer.toString(i);
             }
             else{
-                cn = Integer.toString(i);
+                cn = "M"+Integer.toString(i);
             }
             JRadioButton jr = new JRadioButton(cn,seat_icon);
             mid_seat_panel.add(jr);
@@ -58,10 +81,10 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         ImageIcon seat_icon = new ImageIcon("seat.png");
         for(int i=1; i<=sc;i++){
             if(i<=9){
-                cn = "0" + Integer.toString(i);
+                cn = "R0" + Integer.toString(i);
             }
             else{
-                cn = Integer.toString(i);
+                cn = "R" + Integer.toString(i);
             }
             JRadioButton jr = new JRadioButton(cn,seat_icon);
             right_seat_panel.add(jr);
@@ -135,7 +158,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(cart_panelLayout.createSequentialGroup()
                 .addComponent(Cart_label)
-                .addGap(0, 356, Short.MAX_VALUE))
+                .addContainerGap(356, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout Left_yellow_PanelLayout = new javax.swing.GroupLayout(Left_yellow_Panel);
@@ -184,7 +207,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         left_seat_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
 
         mid_seat_panel.setBackground(new java.awt.Color(204, 204, 204));
-        mid_seat_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 10));
+        mid_seat_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 8));
 
         right_seat_panel.setBackground(new java.awt.Color(204, 204, 204));
         right_seat_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 5, 15));
@@ -204,19 +227,19 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         );
         panel_for_seatsLayout.setVerticalGroup(
             panel_for_seatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_for_seatsLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panel_for_seatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(right_seat_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_for_seatsLayout.createSequentialGroup()
+                .addContainerGap(40, Short.MAX_VALUE)
+                .addGroup(panel_for_seatsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(left_seat_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 260, Short.MAX_VALUE)
                     .addComponent(mid_seat_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(left_seat_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(right_seat_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
-        right_main_panel.add(panel_for_seats, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, 530, -1));
+        right_main_panel.add(panel_for_seats, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 122, 530, 310));
 
         jPanel5.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 10));
+        jPanel5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 5));
 
         jLabel11.setText("Available Time");
         jPanel5.add(jLabel11);
@@ -228,29 +251,29 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         jLabel14.setText("time 2");
         jPanel5.add(jLabel14);
 
-        right_main_panel.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, 130, 100));
+        right_main_panel.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 40, 130, 80));
 
         jPanel6.setBackground(new java.awt.Color(204, 255, 204));
         jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel6.setText("DIto yung image");
-        jPanel6.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 67));
+        jPanel6.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, -1, 67));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel7.setText("Title: dito ang title");
-        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, -1, -1));
+        jPanel6.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, -1, -1));
 
         jLabel8.setText("Genre: Comedy, Sex");
-        jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 40, -1, -1));
+        jPanel6.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, -1, -1));
 
         jLabel9.setText("Duration: 1hr 45 mins");
-        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 60, -1, -1));
+        jPanel6.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 50, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel10.setText("PRICE");
-        jPanel6.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 30, -1, -1));
+        jPanel6.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, -1, -1));
 
-        right_main_panel.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 400, 100));
+        right_main_panel.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 400, 80));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setText("SEATS");
