@@ -12,6 +12,8 @@ import java.sql.*;
  */
 public class Seat_Management extends javax.swing.JFrame implements MouseListener{
 
+    //Movie_List mlst = new Movie_List();
+    public Seat_Management() {
     Movie_List mlst = new Movie_List();
     public Seat_Management() throws SQLException {
         initComponents();
@@ -33,7 +35,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     void retreive_seat_count() throws SQLException{
         Main_Staff ms = new Main_Staff();
         
-        Statement stmt = ms.ucon.createStatement();
+        Statement stmt = ms.mc.createStatement();
             
         String qry = "select * from movieshowtime_cinemadesig";
         ResultSet rs = stmt.executeQuery(qry);
@@ -315,7 +317,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         this.setVisible(false);
-        mlst.setVisible(true);
+        //mlst.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
