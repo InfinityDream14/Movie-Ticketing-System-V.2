@@ -2,6 +2,8 @@
 package Staffs;
 
 import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,7 +13,7 @@ import java.sql.*;
  *
  * @author Administrator
  */
-public class Movie_List extends javax.swing.JFrame {
+public class Movie_List extends javax.swing.JFrame implements MouseListener {
 
     //Seat_Management sm = new Seat_Management();
     //Payment_Method pm= new Payment_Method();
@@ -38,6 +40,7 @@ public class Movie_List extends javax.swing.JFrame {
                 JLabel gr = new JLabel("Genre: " + mgenre);
                 JPanel movie_panel1 = new JPanel();
                 movie_panel1.setPreferredSize(new Dimension(160,225));
+                movie_panel1.setLayout(new FlowLayout(FlowLayout.CENTER,20,2));
                 
                 movie_panel1.add(mve1);
                 movie_panel1.add(mt);
@@ -222,7 +225,11 @@ public class Movie_List extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
-        new Seat_Management().setVisible(true);
+        try {
+            new Seat_Management().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jLabel5MouseClicked
 
     private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
@@ -231,7 +238,11 @@ public class Movie_List extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
-        new Seat_Management().setVisible(true);
+        try {
+            new Seat_Management().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jPanel5MouseClicked
 
 
@@ -247,4 +258,29 @@ public class Movie_List extends javax.swing.JFrame {
     private javax.swing.JPanel main_panel;
     private javax.swing.JPanel movie_panel;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
