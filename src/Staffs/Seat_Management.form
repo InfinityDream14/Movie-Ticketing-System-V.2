@@ -254,6 +254,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
             <Property name="horizontalGap" type="int" value="50"/>
+            <Property name="verticalGap" type="int" value="3"/>
           </Layout>
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel11">
@@ -264,17 +265,14 @@
                 <Property name="text" type="java.lang.String" value="Available Time"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel13">
+            <Component class="javax.swing.JButton" name="av_time1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="time 2"/>
+                <Property name="text" type="java.lang.String" value="null"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel14">
+            <Component class="javax.swing.JButton" name="av_time2">
               <Properties>
-                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="33" green="ff" red="66" type="rgb"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="time 2"/>
+                <Property name="text" type="java.lang.String" value="null"/>
               </Properties>
             </Component>
           </SubComponents>

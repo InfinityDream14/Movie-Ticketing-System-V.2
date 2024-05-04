@@ -27,10 +27,10 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         right_panel_bg(); // putting image background to right panel
         left_panel_bg(); // putting image background to left panel
         
-        retreive_seat_count();
-        add_lseat_button(lcount);
-        add_mseat_button(mcount);
-        add_rseat_button(rcount);
+        //retreive_seat_count();
+        //add_lseat_button(lcount);
+        //add_mseat_button(mcount);
+        //add_rseat_button(rcount);
         add_seat_icon();
         
         
@@ -66,24 +66,31 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         
         Statement stmt = ms.mc.createStatement();
             
-        String qry = "select msc.title, msc.starttime\n" +
-        "from (select m.Title, m.MovieID, st.ShowtimeMovieID,st.startTime, st.ShowtimeCinemaID, \n" +
-        "		c.CinemaID, c.NumofSteats\n" +
-        "from cinema c inner join(movie m inner join showtime st\n" +
-        "			  on m.MovieID = st.ShowtimeMovieID)\n" +
-        "	 on c.CinemaID = st.ShowtimeCinemaID) as msc\n" +
-        "order by msc.title asc";
+        String qry = "select m.Title, m.MovieID, st.ShowtimeMovieID ,st.startTime, st.ShowtimeCinemaID,\n" +
+                    "        c.CinemaID, c.NumofSteats, m.price, st.showtimeID\n" +
+                    "from cinema c inner join(movie m inner join showtime st\n" +
+                    "              on m.MovieID = st.ShowtimeMovieID)\n" +
+                    "     on c.CinemaID = st.ShowtimeCinemaID";
         
-        String qry1 = "select * from movie";
         
         sm_mtitle.setText(mvt);
         sm_mgenre.setText(mvg);
+        String t1,t2;
         ResultSet rs = stmt.executeQuery(qry);
         while(rs.next()){
             if(rs.getString(1).trim().equals(mvt)){
-                System.out.println(rs.getString(1));
+                if(av_time1.getText().equals("null")){
+                    av_time1.setText(rs.getString(4));
+                }
+                if(av_time2.getText().equals("null")&& 
+                  (av_time1.getText() == null ? rs.getString(4) != null : !
+                   av_time1.getText().equals(rs.getString(4)))){
+                    av_time2.setText(rs.getString(4));
+                }
             }
         }
+
+        String qry1 = "select * from movie";
         
         ResultSet rs1 = stmt.executeQuery(qry1);
         while(rs1.next()){
@@ -104,7 +111,43 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         }
         sm_mduration.setText(mvd);
         sm_mprice.setText(mvp);
+        String st1="";
+        ResultSet rs2 = stmt.executeQuery(qry);
+        while(rs2.next()){
+            if(rs2.getString(1).equals(sm_mtitle.getText()) 
+                    && rs2.getString(4).equals(av_time1.getText()) ){
+                st1 = rs2.getString(9);
+                System.out.println(st1);
+            }
+        }
         
+        String qry3 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number\n" +
+                        "from showtime st inner join seat_list sl\n" +
+                        "	on st.showtimeid = sl.showtimeid";
+        rs = stmt.executeQuery(qry3);
+        while(rs.next()){
+            if(rs.getString(1).equals(st1)){
+                String cn="";
+                if(rs.getString(3).equals("L")){
+                    ImageIcon seat_icon = new ImageIcon("seat.png");
+                    cn = cn+"L"+rs.getString(4);
+                    JRadioButton jr = new JRadioButton(cn,seat_icon);
+                    left_seat_panel.add(jr);
+                }
+                else if(rs.getString(3).equals("M")){
+                    ImageIcon seat_icon = new ImageIcon("seat.png");
+                    cn = cn+"M"+rs.getString(4);
+                    JRadioButton jr = new JRadioButton(cn,seat_icon);
+                    mid_seat_panel.add(jr);
+                }
+                else if(rs.getString(3).equals("R")){
+                    ImageIcon seat_icon = new ImageIcon("seat.png");
+                    cn = cn+"R"+rs.getString(4);
+                    JRadioButton jr = new JRadioButton(cn,seat_icon);
+                    right_seat_panel.add(jr);
+                }
+            }
+        }
     }
     
     //this methods add JRadioButton for seat_management
@@ -194,8 +237,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         jLabel3 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
+        av_time1 = new javax.swing.JButton();
+        av_time2 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         sm_image_slot = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -308,18 +351,17 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         right_main_panel.add(panel_for_seats, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 122, 530, 310));
 
         jPanel5.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 5));
+        jPanel5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 3));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel11.setText("Available Time");
         jPanel5.add(jLabel11);
 
-        jLabel13.setText("time 2");
-        jPanel5.add(jLabel13);
+        av_time1.setText("null");
+        jPanel5.add(av_time1);
 
-        jLabel14.setBackground(new java.awt.Color(102, 255, 51));
-        jLabel14.setText("time 2");
-        jPanel5.add(jLabel14);
+        av_time2.setText("null");
+        jPanel5.add(av_time2);
 
         right_main_panel.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 40, 110, 80));
 
@@ -415,13 +457,13 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Cart_label;
     private javax.swing.JPanel Left_yellow_Panel;
+    private javax.swing.JButton av_time1;
+    private javax.swing.JButton av_time2;
     private javax.swing.JPanel cart_panel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;

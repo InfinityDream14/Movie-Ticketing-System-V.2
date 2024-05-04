@@ -133,6 +133,11 @@ public class Movie_List extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         setSize(new java.awt.Dimension(0, 0));
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                exit_staff(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 102));
@@ -255,6 +260,12 @@ public class Movie_List extends javax.swing.JFrame {
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         System.exit(0);
     }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void exit_staff(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_exit_staff
+        if(evt.getKeyCode() == KeyEvent.VK_END){
+             System.exit(0);
+         }
+    }//GEN-LAST:event_exit_staff
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
