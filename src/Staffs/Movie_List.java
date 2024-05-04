@@ -3,6 +3,7 @@ package Staffs;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.RoundRectangle2D;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,9 +20,19 @@ public class Movie_List extends javax.swing.JFrame {
     public Movie_List() throws SQLException {
         initComponents();
         setLocationRelativeTo(null);
+        
+        this.setShape(new RoundRectangle2D.Double(0, 0, (850), 
+        (480), 25, 25));
+        
+        left_panel_bg();
+        right_panel_bg();
+        
+        
         create_movie_list_panel();
+        
     }
     static String title_to_sm;
+    static String genre_to_sm;
     public void create_movie_list_panel() throws SQLException{
         Main_Staff ms = new Main_Staff();
         
@@ -53,6 +64,8 @@ public class Movie_List extends javax.swing.JFrame {
                         try {
                             JLabel jt = (JLabel)movie_panel1.getComponent(1);
                             title_to_sm = jt.getText();
+                            JLabel jg = (JLabel)movie_panel1.getComponent(2);
+                            genre_to_sm = jg.getText();
                             Seat_Management sm = new Seat_Management();
                             new Movie_List().setVisible(false);
                             sm.setVisible(true);
@@ -77,6 +90,22 @@ public class Movie_List extends javax.swing.JFrame {
             main_panel.add(scrollPane);
         }
     
+    void left_panel_bg(){
+        ImageIcon rpbg = new ImageIcon("lpbg.png");
+        Image image = rpbg.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(570, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        rpbg = new ImageIcon(newimg);
+        lp_bg.setIcon(rpbg);
+    }
+    void right_panel_bg(){
+
+        ImageIcon rpbg = new ImageIcon("rpbg.png");
+        Image image = rpbg.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(570, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        rpbg = new ImageIcon(newimg);
+        rp_bg.setIcon(rpbg);
+                
+    }
     
     
     /**
@@ -94,24 +123,36 @@ public class Movie_List extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        lp_bg = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         main_panel = new javax.swing.JPanel();
         movie_panel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
+        rp_bg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         setSize(new java.awt.Dimension(0, 0));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 102));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 15, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel2.setText("STAFF NAME");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 24, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
         jLabel3.setText("LOG OUT");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 44, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("CART");
@@ -130,44 +171,15 @@ public class Movie_List extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4)
-                .addContainerGap(350, Short.MAX_VALUE))
+                .addContainerGap(354, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(73, 73, 73)
-                .addComponent(jLabel1)
-                .addGap(0, 0, 0)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addContainerGap(70, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(10, 10, 10)
-                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(10, 10, 10))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, 0)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 11, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(15, 15, 15)
-                        .addComponent(jLabel1)))
-                .addGap(16, 16, 16)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
-        );
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, -1, 380));
+        jPanel1.add(lp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
+
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         main_panel.setBackground(new java.awt.Color(246, 246, 246));
         main_panel.setPreferredSize(new java.awt.Dimension(530, 365));
@@ -193,31 +205,12 @@ public class Movie_List extends javax.swing.JFrame {
                 .addContainerGap(15, Short.MAX_VALUE))
         );
 
+        jPanel2.add(main_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
+
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel5.setText("AVAILABLE MOVIES");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(main_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(173, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addGap(172, 172, 172))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(20, Short.MAX_VALUE)
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(main_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45))
-        );
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(173, 20, -1, -1));
+        jPanel2.add(rp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 570, 480));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 570, 480));
 
@@ -259,6 +252,10 @@ public class Movie_List extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jPanel5MouseClicked
 
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_jLabel3MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
@@ -269,8 +266,10 @@ public class Movie_List extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lp_bg;
     private javax.swing.JPanel main_panel;
     private javax.swing.JPanel movie_panel;
+    private javax.swing.JLabel rp_bg;
     // End of variables declaration//GEN-END:variables
 
 }
