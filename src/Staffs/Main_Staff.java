@@ -14,7 +14,7 @@ public class Main_Staff {
        try{
             String hostname = "localhost";
             String sqlInstanceName = "MTS"; //computer name 
-            String sqlDatabase = "movieticketsystem";  //sql server database name
+            String sqlDatabase = "movieticketingsystem";  //sql server database name
             String sqlUser = "sa";
             String sqlPassword = "Java"; //passwrod sa account
 
