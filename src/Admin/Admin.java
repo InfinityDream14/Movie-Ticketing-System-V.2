@@ -27,7 +27,6 @@ public final class Admin extends javax.swing.JFrame {
     /**
      * Creates new form AdminII
      */
-    
     String adminpass;
     String EmpId, FName, LName, PNum, pass, UserPass = " "; // for creating new Staff
     String Email = "null"; // for creating new Staff
@@ -40,18 +39,19 @@ public final class Admin extends javax.swing.JFrame {
     Statement stmt;
     Connection conn;
     DefaultTableModel tmodel = new DefaultTableModel();
-    
+
     public Admin() throws SQLException, ClassNotFoundException {
         connectToDatabase();
         initComponents();
 
         sales.setVisible(true);
-        staffs.setVisible(false);
-        addStaffs.setVisible(false);
+        employee.setVisible(false);
+        addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
 
         createTableSales();
+        getIDs();
     }
 
     public void connectToDatabase() throws ClassNotFoundException {
@@ -70,14 +70,17 @@ public final class Admin extends javax.swing.JFrame {
                     + ";encrypt=true;trustServerCertificate=true";
 
             conn = DriverManager.getConnection(connectURL, sqlUser, sqlPassword);
-            
+
             System.out.println("Connect to database successful!!");
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
     }
 
+    // for creating and reseting sales table
     public void createTableSales() {
+        tmodel = new DefaultTableModel();
+
         salesTable.setModel(tmodel);
         tmodel.addColumn("Ticket ID");
         tmodel.addColumn("Date Purchased");
@@ -102,6 +105,7 @@ public final class Admin extends javax.swing.JFrame {
         getSalesData();
     }
 
+    // for getting the sales datas from database to the jtable
     public void getSalesData() {
         String sql = """
                      select t.TicketID, p.PaymentDate
@@ -115,6 +119,57 @@ public final class Admin extends javax.swing.JFrame {
                 Vector vec = new Vector();
                 vec.add(rs.getString("TicketID"));
                 vec.add(rs.getString("PaymentDate"));
+                tmodel.addRow(vec);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    // for creating and reseting employee table
+    public void createTableEmployee() {
+        tmodel = new DefaultTableModel();
+
+        empTable.setModel(tmodel);
+        tmodel.addColumn("Employee ID");
+        tmodel.addColumn("Name");
+        ListSelectionModel cellSelectionModel = empTable.getSelectionModel();
+        cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                String selectedData = null;
+
+                int[] selectedRow = empTable.getSelectedRows();
+                int[] selectedColumn = empTable.getSelectedColumns();
+
+                for (int i = 0; i < selectedRow.length; i++) {
+                    for (int j = 0; j < selectedColumn.length; j++) {
+                        selectedData = (String) empTable.getValueAt(selectedRow[i], selectedColumn[j]);
+                    }
+                }
+                System.out.println("Selected: " + selectedData);
+            }
+        });
+        getEmployeedata();
+    }
+
+    // for getting the employee datas from database to the jtable
+    public void getEmployeedata() {
+        String sql = """
+                     select EmployeeID, Fname + ' ' + Lname as 'FullName'
+                     from staff
+                     order by len(EmployeeID), EmployeeID""";
+
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs != null && rs.next()) {
+                Vector vec = new Vector();
+                vec.add(rs.getString("EmployeeID"));
+                vec.add(rs.getString("FullName"));
                 tmodel.addRow(vec);
             }
 
@@ -140,14 +195,21 @@ public final class Admin extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        staffs = new javax.swing.JPanel();
+        logs = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        logsTable = new javax.swing.JTable();
+        jLabel10 = new javax.swing.JLabel();
+        jTextField2 = new javax.swing.JTextField();
+        jButton2 = new javax.swing.JButton();
+        employee = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTable3 = new javax.swing.JTable();
+        empTable = new javax.swing.JTable();
         jLabel14 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
-        addStaffs = new javax.swing.JPanel();
+        addEmplyee = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         AddStaff_StaffDetailsLabel = new javax.swing.JLabel();
         AddStaff_EmployeeIDLabel = new javax.swing.JLabel();
@@ -187,10 +249,11 @@ public final class Admin extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         addMoviesB = new javax.swing.JButton();
-        salesB = new javax.swing.JButton();
+        logsB = new javax.swing.JButton();
         staffsB = new javax.swing.JButton();
         addStaffsB = new javax.swing.JButton();
         moviesB = new javax.swing.JButton();
+        salesB1 = new javax.swing.JButton();
         movies = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -208,7 +271,7 @@ public final class Admin extends javax.swing.JFrame {
         sales.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel3.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
-        jLabel3.setText("Sales");
+        jLabel3.setText("Logs");
 
         salesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -275,32 +338,94 @@ public final class Admin extends javax.swing.JFrame {
         jPanel3.add(sales);
         sales.setBounds(162, 0, 939, 652);
 
-        staffs.setBackground(new java.awt.Color(255, 255, 255));
-        staffs.setPreferredSize(new java.awt.Dimension(939, 652));
+        logs.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel5.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
-        jLabel5.setText("Staffs");
+        jLabel4.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
+        jLabel4.setText("Sales");
 
-        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+        logsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Receipt Number", "Date Purchased"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Object.class
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-        });
-        jScrollPane4.setViewportView(jTable3);
+        ));
+        jScrollPane2.setViewportView(logsTable);
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel10.setText("Receipt No.");
+
+        jTextField2.setText("jTextField1");
+
+        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jButton2.setText("Search");
+        jButton2.setFocusPainted(false);
+        jButton2.setMargin(new java.awt.Insets(2, 30, 3, 30));
+        jButton2.setOpaque(true);
+
+        javax.swing.GroupLayout logsLayout = new javax.swing.GroupLayout(logs);
+        logs.setLayout(logsLayout);
+        logsLayout.setHorizontalGroup(
+            logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logsLayout.createSequentialGroup()
+                .addGap(33, 33, 33)
+                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logsLayout.createSequentialGroup()
+                .addGap(277, 277, 277)
+                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logsLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logsLayout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(138, 138, 138)))
+                .addGap(270, 270, 270))
+        );
+        logsLayout.setVerticalGroup(
+            logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(logsLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel4)
+                .addGap(47, 47, 47)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(43, 43, 43)
+                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2)
+                .addContainerGap(76, Short.MAX_VALUE))
+        );
+
+        jPanel3.add(logs);
+        logs.setBounds(162, 0, 939, 652);
+
+        employee.setBackground(new java.awt.Color(255, 255, 255));
+        employee.setPreferredSize(new java.awt.Dimension(939, 652));
+
+        jLabel5.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
+        jLabel5.setText("Employees");
+
+        empTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane4.setViewportView(empTable);
 
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel14.setText("Receipt No.");
@@ -313,37 +438,37 @@ public final class Admin extends javax.swing.JFrame {
         jButton4.setMargin(new java.awt.Insets(2, 30, 3, 30));
         jButton4.setOpaque(true);
 
-        javax.swing.GroupLayout staffsLayout = new javax.swing.GroupLayout(staffs);
-        staffs.setLayout(staffsLayout);
-        staffsLayout.setHorizontalGroup(
-            staffsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(staffsLayout.createSequentialGroup()
+        javax.swing.GroupLayout employeeLayout = new javax.swing.GroupLayout(employee);
+        employee.setLayout(employeeLayout);
+        employeeLayout.setHorizontalGroup(
+            employeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(employeeLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addGroup(staffsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(employeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, staffsLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, employeeLayout.createSequentialGroup()
                 .addGap(277, 277, 277)
-                .addGroup(staffsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, staffsLayout.createSequentialGroup()
+                .addGroup(employeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, employeeLayout.createSequentialGroup()
                         .addComponent(jLabel14)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, staffsLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, employeeLayout.createSequentialGroup()
                         .addComponent(jButton4)
                         .addGap(138, 138, 138)))
                 .addGap(270, 270, 270))
         );
-        staffsLayout.setVerticalGroup(
-            staffsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(staffsLayout.createSequentialGroup()
+        employeeLayout.setVerticalGroup(
+            employeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(employeeLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(jLabel5)
                 .addGap(47, 47, 47)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
-                .addGroup(staffsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(employeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -351,10 +476,10 @@ public final class Admin extends javax.swing.JFrame {
                 .addContainerGap(80, Short.MAX_VALUE))
         );
 
-        jPanel3.add(staffs);
-        staffs.setBounds(162, 0, 939, 652);
+        jPanel3.add(employee);
+        employee.setBounds(162, 0, 939, 652);
 
-        addStaffs.setBackground(new java.awt.Color(255, 255, 255));
+        addEmplyee.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), new java.awt.Color(0, 0, 0)));
@@ -524,26 +649,26 @@ public final class Admin extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
         jLabel6.setText("Add Staffs");
 
-        javax.swing.GroupLayout addStaffsLayout = new javax.swing.GroupLayout(addStaffs);
-        addStaffs.setLayout(addStaffsLayout);
-        addStaffsLayout.setHorizontalGroup(
-            addStaffsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout addEmplyeeLayout = new javax.swing.GroupLayout(addEmplyee);
+        addEmplyee.setLayout(addEmplyeeLayout);
+        addEmplyeeLayout.setHorizontalGroup(
+            addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 939, Short.MAX_VALUE)
-            .addGroup(addStaffsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(addStaffsLayout.createSequentialGroup()
+            .addGroup(addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(addEmplyeeLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
-                    .addGroup(addStaffsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(addStaffsLayout.createSequentialGroup()
+                        .addGroup(addEmplyeeLayout.createSequentialGroup()
                             .addGap(100, 100, 100)
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
-        addStaffsLayout.setVerticalGroup(
-            addStaffsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        addEmplyeeLayout.setVerticalGroup(
+            addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 652, Short.MAX_VALUE)
-            .addGroup(addStaffsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(addStaffsLayout.createSequentialGroup()
+            .addGroup(addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(addEmplyeeLayout.createSequentialGroup()
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addComponent(jLabel6)
                     .addGap(42, 42, 42)
@@ -551,8 +676,8 @@ public final class Admin extends javax.swing.JFrame {
                     .addGap(0, 0, Short.MAX_VALUE)))
         );
 
-        jPanel3.add(addStaffs);
-        addStaffs.setBounds(162, 0, 939, 652);
+        jPanel3.add(addEmplyee);
+        addEmplyee.setBounds(162, 0, 939, 652);
 
         addMovies.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -785,18 +910,18 @@ public final class Admin extends javax.swing.JFrame {
             }
         });
         jPanel1.add(addMoviesB);
-        addMoviesB.setBounds(10, 210, 130, 27);
+        addMoviesB.setBounds(10, 260, 130, 27);
 
-        salesB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        salesB.setText("Sales");
-        salesB.setMargin(new java.awt.Insets(2, 20, 3, 20));
-        salesB.addActionListener(new java.awt.event.ActionListener() {
+        logsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        logsB.setText("Logs");
+        logsB.setMargin(new java.awt.Insets(2, 20, 3, 20));
+        logsB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                salesBActionPerformed(evt);
+                logsBActionPerformed(evt);
             }
         });
-        jPanel1.add(salesB);
-        salesB.setBounds(10, 10, 130, 27);
+        jPanel1.add(logsB);
+        logsB.setBounds(10, 60, 130, 27);
 
         staffsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staffsB.setText("Staffs");
@@ -807,7 +932,7 @@ public final class Admin extends javax.swing.JFrame {
             }
         });
         jPanel1.add(staffsB);
-        staffsB.setBounds(10, 60, 130, 27);
+        staffsB.setBounds(10, 110, 130, 27);
 
         addStaffsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         addStaffsB.setText("Add Staffs");
@@ -818,7 +943,7 @@ public final class Admin extends javax.swing.JFrame {
             }
         });
         jPanel1.add(addStaffsB);
-        addStaffsB.setBounds(10, 110, 130, 27);
+        addStaffsB.setBounds(10, 160, 130, 27);
 
         moviesB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         moviesB.setText("Movies");
@@ -829,10 +954,21 @@ public final class Admin extends javax.swing.JFrame {
             }
         });
         jPanel1.add(moviesB);
-        moviesB.setBounds(10, 160, 130, 27);
+        moviesB.setBounds(10, 210, 130, 27);
+
+        salesB1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        salesB1.setText("Sales");
+        salesB1.setMargin(new java.awt.Insets(2, 20, 3, 20));
+        salesB1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                salesB1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(salesB1);
+        salesB1.setBounds(10, 10, 130, 27);
 
         jPanel3.add(jPanel1);
-        jPanel1.setBounds(6, 224, 150, 260);
+        jPanel1.setBounds(6, 224, 150, 310);
 
         movies.setBackground(new java.awt.Color(255, 255, 255));
         movies.setMinimumSize(new java.awt.Dimension(932, 652));
@@ -910,8 +1046,9 @@ public final class Admin extends javax.swing.JFrame {
 
     private void addMoviesBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMoviesBActionPerformed
         sales.setVisible(false);
-        staffs.setVisible(false);
-        addStaffs.setVisible(false);
+        logs.setVisible(false);
+        employee.setVisible(false);
+        addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(true);
         AddMovie_MovieID_TextField.setText(newmovieid);
@@ -919,16 +1056,20 @@ public final class Admin extends javax.swing.JFrame {
 
     private void staffsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffsBActionPerformed
         sales.setVisible(false);
-        staffs.setVisible(true);
-        addStaffs.setVisible(false);
+        logs.setVisible(false);
+        employee.setVisible(true);
+        addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
+
+        createTableEmployee();
     }//GEN-LAST:event_staffsBActionPerformed
 
     private void addStaffsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStaffsBActionPerformed
         sales.setVisible(false);
-        staffs.setVisible(false);
-        addStaffs.setVisible(true);
+        logs.setVisible(false);
+        employee.setVisible(false);
+        addEmplyee.setVisible(true);
         AddStaff_EmployeeID_TextField.setText(newempid);
         movies.setVisible(false);
         addMovies.setVisible(false);
@@ -936,19 +1077,21 @@ public final class Admin extends javax.swing.JFrame {
 
     private void moviesBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moviesBActionPerformed
         sales.setVisible(false);
-        staffs.setVisible(false);
-        addStaffs.setVisible(false);
+        logs.setVisible(false);
+        employee.setVisible(false);
+        addEmplyee.setVisible(false);
         movies.setVisible(true);
         addMovies.setVisible(false);
     }//GEN-LAST:event_moviesBActionPerformed
 
-    private void salesBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesBActionPerformed
-        sales.setVisible(true);
-        staffs.setVisible(false);
-        addStaffs.setVisible(false);
+    private void logsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logsBActionPerformed
+        sales.setVisible(false);
+        logs.setVisible(true);
+        employee.setVisible(false);
+        addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
-    }//GEN-LAST:event_salesBActionPerformed
+    }//GEN-LAST:event_logsBActionPerformed
 
     private void AddStaff_EmployeeID_TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddStaff_EmployeeID_TextFieldActionPerformed
         // TODO add your handling code here:
@@ -1022,7 +1165,7 @@ public final class Admin extends javax.swing.JFrame {
             System.out.println(LName);
             System.out.println(AddStaff_Email_TextField.getText());
             System.out.println(PNum);
-            System.out.println(UserPass = newempid);
+            System.out.println(UserPass = pass);
             System.out.println(lnum);
 
             try {  // INSERTING VALUES FOR ADDSTAFF
@@ -1030,7 +1173,7 @@ public final class Admin extends javax.swing.JFrame {
                 stmt = conn.createStatement();
                 String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
                         + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
-                        + EmpId + "','" + newempid + "')";
+                        + EmpId + "','" + UserPass + "')";
                 int rows = stmt.executeUpdate(qry);
                 if (rows > 0) {
                     System.out.println("Insert Successful");
@@ -1185,6 +1328,15 @@ public final class Admin extends javax.swing.JFrame {
 
     }//GEN-LAST:event_Add_Another_StaffMouseClicked
 
+    private void salesB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesB1ActionPerformed
+        sales.setVisible(true);
+        logs.setVisible(false);
+        employee.setVisible(false);
+        addEmplyee.setVisible(false);
+        movies.setVisible(false);
+        addMovies.setVisible(false);
+    }//GEN-LAST:event_salesB1ActionPerformed
+
     /**
      * @param args
      * @throws ClassNotFoundException
@@ -1219,7 +1371,9 @@ public final class Admin extends javax.swing.JFrame {
         lempid = "";
         stmt = conn.createStatement();
 
-        String qry = "select * from staff";
+        String qry = """
+                     select * from staff
+                     order by len(EmployeeID), EmployeeID""";
         ResultSet rs = stmt.executeQuery(qry);
         while (rs.next()) {
             lempid = rs.getString(1);
@@ -1227,6 +1381,7 @@ public final class Admin extends javax.swing.JFrame {
         lnum = Integer.parseInt(lempid.substring(1, lempid.length())) + 1;
         String nmpd = "";
         newempid = "E" + String.valueOf(lnum);
+
         System.out.println(newempid);
     }
 
@@ -1239,13 +1394,12 @@ public final class Admin extends javax.swing.JFrame {
         lmovieid = "";
         Statement stmt = conn.createStatement();
 
-        String qry = "select * from movie";
+        String qry = "select * from movie order by len(MovieID), MovieID";
         ResultSet rs = stmt.executeQuery(qry);
         while (rs.next()) {
             lmovieid = rs.getString(1);
         }
         lmovidnum = Integer.parseInt(lmovieid.substring(1, lmovieid.length())) + 1;
-        String lmovd = "";
         newmovieid = "M" + String.valueOf(lmovidnum);
         System.out.println(newmovieid);
     }
@@ -1282,18 +1436,23 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JButton Add_Another_Staff;
     private javax.swing.JButton Add_Staff;
     private javax.swing.JButton Back;
+    private javax.swing.JPanel addEmplyee;
     private javax.swing.JPanel addMovies;
     private javax.swing.JButton addMoviesB;
-    private javax.swing.JPanel addStaffs;
     private javax.swing.JButton addStaffsB;
+    private javax.swing.JTable empTable;
+    private javax.swing.JPanel employee;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1304,19 +1463,22 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTable jTable2;
-    private javax.swing.JTable jTable3;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JPanel logs;
+    private javax.swing.JButton logsB;
+    private javax.swing.JTable logsTable;
     private javax.swing.JPanel movies;
     private javax.swing.JButton moviesB;
     private javax.swing.JPanel sales;
-    private javax.swing.JButton salesB;
+    private javax.swing.JButton salesB1;
     private javax.swing.JTable salesTable;
-    private javax.swing.JPanel staffs;
     private javax.swing.JButton staffsB;
     // End of variables declaration//GEN-END:variables
 
