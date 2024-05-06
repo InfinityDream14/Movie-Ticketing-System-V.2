@@ -267,13 +267,19 @@
             </Component>
             <Component class="javax.swing.JButton" name="av_time1">
               <Properties>
-                <Property name="text" type="java.lang.String" value="null"/>
+                <Property name="text" type="java.lang.String" value="unavailable"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="av_time1ActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="av_time2">
               <Properties>
-                <Property name="text" type="java.lang.String" value="null"/>
+                <Property name="text" type="java.lang.String" value="unavailable"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="av_time2ActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>

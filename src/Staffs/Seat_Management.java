@@ -6,10 +6,14 @@ package Staffs;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
+import java.lang.System.*;
 import javax.swing.*;
 import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
 /**
  *
  * @author Administrator
@@ -19,7 +23,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     //Movie_List mlst = new Movie_List();
 
     Movie_List mlst = new Movie_List();
-    public Seat_Management() throws SQLException {
+    public Seat_Management() throws SQLException, ParseException {
         initComponents();
         setLocationRelativeTo(null);
         
@@ -28,8 +32,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         
         right_panel_bg(); // putting image background to right panel
         left_panel_bg(); // putting image background to left panel
-        
-        add_seat_icon();
+        get_info_in_database();
         
         
     }
@@ -39,19 +42,19 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     String mvg = mlst.genre_to_sm;
     static String mvp;
     static String mvd;
+    
+    Main_Staff ms = new Main_Staff();
+    Statement stmt = ms.mc.createStatement();
     //this method will get the exact seat count of a cinema where a movie will be played
     
-    void add_seat_icon() throws SQLException{
-        Main_Staff ms = new Main_Staff();
-        
-        Statement stmt = ms.mc.createStatement();
-            
-        String qry = "select m.Title, m.MovieID, st.ShowtimeMovieID ,st.startTime, st.ShowtimeCinemaID,\n" +
+    String qry = "select m.Title, m.MovieID, st.ShowtimeMovieID ,st.startTime, st.ShowtimeCinemaID,\n" +
                     "        c.CinemaID, c.NumofSteats, m.price, st.showtimeID\n" +
                     "from cinema c inner join(movie m inner join showtime st\n" +
                     "              on m.MovieID = st.ShowtimeMovieID)\n" +
                     "     on c.CinemaID = st.ShowtimeCinemaID";
-        
+    
+    void get_info_in_database() throws SQLException, ParseException{
+         
         
         sm_mtitle.setText(mvt);
         sm_mgenre.setText(mvg);
@@ -63,10 +66,10 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 ttime = ttime.substring(0,5);
                 String result = LocalTime.parse(ttime, DateTimeFormatter.ofPattern("HH:mm"))
                             .format(DateTimeFormatter.ofPattern("hh:mm a"));
-                if(av_time1.getText().equals("null")){
+                if(av_time1.getText().equals("unavailable")){
                     av_time1.setText(result);
                 }
-                if(av_time2.getText().equals("null")&& !(av_time1.getText().equals(result))){
+                if(av_time2.getText().equals("unavailable")&& !(av_time1.getText().equals(result))){
                     av_time2.setText(result);
                 }
             }
@@ -93,45 +96,77 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         }
         sm_mduration.setText(mvd);
         sm_mprice.setText(mvp);
+        av_time1.setBackground(new Color(255,204,102));
+        av_time2.setBackground(Color.LIGHT_GRAY);
+        
+        String real_time = convert_12hr_to_24hr(av_time1.getText());
+        
+        change_seat_list(real_time);
+    }
+    
+    String convert_12hr_to_24hr(String tm) throws ParseException{
+        SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mm a");
+        java.util.Date date = parseFormat.parse(tm);
+        String real_time = displayFormat.format(date);
+        real_time = real_time +":00.0000000";
+        return real_time;
+    }
+    
+    void change_seat_list(String rt) throws SQLException, ParseException{
         String st1="";
         ResultSet rs2 = stmt.executeQuery(qry);
+       
         while(rs2.next()){
             if(rs2.getString(1).equals(sm_mtitle.getText()) 
-                    && rs2.getString(4).equals(av_time1.getText()) ){
+                    && rs2.getString(4).equals(rt) ){
                 st1 = rs2.getString(9);
-                System.out.println(st1);
             }
         }
         
-        String qry3 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number\n" +
+        String qry3 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
                         "from showtime st inner join seat_list sl\n" +
                         "	on st.showtimeid = sl.showtimeid";
-        rs = stmt.executeQuery(qry3);
+        ResultSet rs = stmt.executeQuery(qry3);
         while(rs.next()){
             if(rs.getString(1).equals(st1)){
                 String cn="";
+                ImageIcon seat_icon = new ImageIcon("seat.png");
+                JRadioButton jr = new JRadioButton();
+                if(rs.getString(5).equals("A")){
+                    jr.setBackground(Color.white);
+                }
+                else
+                    jr.setBackground(new Color(255,204,102));
+                jr.addMouseListener(new MouseAdapter(){
+                    @Override
+                    public void mouseClicked(MouseEvent e){
+                        if(!(jr.getBackground().equals(Color.cyan))){
+                            jr.setBackground(Color.cyan);
+                        }
+                        else
+                            jr.setBackground(Color.white);
+                        
+                    }
+                });
                 if(rs.getString(3).equals("L")){
-                    ImageIcon seat_icon = new ImageIcon("seat.png");
                     cn = cn+"L"+rs.getString(4);
-                    JRadioButton jr = new JRadioButton(cn,seat_icon);
+                    jr.setText(cn); jr.setIcon(seat_icon);
                     left_seat_panel.add(jr);
                 }
                 else if(rs.getString(3).equals("M")){
-                    ImageIcon seat_icon = new ImageIcon("seat.png");
                     cn = cn+"M"+rs.getString(4);
-                    JRadioButton jr = new JRadioButton(cn,seat_icon);
+                    jr.setText(cn);jr.setIcon(seat_icon);
                     mid_seat_panel.add(jr);
                 }
                 else if(rs.getString(3).equals("R")){
-                    ImageIcon seat_icon = new ImageIcon("seat.png");
                     cn = cn+"R"+rs.getString(4);
-                    JRadioButton jr = new JRadioButton(cn,seat_icon);
+                    jr.setText(cn);jr.setIcon(seat_icon);
                     right_seat_panel.add(jr);
                 }
             }
         }
     }
-    
     //this methods add JRadioButton for seat_management
  
 
@@ -299,10 +334,20 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         jLabel11.setText("Available Time");
         jPanel5.add(jLabel11);
 
-        av_time1.setText("null");
+        av_time1.setText("unavailable");
+        av_time1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                av_time1ActionPerformed(evt);
+            }
+        });
         jPanel5.add(av_time1);
 
-        av_time2.setText("null");
+        av_time2.setText("unavailable");
+        av_time2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                av_time2ActionPerformed(evt);
+            }
+        });
         jPanel5.add(av_time2);
 
         right_main_panel.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 40, 110, 80));
@@ -395,6 +440,47 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         this.setVisible(false);
         //mlst.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void av_time1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_av_time1ActionPerformed
+        if(!(av_time1.getText().equals("unavailable"))){
+            av_time1.setBackground(new Color(255,204,102));
+            av_time2.setBackground(Color.lightGray);
+            String time1="";
+            try {
+                time1 = convert_12hr_to_24hr(av_time1.getText());
+            } catch (ParseException ex) {
+                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                change_seat_list(time1);
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+    }//GEN-LAST:event_av_time1ActionPerformed
+
+    private void av_time2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_av_time2ActionPerformed
+        if(!(av_time2.getText().equals("unavailable"))){
+            av_time2.setBackground(new Color(255,204,102));
+            av_time1.setBackground(Color.lightGray);
+            String time1="";
+            try {
+                time1 = convert_12hr_to_24hr(av_time2.getText());
+            } catch (ParseException ex) {
+                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            try {
+                change_seat_list(time1);
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_av_time2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

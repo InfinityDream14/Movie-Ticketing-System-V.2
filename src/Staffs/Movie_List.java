@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import java.sql.*;
+import java.text.ParseException;
 /**
  *
  * @author Administrator
@@ -66,9 +67,14 @@ public class Movie_List extends javax.swing.JFrame {
                             title_to_sm = jt.getText();
                             JLabel jg = (JLabel)movie_panel1.getComponent(2);
                             genre_to_sm = jg.getText();
-                            Seat_Management sm = new Seat_Management();
+                            Seat_Management sm;
                             new Movie_List().setVisible(false);
-                            sm.setVisible(true);
+                            try {
+                                sm = new Seat_Management();
+                                sm.setVisible(true);
+                            } catch (ParseException ex) {
+                                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         } catch (SQLException ex) {
                             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -238,7 +244,11 @@ public class Movie_List extends javax.swing.JFrame {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            new Seat_Management().setVisible(true);
+            try {
+                new Seat_Management().setVisible(true);
+            } catch (ParseException ex) {
+                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -251,7 +261,11 @@ public class Movie_List extends javax.swing.JFrame {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
-            new Seat_Management().setVisible(true);
+            try {
+                new Seat_Management().setVisible(true);
+            } catch (ParseException ex) {
+                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
