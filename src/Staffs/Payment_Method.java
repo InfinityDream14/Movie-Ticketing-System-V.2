@@ -159,12 +159,27 @@ public class Payment_Method extends javax.swing.JFrame {
         jPanel8.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 240, -1, -1));
 
         BDO.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Bdo-70.png"))); // NOI18N
+        BDO.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BDOMouseClicked(evt);
+            }
+        });
         jPanel8.add(BDO, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 160, -1, -1));
 
         BPI.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Bpi-70.png"))); // NOI18N
+        BPI.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                BPIMouseClicked(evt);
+            }
+        });
         jPanel8.add(BPI, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, -1, -1));
 
         UnionBank.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Unionbak-70.png"))); // NOI18N
+        UnionBank.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                UnionBankMouseClicked(evt);
+            }
+        });
         jPanel8.add(UnionBank, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, -1, -1));
         jPanel8.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 270, 139, 30));
 
@@ -208,9 +223,24 @@ public class Payment_Method extends javax.swing.JFrame {
     }//GEN-LAST:event_GCashMouseClicked
 
     private void MayaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MayaMouseClicked
-       PayMaya paym = new PayMaya();
-       paym.setVisible(true);
+        PayMaya py= new PayMaya();
+        py.setVisible(true);
     }//GEN-LAST:event_MayaMouseClicked
+
+    private void BPIMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BPIMouseClicked
+        BPI bp =new BPI();
+        bp.setVisible(true);
+    }//GEN-LAST:event_BPIMouseClicked
+
+    private void BDOMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BDOMouseClicked
+        BDO bd=new BDO();
+        bd.setVisible(true);
+    }//GEN-LAST:event_BDOMouseClicked
+
+    private void UnionBankMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UnionBankMouseClicked
+        UnionBank ub= new UnionBank();
+        ub.setVisible(true);
+    }//GEN-LAST:event_UnionBankMouseClicked
    
     // Add an action listener to the GCash label/icon
 
