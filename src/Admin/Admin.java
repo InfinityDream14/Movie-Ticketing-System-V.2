@@ -4,6 +4,7 @@
  */
 package Admin;
 
+import java.awt.geom.RoundRectangle2D;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -49,7 +50,7 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
-
+                
         createTableSales();
         getIDs();
     }
