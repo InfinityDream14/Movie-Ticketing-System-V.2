@@ -7,6 +7,9 @@ import LogIn.LogInProcess;
 import java.awt.Color;
 import javax.swing.JOptionPane;
 import Admin.Admin;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -327,9 +330,9 @@ public class LogIn extends javax.swing.JFrame {
 
     private void logInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInActionPerformed
         if (lUserIn.getText().equals("Admin") && lPassIn.getText().equals("Admin")) {
-            System.out.println("Hello World");
             JOptionPane.showMessageDialog(null, "You are an admin!");
             Admin.main(null);
+            dispose();
         } else{
             JOptionPane.showMessageDialog(null,"You entered wrong data!", "Wrong data input", JOptionPane.WARNING_MESSAGE);
         }
