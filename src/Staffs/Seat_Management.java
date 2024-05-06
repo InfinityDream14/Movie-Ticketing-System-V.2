@@ -8,6 +8,8 @@ import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.*;
 import java.sql.*;
+import java.time.*;
+import java.time.format.DateTimeFormatter;
 /**
  *
  * @author Administrator
@@ -27,39 +29,17 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         right_panel_bg(); // putting image background to right panel
         left_panel_bg(); // putting image background to left panel
         
-        //retreive_seat_count();
-        //add_lseat_button(lcount);
-        //add_mseat_button(mcount);
-        //add_rseat_button(rcount);
         add_seat_icon();
         
         
     }
     
-    int scount;
-    int lcount;
-    int mcount = 21;
-    int rcount;
+
     String mvt = mlst.title_to_sm;
     String mvg = mlst.genre_to_sm;
     static String mvp;
     static String mvd;
     //this method will get the exact seat count of a cinema where a movie will be played
-    void retreive_seat_count() throws SQLException{
-        Main_Staff ms = new Main_Staff();
-        
-        Statement stmt = ms.mc.createStatement();
-            
-        String qry = "select * from movieshowtime_cinemadesig";
-        ResultSet rs = stmt.executeQuery(qry);
-        while(rs.next()){
-            if(rs.getString(1).trim().equals(mvt)){
-                scount = Integer.parseInt(rs.getString(7));
-            }
-        }
-        lcount =(scount-21)/2;
-        rcount = lcount;
-    }
     
     void add_seat_icon() throws SQLException{
         Main_Staff ms = new Main_Staff();
@@ -79,13 +59,15 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         ResultSet rs = stmt.executeQuery(qry);
         while(rs.next()){
             if(rs.getString(1).trim().equals(mvt)){
+                String ttime = rs.getString(4);
+                ttime = ttime.substring(0,5);
+                String result = LocalTime.parse(ttime, DateTimeFormatter.ofPattern("HH:mm"))
+                            .format(DateTimeFormatter.ofPattern("hh:mm a"));
                 if(av_time1.getText().equals("null")){
-                    av_time1.setText(rs.getString(4));
+                    av_time1.setText(result);
                 }
-                if(av_time2.getText().equals("null")&& 
-                  (av_time1.getText() == null ? rs.getString(4) != null : !
-                   av_time1.getText().equals(rs.getString(4)))){
-                    av_time2.setText(rs.getString(4));
+                if(av_time2.getText().equals("null")&& !(av_time1.getText().equals(result))){
+                    av_time2.setText(result);
                 }
             }
         }
@@ -151,48 +133,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     }
     
     //this methods add JRadioButton for seat_management
-    void add_lseat_button( int sc){
-        String cn="";
-        ImageIcon seat_icon = new ImageIcon("seat.png");
-        for(int i=1; i<=sc;i++){
-            if(i<=9){
-                cn = "L0" + Integer.toString(i);
-            }
-            else{
-                cn = "L"+Integer.toString(i);
-            }
-            JRadioButton jr = new JRadioButton(cn,seat_icon);
-            left_seat_panel.add(jr);
-        }
-    }
-    void add_mseat_button( int sc){
-        String cn="";
-        ImageIcon seat_icon = new ImageIcon("seat.png");
-        for(int i=1; i<=sc;i++){
-            if(i<=9){
-                cn = "M0" + Integer.toString(i);
-            }
-            else{
-                cn = "M"+Integer.toString(i);
-            }
-            JRadioButton jr = new JRadioButton(cn,seat_icon);
-            mid_seat_panel.add(jr);
-        }
-    }
-    void add_rseat_button( int sc){
-        String cn="";
-        ImageIcon seat_icon = new ImageIcon("seat.png");
-        for(int i=1; i<=sc;i++){
-            if(i<=9){
-                cn = "R0" + Integer.toString(i);
-            }
-            else{
-                cn = "R" + Integer.toString(i);
-            }
-            JRadioButton jr = new JRadioButton(cn,seat_icon);
-            right_seat_panel.add(jr);
-        }
-    }
+ 
+
     
     void right_panel_bg(){
 
@@ -445,7 +387,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+        this.setVisible(false);
+        new Payment_Method().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
