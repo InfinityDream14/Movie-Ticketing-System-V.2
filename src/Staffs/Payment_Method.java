@@ -80,7 +80,6 @@ public class Payment_Method extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 204, 102));
         setMinimumSize(new java.awt.Dimension(850, 480));
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(850, 480));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 102));
@@ -148,6 +147,11 @@ public class Payment_Method extends javax.swing.JFrame {
         jPanel8.add(GCash, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 40, -1, -1));
 
         Maya.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/Maya-70.png"))); // NOI18N
+        Maya.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MayaMouseClicked(evt);
+            }
+        });
         jPanel8.add(Maya, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 40, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -202,6 +206,11 @@ public class Payment_Method extends javax.swing.JFrame {
        GCash gc = new GCash();
        gc.setVisible(true);
     }//GEN-LAST:event_GCashMouseClicked
+
+    private void MayaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MayaMouseClicked
+       PayMaya paym = new PayMaya();
+       paym.setVisible(true);
+    }//GEN-LAST:event_MayaMouseClicked
    
     // Add an action listener to the GCash label/icon
 
