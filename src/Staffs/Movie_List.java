@@ -89,7 +89,7 @@ public class Movie_List extends javax.swing.JFrame {
             JScrollPane scrollPane = new JScrollPane(movie_panel);
             scrollPane.setMinimumSize(new Dimension(10, 10));
             scrollPane.setPreferredSize(new Dimension(500,300));
-            scrollPane.setBounds(15, 15, 500, 530);
+            scrollPane.setBounds(15, 15, 500, 335);
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             scrollPane.setOpaque(false);
