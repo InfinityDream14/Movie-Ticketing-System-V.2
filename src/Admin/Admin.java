@@ -4,20 +4,30 @@
  */
 package Admin;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.*;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Christian
  */
-public class Admin extends javax.swing.JFrame {
+public final class Admin extends javax.swing.JFrame {
 
     /**
      * Creates new form AdminII
      */
+    
     String adminpass;
     String EmpId, FName, LName, PNum, pass, UserPass = " "; // for creating new Staff
     String Email = "null"; // for creating new Staff
@@ -27,18 +37,92 @@ public class Admin extends javax.swing.JFrame {
     int price; // for creating new Movie
     String Duration = "null"; // for creating new Movie;
 
-    public Admin() {
+    Statement stmt;
+    Connection conn;
+    DefaultTableModel tmodel = new DefaultTableModel();
+    
+    public Admin() throws SQLException, ClassNotFoundException {
+        connectToDatabase();
         initComponents();
 
         sales.setVisible(true);
-        refund.setVisible(false);
         staffs.setVisible(false);
         addStaffs.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
+
+        createTableSales();
     }
 
-    
+    public void connectToDatabase() throws ClassNotFoundException {
+        String hostname = "localhost";
+        String sqlInstanceName = "MTS"; //computer name 
+        String sqlDatabase = "MovieTicketSystem";  //sql server database name
+        String sqlUser = "sa";
+        String sqlPassword = "Java"; //passwrod sa account
+
+        try {
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+            //jdbc:sqlserver://localhost:1433;instance=COMPUTERBERRY;databaseName=Database;
+            String connectURL = "jdbc:sqlserver://" + hostname + ":1433"
+                    + ";instance=" + sqlInstanceName + ";databaseName=" + sqlDatabase
+                    + ";encrypt=true;trustServerCertificate=true";
+
+            conn = DriverManager.getConnection(connectURL, sqlUser, sqlPassword);
+            
+            System.out.println("Connect to database successful!!");
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    public void createTableSales() {
+        salesTable.setModel(tmodel);
+        tmodel.addColumn("Ticket ID");
+        tmodel.addColumn("Date Purchased");
+        ListSelectionModel cellSelectionModel = salesTable.getSelectionModel();
+        cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent e) {
+                String selectedData = null;
+
+                int[] selectedRow = salesTable.getSelectedRows();
+                int[] selectedColumn = salesTable.getSelectedColumns();
+
+                for (int i = 0; i < selectedRow.length; i++) {
+                    for (int j = 0; j < selectedColumn.length; j++) {
+                        selectedData = (String) salesTable.getValueAt(selectedRow[i], selectedColumn[j]);
+                    }
+                }
+                System.out.println("Selected: " + selectedData);
+            }
+        });
+        getSalesData();
+    }
+
+    public void getSalesData() {
+        String sql = """
+                     select t.TicketID, p.PaymentDate
+                     from ticket t join payment p on t.TicketPaymentID = p.PaymentID""";
+
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs != null && rs.next()) {
+                Vector vec = new Vector();
+                vec.add(rs.getString("TicketID"));
+                vec.add(rs.getString("PaymentDate"));
+                tmodel.addRow(vec);
+            }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,20 +136,10 @@ public class Admin extends javax.swing.JFrame {
         sales = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        salesTable = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        refund = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jLabel11 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton2 = new javax.swing.JButton();
         staffs = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -114,7 +188,6 @@ public class Admin extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         addMoviesB = new javax.swing.JButton();
         salesB = new javax.swing.JButton();
-        refundB = new javax.swing.JButton();
         staffsB = new javax.swing.JButton();
         addStaffsB = new javax.swing.JButton();
         moviesB = new javax.swing.JButton();
@@ -137,26 +210,18 @@ public class Admin extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
         jLabel3.setText("Sales");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        salesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Staff ID", "Full Name"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
-            };
 
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
             }
-        });
-        jScrollPane1.setViewportView(jTable1);
+        ));
+        jScrollPane1.setViewportView(salesTable);
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel9.setText("Receipt No.");
@@ -209,85 +274,6 @@ public class Admin extends javax.swing.JFrame {
 
         jPanel3.add(sales);
         sales.setBounds(162, 0, 939, 652);
-
-        refund.setBackground(new java.awt.Color(255, 255, 255));
-        refund.setPreferredSize(new java.awt.Dimension(939, 652));
-
-        jLabel4.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
-        jLabel4.setText("Refund");
-
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel10.setText("Ticket ID:");
-
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jTextField2.setText("jTextField2");
-
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel11.setText("Date Baught:");
-
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jTextField3.setText("jTextField2");
-
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel12.setText("Reason for the Refund:");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
-
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton2.setText("Request for Refund");
-
-        javax.swing.GroupLayout refundLayout = new javax.swing.GroupLayout(refund);
-        refund.setLayout(refundLayout);
-        refundLayout.setHorizontalGroup(
-            refundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(refundLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(refundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
-                    .addGroup(refundLayout.createSequentialGroup()
-                        .addGroup(refundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(refundLayout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(18, 18, 18)
-                                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel11)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(refundLayout.createSequentialGroup()
-                        .addComponent(jLabel12)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(66, 66, 66))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, refundLayout.createSequentialGroup()
-                .addContainerGap(375, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(380, 380, 380))
-        );
-        refundLayout.setVerticalGroup(
-            refundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(refundLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel4)
-                .addGap(47, 47, 47)
-                .addGroup(refundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(56, 56, 56)
-                .addComponent(jLabel12)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 285, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(27, 27, 27)
-                .addComponent(jButton2)
-                .addContainerGap(72, Short.MAX_VALUE))
-        );
-
-        jPanel3.add(refund);
-        refund.setBounds(162, 0, 939, 652);
 
         staffs.setBackground(new java.awt.Color(255, 255, 255));
         staffs.setPreferredSize(new java.awt.Dimension(939, 652));
@@ -784,7 +770,7 @@ public class Admin extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Bookman Old Style", 0, 24)); // NOI18N
         jLabel2.setText("Admin");
         jPanel3.add(jLabel2);
-        jLabel2.setBounds(39, 156, 77, 29);
+        jLabel2.setBounds(39, 156, 68, 32);
 
         jPanel1.setBackground(new java.awt.Color(221, 211, 171));
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(192, 156, 117), null, null));
@@ -799,7 +785,7 @@ public class Admin extends javax.swing.JFrame {
             }
         });
         jPanel1.add(addMoviesB);
-        addMoviesB.setBounds(10, 260, 130, 27);
+        addMoviesB.setBounds(10, 210, 130, 27);
 
         salesB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         salesB.setText("Sales");
@@ -810,18 +796,7 @@ public class Admin extends javax.swing.JFrame {
             }
         });
         jPanel1.add(salesB);
-        salesB.setBounds(9, 15, 130, 27);
-
-        refundB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        refundB.setText("Refund");
-        refundB.setMargin(new java.awt.Insets(2, 20, 3, 20));
-        refundB.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                refundBActionPerformed(evt);
-            }
-        });
-        jPanel1.add(refundB);
-        refundB.setBounds(10, 60, 130, 27);
+        salesB.setBounds(10, 10, 130, 27);
 
         staffsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staffsB.setText("Staffs");
@@ -832,7 +807,7 @@ public class Admin extends javax.swing.JFrame {
             }
         });
         jPanel1.add(staffsB);
-        staffsB.setBounds(10, 110, 130, 27);
+        staffsB.setBounds(10, 60, 130, 27);
 
         addStaffsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         addStaffsB.setText("Add Staffs");
@@ -843,7 +818,7 @@ public class Admin extends javax.swing.JFrame {
             }
         });
         jPanel1.add(addStaffsB);
-        addStaffsB.setBounds(10, 160, 130, 27);
+        addStaffsB.setBounds(10, 110, 130, 27);
 
         moviesB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         moviesB.setText("Movies");
@@ -854,10 +829,10 @@ public class Admin extends javax.swing.JFrame {
             }
         });
         jPanel1.add(moviesB);
-        moviesB.setBounds(10, 210, 130, 27);
+        moviesB.setBounds(10, 160, 130, 27);
 
         jPanel3.add(jPanel1);
-        jPanel1.setBounds(6, 221, 150, 303);
+        jPanel1.setBounds(6, 224, 150, 260);
 
         movies.setBackground(new java.awt.Color(255, 255, 255));
         movies.setMinimumSize(new java.awt.Dimension(932, 652));
@@ -935,7 +910,6 @@ public class Admin extends javax.swing.JFrame {
 
     private void addMoviesBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMoviesBActionPerformed
         sales.setVisible(false);
-        refund.setVisible(false);
         staffs.setVisible(false);
         addStaffs.setVisible(false);
         movies.setVisible(false);
@@ -945,7 +919,6 @@ public class Admin extends javax.swing.JFrame {
 
     private void staffsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffsBActionPerformed
         sales.setVisible(false);
-        refund.setVisible(false);
         staffs.setVisible(true);
         addStaffs.setVisible(false);
         movies.setVisible(false);
@@ -954,7 +927,6 @@ public class Admin extends javax.swing.JFrame {
 
     private void addStaffsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStaffsBActionPerformed
         sales.setVisible(false);
-        refund.setVisible(false);
         staffs.setVisible(false);
         addStaffs.setVisible(true);
         AddStaff_EmployeeID_TextField.setText(newempid);
@@ -964,26 +936,15 @@ public class Admin extends javax.swing.JFrame {
 
     private void moviesBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moviesBActionPerformed
         sales.setVisible(false);
-        refund.setVisible(false);
         staffs.setVisible(false);
         addStaffs.setVisible(false);
         movies.setVisible(true);
         addMovies.setVisible(false);
     }//GEN-LAST:event_moviesBActionPerformed
 
-    private void refundBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_refundBActionPerformed
-        sales.setVisible(false);
-        refund.setVisible(true);
-        staffs.setVisible(false);
-        addStaffs.setVisible(false);
-        movies.setVisible(false);
-        addMovies.setVisible(false);
-    }//GEN-LAST:event_refundBActionPerformed
-
     private void salesBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesBActionPerformed
         sales.setVisible(true);
-        refund.setVisible(false);
-        staffs.setVisible(true);
+        staffs.setVisible(false);
         addStaffs.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
@@ -1052,36 +1013,36 @@ public class Admin extends javax.swing.JFrame {
         Mpass = "Admin";
 
         adminpass = JOptionPane.showInputDialog("Enter Admin Username: ");
-        
-            UserPass = JOptionPane.showInputDialog("Enter Admin Password: ");
-            if (UserPass != null && UserPass.matches(Mpass)) {
-                System.out.println("Data Added: ");
-                System.out.println(EmpId);
-                System.out.println(FName);
-                System.out.println(LName);
-                System.out.println(AddStaff_Email_TextField.getText());
-                System.out.println(PNum);
-                System.out.println(UserPass = newempid);
-                 System.out.println(lnum);
 
-                try {  // INSERTING VALUES FOR ADDSTAFF
+        UserPass = JOptionPane.showInputDialog("Enter Admin Password: ");
+        if (UserPass != null && UserPass.matches(Mpass)) {
+            System.out.println("Data Added: ");
+            System.out.println(EmpId);
+            System.out.println(FName);
+            System.out.println(LName);
+            System.out.println(AddStaff_Email_TextField.getText());
+            System.out.println(PNum);
+            System.out.println(UserPass = newempid);
+            System.out.println(lnum);
 
-                    Statement stmt = conn.createStatement();
-                    String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
-                            + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
-                            + EmpId + "','" + newempid + "')";
-                    int rows = stmt.executeUpdate(qry);
-                    if (rows > 0) {
-                        System.out.println("Insert Successful");
-                    }
+            try {  // INSERTING VALUES FOR ADDSTAFF
 
-                    conn.close();
-                } catch (SQLException ex) {
-                    Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                stmt = conn.createStatement();
+                String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
+                        + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
+                        + EmpId + "','" + newempid + "')";
+                int rows = stmt.executeUpdate(qry);
+                if (rows > 0) {
+                    System.out.println("Insert Successful");
                 }
-            } else {
-                JOptionPane.showMessageDialog(null, "Wrong Input");
+
+                conn.close();
+            } catch (SQLException ex) {
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
+            JOptionPane.showMessageDialog(null, "Wrong Input");
+        }
     }//GEN-LAST:event_Add_StaffActionPerformed
 
     private void Add_Another_StaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_Another_StaffActionPerformed
@@ -1225,40 +1186,28 @@ public class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_Add_Another_StaffMouseClicked
 
     /**
-     * @param args the command line arguments
+     * @param args
+     * @throws ClassNotFoundException
+     * @throws SQLException
      */
-    static Connection conn;
-
-    public static void main(String args[]) throws ClassNotFoundException, SQLException {
-
-        String hostname = "localhost";
-        String sqlInstanceName = "MTS"; //computer name 
-        String sqlDatabase = "MovieTicketSystem";  //sql server database name
-        String sqlUser = "sa";
-        String sqlPassword = "Java"; //passwrod sa account
-
-        try {
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-            //jdbc:sqlserver://localhost:1433;instance=COMPUTERBERRY;databaseName=Database;
-            String connectURL = "jdbc:sqlserver://" + hostname + ":1433"
-                    + ";instance=" + sqlInstanceName + ";databaseName=" + sqlDatabase
-                    + ";encrypt=true;trustServerCertificate=true";
-
-            conn = DriverManager.getConnection(connectURL, sqlUser, sqlPassword);
-            System.out.println("Connect to database successful!!");
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        get_last_empid();
-        get_last_movieid();
-
+    public static void main(String args[]) {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Admin().setVisible(true);
+                try {
+                    new Admin().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
+    }
+
+    void getIDs() throws SQLException {
+        get_last_empid();
+        get_last_movieid();
     }
 
     //Last EmpID
@@ -1266,9 +1215,9 @@ public class Admin extends javax.swing.JFrame {
     static int lnum;
     static String newempid;
 
-    static void get_last_empid() throws SQLException {
+    void get_last_empid() throws SQLException {
         lempid = "";
-        Statement stmt = conn.createStatement();
+        stmt = conn.createStatement();
 
         String qry = "select * from staff";
         ResultSet rs = stmt.executeQuery(qry);
@@ -1286,7 +1235,7 @@ public class Admin extends javax.swing.JFrame {
     static int lmovidnum;
     static String newmovieid;
 
-    static void get_last_movieid() throws SQLException {
+    void get_last_movieid() throws SQLException {
         lmovieid = "";
         Statement stmt = conn.createStatement();
 
@@ -1300,7 +1249,7 @@ public class Admin extends javax.swing.JFrame {
         newmovieid = "M" + String.valueOf(lmovidnum);
         System.out.println(newmovieid);
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddMovie_AddAnotherMovie_Button;
@@ -1338,18 +1287,13 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JPanel addStaffs;
     private javax.swing.JButton addStaffsB;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -1360,24 +1304,18 @@ public class Admin extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JTable jTable3;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JPanel movies;
     private javax.swing.JButton moviesB;
-    private javax.swing.JPanel refund;
-    private javax.swing.JButton refundB;
     private javax.swing.JPanel sales;
     private javax.swing.JButton salesB;
+    private javax.swing.JTable salesTable;
     private javax.swing.JPanel staffs;
     private javax.swing.JButton staffsB;
     // End of variables declaration//GEN-END:variables
