@@ -329,15 +329,8 @@ public class LogIn extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void logInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInActionPerformed
-        if (lUserIn.getText().equals("Admin") && lPassIn.getText().equals("Admin")) {
-            JOptionPane.showMessageDialog(null, "You are an admin!");
-            Admin.main(null);
-            dispose();
-        } else{
-            JOptionPane.showMessageDialog(null,"You entered wrong data!", "Wrong data input", JOptionPane.WARNING_MESSAGE);
-        }
-        lUserIn.setText("");
-        lPassIn.setText("");
+        LogInProcess process = new LogInProcess();
+        process.checkAcc(lUserIn.getText(), lPassIn.getText());
     }//GEN-LAST:event_logInActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
