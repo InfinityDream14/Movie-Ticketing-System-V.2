@@ -67,7 +67,7 @@ public class Movie_List extends javax.swing.JFrame {
                             JLabel jg = (JLabel)movie_panel1.getComponent(2);
                             genre_to_sm = jg.getText();
                             Seat_Management sm;
-                            new Movie_List().dispose();
+                                dispose();
                             try {
                                 sm = new Seat_Management();
                                 sm.setVisible(true);

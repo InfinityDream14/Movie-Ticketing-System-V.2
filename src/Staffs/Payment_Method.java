@@ -8,6 +8,10 @@ import java.awt.geom.RoundRectangle2D;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 /**
  *
@@ -77,6 +81,7 @@ public class Payment_Method extends javax.swing.JFrame {
         jLabel13 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         rp_bg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -196,15 +201,25 @@ public class Payment_Method extends javax.swing.JFrame {
 
         jPanel2.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(79, 69, 412, 352));
 
-        jButton2.setBackground(new java.awt.Color(255, 204, 102));
-        jButton2.setText("Proceed");
+        jButton2.setBackground(new java.awt.Color(204, 204, 204));
+        jButton2.setText("Cancel");
         jButton2.setPreferredSize(new java.awt.Dimension(137, 30));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 432, 100, -1));
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 430, 100, -1));
+
+        jButton3.setBackground(new java.awt.Color(255, 204, 102));
+        jButton3.setText("Proceed");
+        jButton3.setPreferredSize(new java.awt.Dimension(137, 30));
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 430, 100, -1));
 
         rp_bg.setMaximumSize(new java.awt.Dimension(570, 480));
         rp_bg.setMinimumSize(new java.awt.Dimension(570, 480));
@@ -217,7 +232,14 @@ public class Payment_Method extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-    
+        this.dispose();
+        try {
+            new Seat_Management().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
     static String payment = "";
     static String emp_log = "E1";
@@ -250,6 +272,15 @@ public class Payment_Method extends javax.swing.JFrame {
         ub.setVisible(true);
         payment="Card";
     }//GEN-LAST:event_UnionBankMouseClicked
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        this.dispose();
+        try {
+            new Movie_List().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
    
     // Add an action listener to the GCash label/icon
 
@@ -264,6 +295,7 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JLabel Maya;
     private javax.swing.JLabel UnionBank;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
