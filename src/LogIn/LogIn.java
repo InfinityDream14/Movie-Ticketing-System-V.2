@@ -4,12 +4,14 @@
  */
 package LogIn;
 import LogIn.LogInProcess;
+import Staffs.Movie_List;
 import java.awt.Color;
 import javax.swing.JOptionPane;
-import Admin.Admin;
+import admin.Admin;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import main.Main;
 
 /**
  *
@@ -20,9 +22,14 @@ public class LogIn extends javax.swing.JFrame {
     /**
      * Creates new form LogIn
      */
+    
+    Main main;
+    
     public LogIn() {
         initComponents();
         SignUp.setVisible(false);
+        main = new Main();
+        
     }
 
     /**
@@ -329,15 +336,26 @@ public class LogIn extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void logInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInActionPerformed
-        if (lUserIn.getText().equals("Admin") && lPassIn.getText().equals("Admin")) {
-            JOptionPane.showMessageDialog(null, "You are an admin!");
-            Admin.main(null);
-            dispose();
-        } else{
-            JOptionPane.showMessageDialog(null,"You entered wrong data!", "Wrong data input", JOptionPane.WARNING_MESSAGE);
+        LogInProcess process = new LogInProcess();
+        try {
+            int flag = process.checkAcc(lUserIn.getText(), lPassIn.getText());
+            switch (flag) {
+                case 1:
+                    Admin.main(null);
+                    dispose();
+                    break;
+                case 2:
+                    new Movie_List().setVisible(true);
+                    dispose();
+                    break;
+                default:
+                    lUserIn.setText("");
+                    lPassIn.setText("");
+                    break;
+            }
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
         }
-        lUserIn.setText("");
-        lPassIn.setText("");
     }//GEN-LAST:event_logInActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
