@@ -62,13 +62,14 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         ResultSet rs = stmt.executeQuery(qry);
         while(rs.next()){
             if(rs.getString(1).trim().equals(mvt)){
-                st1 = rs.getString(9);
+                
                 String ttime = rs.getString(4);
                 ttime = ttime.substring(0,5);
                 String result = LocalTime.parse(ttime, DateTimeFormatter.ofPattern("HH:mm"))
                             .format(DateTimeFormatter.ofPattern("hh:mm a"));
                 if(av_time1.getText().equals("unavailable")){
                     av_time1.setText(result);
+                    st1 = rs.getString(9);
                 }
                 if(av_time2.getText().equals("unavailable")&& !(av_time1.getText().equals(result))){
                     av_time2.setText(result);
@@ -116,12 +117,19 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     
     ArrayList<String> seat_choices = new ArrayList();
     void change_seat_list(String rt) throws SQLException, ParseException{
-        String st1="";
+        left_seat_panel.removeAll();
+        mid_seat_panel.removeAll();
+        right_seat_panel.removeAll();
+        left_seat_panel.revalidate();
+        mid_seat_panel.revalidate();
+        right_seat_panel.revalidate();
+        
         ResultSet rs2 = stmt.executeQuery(qry);
        
         while(rs2.next()){
-            if(rs2.getString(1).equals(sm_mtitle.getText()) 
-                    && rs2.getString(4).equals(rt) ){
+            if(rs2.getString(4).equals(rt) ){
+                System.out.println("Nakuhang time: " + rt);
+                System.out.println("nakuhang showtimeid: " + rs2.getString(9));
                 st1 = rs2.getString(9);
             }
         }
@@ -176,6 +184,9 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 }
             }
         }
+        left_seat_panel.repaint();
+        mid_seat_panel.repaint();
+        right_seat_panel.repaint();
     }
     //this methods add JRadioButton for seat_management
  
@@ -611,6 +622,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     }//GEN-LAST:event_av_time1ActionPerformed
 
     private void av_time2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_av_time2ActionPerformed
+        System.out.println("ITO NAMAN LATEST ST1: " + st1);
         if(!(av_time2.getText().equals("unavailable"))){
             av_time2.setBackground(new Color(255,204,102));
             av_time1.setBackground(Color.lightGray);
