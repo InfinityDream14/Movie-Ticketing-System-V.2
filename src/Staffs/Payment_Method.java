@@ -219,50 +219,36 @@ public class Payment_Method extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
     
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    static String payment = "";
+    static String emp_log = "E1";
     private void GCashMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GCashMouseClicked
+       payment="E-Wallet";
        GCash gc = new GCash();
        gc.setVisible(true);
     }//GEN-LAST:event_GCashMouseClicked
 
     private void MayaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MayaMouseClicked
+        payment="E-Wallet";
         PayMaya py= new PayMaya();
         py.setVisible(true);
-        
-        try{
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;instance=COMPUTERBERRY;databaseName=Database", "sa", "Java");
-            
-            String sql = "insert into payment values (?,?,?,?,?)";
-            
-            PreparedStatement ptsmt = conn.prepareStatement(sql);
-            
-            ptsmt.setString(1, "");
-            ptsmt.setString(2, Maya.getText());
-            ptsmt.setString(3, "");
-            ptsmt.setString(4, "");
-            ptsmt.setString(5, "");
-            
-            ptsmt.executeUpdate();
-        }
-        catch(Exception e){
-            
-        }
     }//GEN-LAST:event_MayaMouseClicked
 
     private void BPIMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BPIMouseClicked
         BPI bp =new BPI();
         bp.setVisible(true);
+        payment="Card";
     }//GEN-LAST:event_BPIMouseClicked
 
     private void BDOMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BDOMouseClicked
         BDO bd=new BDO();
         bd.setVisible(true);
+        payment="Card";
     }//GEN-LAST:event_BDOMouseClicked
 
     private void UnionBankMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UnionBankMouseClicked
         UnionBank ub= new UnionBank();
         ub.setVisible(true);
+        payment="Card";
     }//GEN-LAST:event_UnionBankMouseClicked
    
     // Add an action listener to the GCash label/icon
