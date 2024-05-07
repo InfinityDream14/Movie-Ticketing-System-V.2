@@ -67,13 +67,13 @@ public class Movie_List extends javax.swing.JFrame {
                             JLabel jg = (JLabel)movie_panel1.getComponent(2);
                             genre_to_sm = jg.getText();
                             Seat_Management sm;
-                                dispose();
                             try {
                                 sm = new Seat_Management();
                                 sm.setVisible(true);
                             } catch (ParseException ex) {
                                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                             }
+                            dispose();
                         } catch (SQLException ex) {
                             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                         }

@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.logging.Level;
 /**
  *
@@ -53,15 +54,15 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                     "              on m.MovieID = st.ShowtimeMovieID)\n" +
                     "     on c.CinemaID = st.ShowtimeCinemaID";
     
+    String st1;
     void get_info_in_database() throws SQLException, ParseException{
-         
-        
         sm_mtitle.setText(mvt);
         sm_mgenre.setText(mvg);
         String t1,t2;
         ResultSet rs = stmt.executeQuery(qry);
         while(rs.next()){
             if(rs.getString(1).trim().equals(mvt)){
+                st1 = rs.getString(9);
                 String ttime = rs.getString(4);
                 ttime = ttime.substring(0,5);
                 String result = LocalTime.parse(ttime, DateTimeFormatter.ofPattern("HH:mm"))
@@ -113,6 +114,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         return real_time;
     }
     
+    ArrayList<String> seat_choices = new ArrayList();
     void change_seat_list(String rt) throws SQLException, ParseException{
         String st1="";
         ResultSet rs2 = stmt.executeQuery(qry);
@@ -130,6 +132,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         ResultSet rs = stmt.executeQuery(qry3);
         while(rs.next()){
             if(rs.getString(1).equals(st1)){
+                
                 String cn="";
                 ImageIcon seat_icon = new ImageIcon("seat.png");
                 JRadioButton jr = new JRadioButton();
@@ -141,11 +144,18 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 jr.addMouseListener(new MouseAdapter(){
                     @Override
                     public void mouseClicked(MouseEvent e){
-                        if(!(jr.getBackground().equals(Color.cyan))){
+                        if(!(jr.getBackground().equals(Color.cyan))&&
+                                !(jr.getBackground().equals(new Color(255,204,102)))){
                             jr.setBackground(Color.cyan);
+                            seat_choices.add(jr.getText());
+                            System.out.println("added to list");
+                            
                         }
-                        else
+                        else if(jr.getBackground().equals(Color.cyan)){
                             jr.setBackground(Color.white);
+                            seat_choices.remove(jr.getText());
+                            System.out.println("removed to list");
+                        }
                         
                     }
                 });
@@ -191,7 +201,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 
     }
         
-        public void create_receipt_panel(){
+    public void create_receipt_panel(){
             
             JPanel receipt_panel1 = new JPanel();
             receipt_panel1.setPreferredSize(new Dimension(228,268));
@@ -255,6 +265,46 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             main_receipt_panel.add(scrollPane);
     }
     
+    
+    String qry2 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
+                "from showtime st inner join seat_list sl\n" +
+                "	on st.showtimeid = sl.showtimeid";
+    void update_seat_list() throws SQLException{
+        
+       Statement stm = ms.mc.createStatement();
+        
+        for(int i=0; i<seat_choices.size(); i++){
+            
+            ResultSet rs = stm.executeQuery(qry2);
+            
+            String scode = seat_choices.get(i);
+            String sloc="";
+            sloc = sloc + scode.charAt(0);
+            String snum = scode.substring(1,scode.length());
+            System.out.println(sloc);
+            System.out.println(snum);
+            System.out.println(scode);
+            
+            while(rs.next()){
+
+                if(rs.getString(2).equals(st1) && rs.getString(3).equals(sloc)
+                        && rs.getString(4).equals(snum)){
+                    
+                    String rsin = "UPDATE seat_list\n" +
+                                "set seat_status = 'U'\n" +
+                                "Where seat_number="+ snum +"and seat_location = '"+ sloc
+                            +"' and showtimeid = '" +st1 +"'";
+                    
+                    int ups = stmt.executeUpdate(rsin);
+                    if(ups>0){
+                        System.out.println("seat Updated on database");
+                    }
+                  
+                }
+                
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -474,6 +524,11 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         jRadioButton2.setBackground(new java.awt.Color(255, 255, 255));
         jRadioButton2.setText("Available");
         jRadioButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
         right_main_panel.add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 440, -1, -1));
 
         jRadioButton3.setBackground(new java.awt.Color(255, 204, 102));
@@ -522,12 +577,15 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
         this.setVisible(false);
         new Payment_Method().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        mlst.setVisible(true);
         this.setVisible(false);
+        
         //mlst.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -571,6 +629,14 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             }
         }
     }//GEN-LAST:event_av_time2ActionPerformed
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        try {
+            update_seat_list();
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
