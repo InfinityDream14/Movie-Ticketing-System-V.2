@@ -3,10 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Staffs;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
-import java.lang.System.*;
 import javax.swing.*;
 import java.sql.*;
 import java.text.ParseException;
@@ -14,247 +14,251 @@ import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.logging.Level;
+import main.Main;
+
 /**
  *
  * @author Administrator
  */
-public class Seat_Management extends javax.swing.JFrame implements MouseListener{
+public class Seat_Management extends javax.swing.JFrame implements MouseListener {
 
     //Movie_List mlst = new Movie_List();
-
     Movie_List mlst = new Movie_List();
-    public Seat_Management() throws SQLException, ParseException {
+    Statement stmt;
+    Main main;
+
+    public Seat_Management() throws SQLException, ParseException, ClassNotFoundException, ClassNotFoundException {
         initComponents();
         setLocationRelativeTo(null);
-        
-        this.setShape(new RoundRectangle2D.Double(0, 0, (850), 
-        (480), 25, 25));
-        
+
+        main = new Main();
+        main.connectToDatabase();
+        stmt = main.mc.createStatement();
+
+        this.setShape(new RoundRectangle2D.Double(0, 0, (850),
+                (480), 25, 25));
+
         right_panel_bg(); // putting image background to right panel
         left_panel_bg(); // putting image background to left panel
         get_info_in_database();
-        
+
         create_receipt_panel();
     }
-    
 
     String mvt = mlst.title_to_sm;
     String mvg = mlst.genre_to_sm;
     static String mvp;
     static String mvd;
+
     
-    Main_Staff ms = new Main_Staff();
-    Statement stmt = ms.mc.createStatement();
     //this method will get the exact seat count of a cinema where a movie will be played
-    
-    String qry = "select m.Title, m.MovieID, st.ShowtimeMovieID ,st.startTime, st.ShowtimeCinemaID,\n" +
-                    "        c.CinemaID, c.NumofSteats, m.price, st.showtimeID\n" +
-                    "from cinema c inner join(movie m inner join showtime st\n" +
-                    "              on m.MovieID = st.ShowtimeMovieID)\n" +
-                    "     on c.CinemaID = st.ShowtimeCinemaID";
-    
-    void get_info_in_database() throws SQLException, ParseException{
-         
-        
+
+    String qry = "select m.Title, m.MovieID, st.ShowtimeMovieID ,st.startTime, st.ShowtimeCinemaID,\n"
+            + "        c.CinemaID, c.NumofSteats, m.price, st.showtimeID\n"
+            + "from cinema c inner join(movie m inner join showtime st\n"
+            + "              on m.MovieID = st.ShowtimeMovieID)\n"
+            + "     on c.CinemaID = st.ShowtimeCinemaID";
+
+    void get_info_in_database() throws SQLException, ParseException {
+
         sm_mtitle.setText(mvt);
         sm_mgenre.setText(mvg);
-        String t1,t2;
+        String t1, t2;
         ResultSet rs = stmt.executeQuery(qry);
-        while(rs.next()){
-            if(rs.getString(1).trim().equals(mvt)){
+        while (rs.next()) {
+            if (rs.getString(1).trim().equals(mvt)) {
                 String ttime = rs.getString(4);
-                ttime = ttime.substring(0,5);
+                ttime = ttime.substring(0, 5);
                 String result = LocalTime.parse(ttime, DateTimeFormatter.ofPattern("HH:mm"))
-                            .format(DateTimeFormatter.ofPattern("hh:mm a"));
-                if(av_time1.getText().equals("unavailable")){
+                        .format(DateTimeFormatter.ofPattern("hh:mm a"));
+                if (av_time1.getText().equals("unavailable")) {
                     av_time1.setText(result);
                 }
-                if(av_time2.getText().equals("unavailable")&& !(av_time1.getText().equals(result))){
+                if (av_time2.getText().equals("unavailable") && !(av_time1.getText().equals(result))) {
                     av_time2.setText(result);
                 }
             }
         }
 
         String qry1 = "select * from movie";
-        
+
         ResultSet rs1 = stmt.executeQuery(qry1);
-        while(rs1.next()){
-            if(rs1.getString(2).trim().equals(mvt)){
+        while (rs1.next()) {
+            if (rs1.getString(2).trim().equals(mvt)) {
                 String imgloc = rs1.getString(7);
                 ImageIcon mi = new ImageIcon(imgloc);
                 Image image = mi.getImage(); // transform it 
-                Image newimg = image.getScaledInstance(100, 80,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+                Image newimg = image.getScaledInstance(100, 80, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
                 mi = new ImageIcon(newimg);  // transform it back
                 sm_image_slot.setIcon(mi);
                 sm_image_slot.setText("");
                 mvp = rs1.getString(6);
                 mvp = mvp.substring(0, 3);
                 mvd = rs1.getString(5);
-                mvd = "Duration: "+mvd.charAt(0) +" hr "+mvd.substring(2,4) +" mins";
+                mvd = "Duration: " + mvd.charAt(0) + " hr " + mvd.substring(2, 4) + " mins";
                 break;
             }
         }
         sm_mduration.setText(mvd);
         sm_mprice.setText(mvp);
-        av_time1.setBackground(new Color(255,204,102));
+        av_time1.setBackground(new Color(255, 204, 102));
         av_time2.setBackground(Color.LIGHT_GRAY);
-        
+
         String real_time = convert_12hr_to_24hr(av_time1.getText());
-        
+
         change_seat_list(real_time);
     }
-    
-    String convert_12hr_to_24hr(String tm) throws ParseException{
+
+    String convert_12hr_to_24hr(String tm) throws ParseException {
         SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
         SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mm a");
         java.util.Date date = parseFormat.parse(tm);
         String real_time = displayFormat.format(date);
-        real_time = real_time +":00.0000000";
+        real_time = real_time + ":00.0000000";
         return real_time;
     }
-    
-    void change_seat_list(String rt) throws SQLException, ParseException{
-        String st1="";
+
+    void change_seat_list(String rt) throws SQLException, ParseException {
+        String st1 = "";
         ResultSet rs2 = stmt.executeQuery(qry);
-       
-        while(rs2.next()){
-            if(rs2.getString(1).equals(sm_mtitle.getText()) 
-                    && rs2.getString(4).equals(rt) ){
+
+        while (rs2.next()) {
+            if (rs2.getString(1).equals(sm_mtitle.getText())
+                    && rs2.getString(4).equals(rt)) {
                 st1 = rs2.getString(9);
             }
         }
-        
-        String qry3 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
-                        "from showtime st inner join seat_list sl\n" +
-                        "	on st.showtimeid = sl.showtimeid";
+
+        String qry3 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n"
+                + "from showtime st inner join seat_list sl\n"
+                + "	on st.showtimeid = sl.showtimeid";
         ResultSet rs = stmt.executeQuery(qry3);
-        while(rs.next()){
-            if(rs.getString(1).equals(st1)){
-                String cn="";
+        while (rs.next()) {
+            if (rs.getString(1).equals(st1)) {
+                String cn = "";
                 ImageIcon seat_icon = new ImageIcon("seat.png");
                 JRadioButton jr = new JRadioButton();
-                if(rs.getString(5).equals("A")){
+                if (rs.getString(5).equals("A")) {
                     jr.setBackground(Color.white);
+                } else {
+                    jr.setBackground(new Color(255, 204, 102));
                 }
-                else
-                    jr.setBackground(new Color(255,204,102));
-                jr.addMouseListener(new MouseAdapter(){
+                jr.addMouseListener(new MouseAdapter() {
                     @Override
-                    public void mouseClicked(MouseEvent e){
-                        if(!(jr.getBackground().equals(Color.cyan))){
+                    public void mouseClicked(MouseEvent e) {
+                        if (!(jr.getBackground().equals(Color.cyan))) {
                             jr.setBackground(Color.cyan);
-                        }
-                        else
+                        } else {
                             jr.setBackground(Color.white);
-                        
+                        }
+
                     }
                 });
-                if(rs.getString(3).equals("L")){
-                    cn = cn+"L"+rs.getString(4);
-                    jr.setText(cn); jr.setIcon(seat_icon);
+                if (rs.getString(3).equals("L")) {
+                    cn = cn + "L" + rs.getString(4);
+                    jr.setText(cn);
+                    jr.setIcon(seat_icon);
                     left_seat_panel.add(jr);
-                }
-                else if(rs.getString(3).equals("M")){
-                    cn = cn+"M"+rs.getString(4);
-                    jr.setText(cn);jr.setIcon(seat_icon);
+                } else if (rs.getString(3).equals("M")) {
+                    cn = cn + "M" + rs.getString(4);
+                    jr.setText(cn);
+                    jr.setIcon(seat_icon);
                     mid_seat_panel.add(jr);
-                }
-                else if(rs.getString(3).equals("R")){
-                    cn = cn+"R"+rs.getString(4);
-                    jr.setText(cn);jr.setIcon(seat_icon);
+                } else if (rs.getString(3).equals("R")) {
+                    cn = cn + "R" + rs.getString(4);
+                    jr.setText(cn);
+                    jr.setIcon(seat_icon);
                     right_seat_panel.add(jr);
                 }
             }
         }
     }
     //this methods add JRadioButton for seat_management
- 
 
-    
-    void right_panel_bg(){
+    void right_panel_bg() {
 
         ImageIcon rpbg = new ImageIcon("rpbg.png");
         Image image = rpbg.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(570, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        Image newimg = image.getScaledInstance(570, 480, java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
         rpbg = new ImageIcon(newimg);
         rp_bg.setIcon(rpbg);
-                
-    }
-    
-    void left_panel_bg(){
 
-    ImageIcon rpbg = new ImageIcon("lpbg.png");
-    Image image = rpbg.getImage(); // transform it 
-    Image newimg = image.getScaledInstance(280, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
-    rpbg = new ImageIcon(newimg);
-    lp_bg.setIcon(rpbg);
-                
     }
-        
-        public void create_receipt_panel(){
-            
-            JPanel receipt_panel1 = new JPanel();
-            receipt_panel1.setPreferredSize(new Dimension(228,268));
-            receipt_panel1.setLayout(null);
-            receipt_panel.add(receipt_panel1);
-            
-            JLabel rob = new JLabel("ROBINSON");
-            receipt_panel1.add(rob);
-            rob.setBounds(80, 0, 200, 30);
-            rob.setFont(new Font("Segoe UI",Font.BOLD,15));
-            
-            JLabel loc = new JLabel("ROBINSON PLACE MALOLOS");
-            receipt_panel1.add(loc);
-            loc.setBounds(30, 20, 200, 30);
-            
-            JLabel date_time = new JLabel("DATE & TIME: ");
-            receipt_panel1.add(date_time);
-            date_time.setBounds(5, 60, 105, 30);
-            
-            JLabel m_ttl = new JLabel("TITLE");
-            receipt_panel1.add(m_ttl);
-            m_ttl.setBounds(95, 90, 200, 30);
-            m_ttl.setFont(new Font("Segoe UI",Font.BOLD,15));
-            
-            JLabel c_id = new JLabel("C_ID");
-            receipt_panel1.add(c_id);
-            c_id.setBounds(20, 125, 100, 30);
-            c_id.setFont(new Font("Segoe UI",Font.BOLD,11));
-            
-            JLabel s_num = new JLabel("SEAT. NUM");
-            receipt_panel1.add(s_num);
-            s_num.setBounds(150, 125, 100, 30);
-            s_num.setFont(new Font("Segoe UI",Font.BOLD,11));
-            
-            JPanel square = new JPanel();
-            square.setLayout(null);
-            receipt_panel1.add(square);
-            square.setBackground(Color.WHITE);
-            square.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            square.setSize(new Dimension(190,70));
-            square.setBounds(20, 150, 190, 70);
-            
-            JLabel price = new JLabel("PRICE: ");
-            square.add(price);
-            price.setBounds(5, 10, 105, 30);
-            
-            JLabel t_id = new JLabel("TICKET ID: ");
-            square.add(t_id);
-            t_id.setBounds(5, 30, 105, 30);
-            
-            main_receipt_panel.add(receipt_panel);
-            receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
-            receipt_panel.setPreferredSize(new Dimension(235,900));
-            JScrollPane scrollPane = new JScrollPane(receipt_panel);
-            scrollPane.setMinimumSize(new Dimension(5, 5));
-            scrollPane.setPreferredSize(new Dimension(230,270));
-            scrollPane.setBounds(5, 5, 255, 280);
-            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            scrollPane.setOpaque(false);
-            main_receipt_panel.add(scrollPane);
+
+    void left_panel_bg() {
+
+        ImageIcon rpbg = new ImageIcon("lpbg.png");
+        Image image = rpbg.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(280, 480, java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        rpbg = new ImageIcon(newimg);
+        lp_bg.setIcon(rpbg);
+
     }
-    
+
+    public void create_receipt_panel() {
+
+        JPanel receipt_panel1 = new JPanel();
+        receipt_panel1.setPreferredSize(new Dimension(228, 268));
+        receipt_panel1.setLayout(null);
+        receipt_panel.add(receipt_panel1);
+
+        JLabel rob = new JLabel("ROBINSON");
+        receipt_panel1.add(rob);
+        rob.setBounds(80, 0, 200, 30);
+        rob.setFont(new Font("Segoe UI", Font.BOLD, 15));
+
+        JLabel loc = new JLabel("ROBINSON PLACE MALOLOS");
+        receipt_panel1.add(loc);
+        loc.setBounds(30, 20, 200, 30);
+
+        JLabel date_time = new JLabel("DATE & TIME: ");
+        receipt_panel1.add(date_time);
+        date_time.setBounds(5, 60, 105, 30);
+
+        JLabel m_ttl = new JLabel("TITLE");
+        receipt_panel1.add(m_ttl);
+        m_ttl.setBounds(95, 90, 200, 30);
+        m_ttl.setFont(new Font("Segoe UI", Font.BOLD, 15));
+
+        JLabel c_id = new JLabel("C_ID");
+        receipt_panel1.add(c_id);
+        c_id.setBounds(20, 125, 100, 30);
+        c_id.setFont(new Font("Segoe UI", Font.BOLD, 11));
+
+        JLabel s_num = new JLabel("SEAT. NUM");
+        receipt_panel1.add(s_num);
+        s_num.setBounds(150, 125, 100, 30);
+        s_num.setFont(new Font("Segoe UI", Font.BOLD, 11));
+
+        JPanel square = new JPanel();
+        square.setLayout(null);
+        receipt_panel1.add(square);
+        square.setBackground(Color.WHITE);
+        square.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        square.setSize(new Dimension(190, 70));
+        square.setBounds(20, 150, 190, 70);
+
+        JLabel price = new JLabel("PRICE: ");
+        square.add(price);
+        price.setBounds(5, 10, 105, 30);
+
+        JLabel t_id = new JLabel("TICKET ID: ");
+        square.add(t_id);
+        t_id.setBounds(5, 30, 105, 30);
+
+        main_receipt_panel.add(receipt_panel);
+        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
+        receipt_panel.setPreferredSize(new Dimension(235, 900));
+        JScrollPane scrollPane = new JScrollPane(receipt_panel);
+        scrollPane.setMinimumSize(new Dimension(5, 5));
+        scrollPane.setPreferredSize(new Dimension(230, 270));
+        scrollPane.setBounds(5, 5, 255, 280);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setOpaque(false);
+        main_receipt_panel.add(scrollPane);
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -532,10 +536,10 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void av_time1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_av_time1ActionPerformed
-        if(!(av_time1.getText().equals("unavailable"))){
-            av_time1.setBackground(new Color(255,204,102));
+        if (!(av_time1.getText().equals("unavailable"))) {
+            av_time1.setBackground(new Color(255, 204, 102));
             av_time2.setBackground(Color.lightGray);
-            String time1="";
+            String time1 = "";
             try {
                 time1 = convert_12hr_to_24hr(av_time1.getText());
             } catch (ParseException ex) {
@@ -549,14 +553,14 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
     }//GEN-LAST:event_av_time1ActionPerformed
 
     private void av_time2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_av_time2ActionPerformed
-        if(!(av_time2.getText().equals("unavailable"))){
-            av_time2.setBackground(new Color(255,204,102));
+        if (!(av_time2.getText().equals("unavailable"))) {
+            av_time2.setBackground(new Color(255, 204, 102));
             av_time1.setBackground(Color.lightGray);
-            String time1="";
+            String time1 = "";
             try {
                 time1 = convert_12hr_to_24hr(av_time2.getText());
             } catch (ParseException ex) {

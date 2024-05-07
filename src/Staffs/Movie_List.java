@@ -10,15 +10,16 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import java.sql.*;
 import java.text.ParseException;
+import main.Main;
 /**
  *
  * @author Administrator
  */
-public class Movie_List extends javax.swing.JFrame {
+public final class Movie_List extends javax.swing.JFrame {
 
     //Seat_Management sm = new Seat_Management();
     //Payment_Method pm= new Payment_Method();
-    public Movie_List() throws SQLException {
+    public Movie_List() throws SQLException, ClassNotFoundException {
         initComponents();
         setLocationRelativeTo(null);
         
@@ -33,9 +34,9 @@ public class Movie_List extends javax.swing.JFrame {
     }
     static String title_to_sm;
     static String genre_to_sm;
-    public void create_movie_list_panel() throws SQLException{
-        Main_Staff ms = new Main_Staff();
-        
+    public void create_movie_list_panel() throws SQLException, ClassNotFoundException, ClassNotFoundException{
+        Main ms = new Main();
+        ms.connectToDatabase();
         Statement stmt = ms.mc.createStatement();
             
             String qry = "select * from movie";
@@ -75,6 +76,8 @@ public class Movie_List extends javax.swing.JFrame {
                                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         } catch (SQLException ex) {
+                            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -232,6 +235,8 @@ public class Movie_List extends javax.swing.JFrame {
             new Movie_List().setVisible(false);
         } catch (SQLException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
         new Payment_Method().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -241,11 +246,15 @@ public class Movie_List extends javax.swing.JFrame {
             new Movie_List().setVisible(false);
         } catch (SQLException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             try {
                 new Seat_Management().setVisible(true);
             } catch (ParseException ex) {
+                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (SQLException ex) {
@@ -255,14 +264,18 @@ public class Movie_List extends javax.swing.JFrame {
 
     private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
         try {
-            new Movie_List().setVisible(false);
+            new Movie_List().setVisible(false); 
         } catch (SQLException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             try {
                 new Seat_Management().setVisible(true);
             } catch (ParseException ex) {
+                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (SQLException ex) {

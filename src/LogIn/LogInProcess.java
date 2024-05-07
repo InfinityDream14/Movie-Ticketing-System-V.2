@@ -4,25 +4,56 @@
  */
 package LogIn;
 
-import Admin.Admin;
-import javax.swing.JOptionPane;
+import admin.Admin;
+import java.sql.*;
+import javax.swing.*;
+import main.Main;
 
 /**
  *
  * @author cdgan
  */
-public class LogInProcess extends LogIn {
+public class LogInProcess {
 
-    public void checkAcc(String user, String pass) {
-        System.out.println(user +", "+pass);
-        if (user.equals("Admin") && user.equals("Admin")) {
-            JOptionPane.showMessageDialog(null, "You are an admin!");
-            Admin.main(null);
-            dispose();
-        } else{
-            JOptionPane.showMessageDialog(null,"You entered wrong data!", "Wrong data input", JOptionPane.WARNING_MESSAGE);
+    Statement stmt;
+
+    public int checkAcc(String user, String pass) throws SQLException, ClassNotFoundException {
+        Main main = new Main();
+        main.connectToDatabase();
+
+        int flag = 0;
+        stmt = (Statement) main.mc.createStatement();
+
+        String userN = user;
+        String userP = pass;
+
+        String query = "select username, passw from staff";
+
+        ResultSet rs = stmt.executeQuery(query);
+        while (rs.next()) {
+            if (userN.equals(rs.getString(1)) && userP.equals(rs.getString(2))) {
+                if(userN.equals("Admin")){
+                    flag = 1;
+                } else{
+                    flag = 2;
+                }
+                break;
+            }
         }
-        lUserIn.setText("");
-        lPassIn.setText("");
+
+        switch (flag) {
+            case 1:
+                JOptionPane.showMessageDialog(null, "Welcome. Our Team leader!");
+                break;
+            case 2:
+                JOptionPane.showMessageDialog(null, "Welcome our team member!");
+                break;
+            default:
+                JOptionPane.showMessageDialog(null, "There is no such an account");
+                break;
+        }
+        System.out.println(flag);
+        return flag;
     }
+
 }
