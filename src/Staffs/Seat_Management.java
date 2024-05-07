@@ -13,7 +13,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.Date;
 import java.util.logging.Level;
 /**
  *
@@ -35,7 +36,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         left_panel_bg(); // putting image background to left panel
         get_info_in_database();
         
-        create_receipt_panel();
+
     }
     
 
@@ -54,12 +55,12 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                     "              on m.MovieID = st.ShowtimeMovieID)\n" +
                     "     on c.CinemaID = st.ShowtimeCinemaID";
     
-    String st1;
+    String st1, cid, mprc;
+    String tixid = "T1";
     ArrayList<String> time_choice = new ArrayList();
     void get_info_in_database() throws SQLException, ParseException{
         sm_mtitle.setText(mvt);
         sm_mgenre.setText(mvg);
-        String t1,t2;
         ResultSet rs = stmt.executeQuery(qry);
         while(rs.next()){
             if(rs.getString(1).trim().equals(mvt)){
@@ -132,6 +133,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 System.out.println("Nakuhang time: " + rt);
                 System.out.println("nakuhang showtimeid: " + rs2.getString(9));
                 st1 = rs2.getString(9);
+                cid = rs2.getString(5);
+                mprc = rs2.getString(8);
             }
         }
         
@@ -157,6 +160,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                                 !(jr.getBackground().equals(new Color(255,204,102)))){
                             jr.setBackground(Color.cyan);
                             seat_choices.add(jr.getText());
+                            create_receipt_panel(jr);
                             System.out.println("added to list");
                             
                         }
@@ -213,7 +217,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 
     }
         
-    public void create_receipt_panel(){
+    public void create_receipt_panel(JRadioButton jrb){
             
             JPanel receipt_panel1 = new JPanel();
             receipt_panel1.setPreferredSize(new Dimension(228,268));
@@ -229,21 +233,26 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             receipt_panel1.add(loc);
             loc.setBounds(30, 20, 200, 30);
             
-            JLabel date_time = new JLabel("DATE & TIME: ");
+            Date date = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+                     String str = formatter.format(date);
+                    System.out.print("Current date: "+str);
+            
+            JLabel date_time = new JLabel("DATE & TIME: " + str);
             receipt_panel1.add(date_time);
             date_time.setBounds(5, 60, 105, 30);
             
-            JLabel m_ttl = new JLabel("TITLE");
+            JLabel m_ttl = new JLabel("TITLE" + mvt);
             receipt_panel1.add(m_ttl);
             m_ttl.setBounds(95, 90, 200, 30);
             m_ttl.setFont(new Font("Segoe UI",Font.BOLD,15));
             
-            JLabel c_id = new JLabel("C_ID");
+            JLabel c_id = new JLabel("C_ID" + cid);
             receipt_panel1.add(c_id);
             c_id.setBounds(20, 125, 100, 30);
             c_id.setFont(new Font("Segoe UI",Font.BOLD,11));
             
-            JLabel s_num = new JLabel("SEAT. NUM");
+            JLabel s_num = new JLabel("SEAT. NUM" + jrb.getText() );
             receipt_panel1.add(s_num);
             s_num.setBounds(150, 125, 100, 30);
             s_num.setFont(new Font("Segoe UI",Font.BOLD,11));
@@ -256,11 +265,11 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             square.setSize(new Dimension(190,70));
             square.setBounds(20, 150, 190, 70);
             
-            JLabel price = new JLabel("PRICE: ");
+            JLabel price = new JLabel("PRICE: " + mprc);
             square.add(price);
             price.setBounds(5, 10, 105, 30);
             
-            JLabel t_id = new JLabel("TICKET ID: ");
+            JLabel t_id = new JLabel("TICKET ID: " + tixid );
             square.add(t_id);
             t_id.setBounds(5, 30, 105, 30);
             
@@ -385,7 +394,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
 
         receipt_panel.setBackground(new java.awt.Color(255, 255, 255));
         receipt_panel.setPreferredSize(new java.awt.Dimension(260, 320));
-        receipt_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        receipt_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
 
         javax.swing.GroupLayout main_receipt_panelLayout = new javax.swing.GroupLayout(main_receipt_panel);
         main_receipt_panel.setLayout(main_receipt_panelLayout);
