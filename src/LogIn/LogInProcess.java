@@ -4,6 +4,7 @@
  */
 package LogIn;
 
+import Admin.Admin;
 import javax.swing.JOptionPane;
 
 /**
@@ -12,11 +13,16 @@ import javax.swing.JOptionPane;
  */
 public class LogInProcess extends LogIn {
 
-    public void checkAcc() {
-        System.out.println(lUserIn.getText() +", "+lPassIn.getText());
-        if (lUserIn.getText().equals("Admin")) {
-            System.out.println("Hello World");
+    public void checkAcc(String user, String pass) {
+        System.out.println(user +", "+pass);
+        if (user.equals("Admin") && user.equals("Admin")) {
             JOptionPane.showMessageDialog(null, "You are an admin!");
+            Admin.main(null);
+            dispose();
+        } else{
+            JOptionPane.showMessageDialog(null,"You entered wrong data!", "Wrong data input", JOptionPane.WARNING_MESSAGE);
         }
+        lUserIn.setText("");
+        lPassIn.setText("");
     }
 }
