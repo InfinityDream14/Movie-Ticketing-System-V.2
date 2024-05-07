@@ -232,7 +232,7 @@ public class Payment_Method extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        this.dispose();
+
         try {
             new Seat_Management().setVisible(true);
         } catch (SQLException ex) {
@@ -240,7 +240,9 @@ public class Payment_Method extends javax.swing.JFrame {
         } catch (ParseException ex) {
             Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+    
     static String payment = "";
     static String emp_log = "E1";
     private void GCashMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GCashMouseClicked
@@ -274,12 +276,13 @@ public class Payment_Method extends javax.swing.JFrame {
     }//GEN-LAST:event_UnionBankMouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        this.dispose();
+        
         try {
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
    
     // Add an action listener to the GCash label/icon

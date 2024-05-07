@@ -160,7 +160,6 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                                 !(jr.getBackground().equals(new Color(255,204,102)))){
                             jr.setBackground(Color.cyan);
                             seat_choices.add(jr.getText());
-                            create_receipt_panel(jr);
                             System.out.println("added to list");
                             
                         }
@@ -595,9 +594,9 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        this.setVisible(false);
         new Payment_Method().setVisible(true);
+        this.setVisible(false);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
