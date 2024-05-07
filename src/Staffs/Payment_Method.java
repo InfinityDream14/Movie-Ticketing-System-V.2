@@ -5,6 +5,9 @@
 package Staffs;
 import java.awt.Image;
 import java.awt.geom.RoundRectangle2D;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import javax.swing.*;
 /**
  *
@@ -225,6 +228,26 @@ public class Payment_Method extends javax.swing.JFrame {
     private void MayaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MayaMouseClicked
         PayMaya py= new PayMaya();
         py.setVisible(true);
+        
+        try{
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;instance=COMPUTERBERRY;databaseName=Database", "sa", "Java");
+            
+            String sql = "insert into payment values (?,?,?,?,?)";
+            
+            PreparedStatement ptsmt = conn.prepareStatement(sql);
+            
+            ptsmt.setString(1, "");
+            ptsmt.setString(2, Maya.getText());
+            ptsmt.setString(3, "");
+            ptsmt.setString(4, "");
+            ptsmt.setString(5, "");
+            
+            ptsmt.executeUpdate();
+        }
+        catch(Exception e){
+            
+        }
     }//GEN-LAST:event_MayaMouseClicked
 
     private void BPIMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BPIMouseClicked

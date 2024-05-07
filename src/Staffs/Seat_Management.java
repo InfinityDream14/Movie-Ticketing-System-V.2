@@ -180,13 +180,14 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         rp_bg.setIcon(rpbg);
                 
     }
-        void left_panel_bg(){
+    
+    void left_panel_bg(){
 
-        ImageIcon rpbg = new ImageIcon("lpbg.png");
-        Image image = rpbg.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(280, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
-        rpbg = new ImageIcon(newimg);
-        lp_bg.setIcon(rpbg);
+    ImageIcon rpbg = new ImageIcon("lpbg.png");
+    Image image = rpbg.getImage(); // transform it 
+    Image newimg = image.getScaledInstance(280, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+    rpbg = new ImageIcon(newimg);
+    lp_bg.setIcon(rpbg);
                 
     }
         
@@ -215,10 +216,10 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             m_ttl.setBounds(95, 90, 200, 30);
             m_ttl.setFont(new Font("Segoe UI",Font.BOLD,15));
             
-            JLabel cinema = new JLabel("CINEMA");
-            receipt_panel1.add(cinema);
-            cinema.setBounds(20, 125, 100, 30);
-            cinema.setFont(new Font("Segoe UI",Font.BOLD,11));
+            JLabel c_id = new JLabel("C_ID");
+            receipt_panel1.add(c_id);
+            c_id.setBounds(20, 125, 100, 30);
+            c_id.setFont(new Font("Segoe UI",Font.BOLD,11));
             
             JLabel s_num = new JLabel("SEAT. NUM");
             receipt_panel1.add(s_num);
@@ -252,7 +253,6 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             scrollPane.setOpaque(false);
             main_receipt_panel.add(scrollPane);
-            
     }
     
     /**

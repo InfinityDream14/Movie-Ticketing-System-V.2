@@ -4,6 +4,10 @@
  */
 package Staffs;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.*;
+
 /**
  *
  * @author John Paul
@@ -16,7 +20,8 @@ public class PayMaya extends javax.swing.JFrame {
     public PayMaya() {
         initComponents();
     }
-
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -29,10 +34,10 @@ public class PayMaya extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        acc_num = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        amount = new javax.swing.JTextField();
+        paynow = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -51,8 +56,13 @@ public class PayMaya extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Amount");
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton1.setText("PayNow");
+        paynow.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        paynow.setText("PayNow");
+        paynow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                paynowActionPerformed(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jButton2.setText("BACK");
@@ -88,11 +98,11 @@ public class PayMaya extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGap(133, 133, 133)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(acc_num, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(amount, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(99, 99, 99)
-                                        .addComponent(jButton1)))))
+                                        .addComponent(paynow)))))
                         .addGap(0, 154, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -109,13 +119,13 @@ public class PayMaya extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(acc_num, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35)
                 .addComponent(jLabel3)
                 .addGap(18, 18, 18)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(amount, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addComponent(paynow)
                 .addGap(33, 33, 33))
         );
 
@@ -143,18 +153,43 @@ public class PayMaya extends javax.swing.JFrame {
          p.setVisible(true);
     }//GEN-LAST:event_jButton2MouseClicked
 
+    private void paynowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paynowActionPerformed
+//        try{
+//            Payment_Method pm = new Payment_Method();
+//            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//            Connection conn = DriverManager.getConnection("jdbc:sqlserver://localhost:1433;instance=COMPUTERBERRY;databaseName=Database", "sa", "Java");
+//            
+//            String sql = "insert into payment values (?,?,?,?,?)";
+//            
+//            PreparedStatement ptsmt = conn.prepareStatement(sql);
+//            
+//            if(){
+//            ptsmt.setString(1, "");
+//            ptsmt.setString(2, acc_num.getText());
+//            ptsmt.setString(3, amount.getText());
+//            ptsmt.setString(4, "");
+//            ptsmt.setString(5, "");
+//            
+//            ptsmt.executeUpdate();
+//            }
+//        }
+//        catch(Exception e){
+//            
+//        }
+    }//GEN-LAST:event_paynowActionPerformed
+
     /**
      * @param args the command line arguments
      */
  
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTextField acc_num;
+    private javax.swing.JTextField amount;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JButton paynow;
     // End of variables declaration//GEN-END:variables
 }

@@ -28,7 +28,6 @@ public class Movie_List extends javax.swing.JFrame {
         left_panel_bg();
         right_panel_bg();
         
-        
         create_movie_list_panel();
         
     }
