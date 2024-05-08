@@ -36,7 +36,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         left_panel_bg(); // putting image background to left panel
         get_info_in_database();
         
-
+        create_ticket_list();
     }
     
 
@@ -44,6 +44,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     String mvg = mlst.genre_to_sm;
     static String mvp;
     static String mvd;
+    
+    String ticket_title = "The Avengers";
     
     Main_Staff ms = new Main_Staff();
     Statement stmt = ms.mc.createStatement();
@@ -285,6 +287,48 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             main_receipt_panel.add(scrollPane);
     }
     
+    public void create_ticket_list(){
+        JPanel receipt_panel1 = new JPanel();
+        receipt_panel1.setPreferredSize(new Dimension(225,95));
+        receipt_panel1.setLayout(null);
+        receipt_panel1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        receipt_panel1.setBackground(Color.WHITE);
+        receipt_panel.add(receipt_panel1);
+        
+        main_receipt_panel.add(receipt_panel);
+        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
+        receipt_panel.setPreferredSize(new Dimension(235,900));
+        JScrollPane scrollPane = new JScrollPane(receipt_panel);
+        scrollPane.setMinimumSize(new Dimension(5, 5));
+        scrollPane.setPreferredSize(new Dimension(230,270));
+        scrollPane.setBounds(5, 5, 255, 280);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setOpaque(false);
+        main_receipt_panel.add(scrollPane);
+        
+        JLabel m_title = new JLabel(ticket_title);
+        JLabel s_num = new JLabel("Seat No:");
+        JLabel amt = new JLabel("Amount:");
+        m_title.setBounds(100, 20, 80, 20);
+        s_num.setBounds(100, 40, 80, 20);
+        amt.setBounds(100, 60, 80, 20);
+        receipt_panel1.add(m_title);
+        receipt_panel1.add(amt);
+        receipt_panel1.add(s_num);
+        
+        JPanel image_panel =new JPanel();
+        receipt_panel1.add(image_panel);
+        image_panel.setLayout(new FlowLayout(FlowLayout.CENTER,1,-7));
+        image_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        image_panel.setPreferredSize(new Dimension(89, 85));
+        image_panel.setBounds(5, 5, 89, 85);
+        ImageIcon image = new ImageIcon("theavengers.png");
+        JLabel new_image = new JLabel(image);
+        new_image.setSize(89, 85);
+        image_panel.add(new_image);
+    }
+    
     
     String qry2 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
                 "from showtime st inner join seat_list sl\n" +
@@ -391,8 +435,10 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         Cart_label.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Cart_label.setText("CART");
 
+        main_receipt_panel.setPreferredSize(new java.awt.Dimension(260, 348));
+
         receipt_panel.setBackground(new java.awt.Color(255, 255, 255));
-        receipt_panel.setPreferredSize(new java.awt.Dimension(260, 320));
+        receipt_panel.setPreferredSize(new java.awt.Dimension(248, 327));
         receipt_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
 
         javax.swing.GroupLayout main_receipt_panelLayout = new javax.swing.GroupLayout(main_receipt_panel);
@@ -401,15 +447,15 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(main_receipt_panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         main_receipt_panelLayout.setVerticalGroup(
             main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(main_receipt_panelLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
-                .addGap(17, 17, 17))
+                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout cart_panelLayout = new javax.swing.GroupLayout(cart_panel);
@@ -419,8 +465,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             .addGroup(cart_panelLayout.createSequentialGroup()
                 .addGap(112, 112, 112)
                 .addComponent(Cart_label)
-                .addContainerGap(112, Short.MAX_VALUE))
-            .addComponent(main_receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(main_receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         cart_panelLayout.setVerticalGroup(
             cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -428,7 +474,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 .addContainerGap()
                 .addComponent(Cart_label)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(main_receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(main_receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         Left_yellow_Panel.add(cart_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, 260, 380));

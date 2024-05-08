@@ -77,7 +77,7 @@ public class Payment_Method extends javax.swing.JFrame {
         BDO = new javax.swing.JLabel();
         BPI = new javax.swing.JLabel();
         UnionBank = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        amount_field = new javax.swing.JTextField();
         jLabel13 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
@@ -189,7 +189,7 @@ public class Payment_Method extends javax.swing.JFrame {
             }
         });
         jPanel8.add(UnionBank, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, -1, -1));
-        jPanel8.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 270, 139, 30));
+        jPanel8.add(amount_field, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 270, 139, 30));
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel13.setText("AMOUNT");
@@ -297,6 +297,7 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JLabel GCash;
     private javax.swing.JLabel Maya;
     private javax.swing.JLabel UnionBank;
+    private javax.swing.JTextField amount_field;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
@@ -312,7 +313,6 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lp_bg;
     private javax.swing.JLabel rp_bg;
     // End of variables declaration//GEN-END:variables
