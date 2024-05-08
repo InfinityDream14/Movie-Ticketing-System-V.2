@@ -3,8 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Staffs;
-import java.awt.Image;
+import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
+import java.io.*;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,7 +48,47 @@ public class Staffs_Profile extends javax.swing.JFrame {
                 
     }
     
-  
+    void move_pf_file() throws FileNotFoundException{
+        JFileChooser jfc = new JFileChooser();
+        //JFileChooser jfc1 = new JFileChooser();
+        
+        jfc.setCurrentDirectory(new File("D:\\Users\\Backup\\Desktop"));
+        //jfc1.setCurrentDirectory(new File("."));
+        
+        int response = jfc.showOpenDialog(null);
+        
+        //File file0 = new File(jfc1.getSelectedFile().getAbsolutePath());
+        String fildest = "D:\\Users\\Backup\\Documents\\Java Projects\\Movie-Ticketing-System-V.2";
+        
+       
+        if(response == JFileChooser.APPROVE_OPTION){
+            File file = new File(jfc.getSelectedFile().getAbsolutePath());
+            System.out.println(file);
+            
+            if(file.exists()){
+                File destfile = new File(fildest + File.separator + file.getName());
+                
+                try(InputStream is = new FileInputStream(file);
+                        OutputStream os = new FileOutputStream(destfile)){
+                    
+                    int len;
+                    float srcfsize = is.available() / 1000.0f;
+                    float totalcopied = 0.0f;
+                    byte[] byt = new byte[1024];
+                    while( (len = is.read(byt)) > 0){
+                        os.write(byt, 0, len);
+                        totalcopied += len;
+                        System.out.println("/rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
+                        Thread.sleep(5);
+                    }
+                    
+                    
+                }catch(IOException | InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
     
 
     /**
@@ -100,6 +141,11 @@ public class Staffs_Profile extends javax.swing.JFrame {
         jPanel1.add(Log_out, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, -1, -1));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
+        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel8MouseClicked(evt);
+            }
+        });
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 140, 80, 80));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
@@ -274,8 +320,7 @@ public class Staffs_Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_Edit_profActionPerformed
 
     private void Log_outMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Log_outMouseClicked
-       
-        this.dispose();
+       this.dispose();
     }//GEN-LAST:event_Log_outMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -286,6 +331,14 @@ public class Staffs_Profile extends javax.swing.JFrame {
         }
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+        try {      
+            move_pf_file();
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Staffs_Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }   
+    }//GEN-LAST:event_jLabel8MouseClicked
 
     /**
      * @param args the command line arguments

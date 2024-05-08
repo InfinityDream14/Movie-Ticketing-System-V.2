@@ -457,23 +457,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         receipt_panel.setName(""); // NOI18N
         receipt_panel.setPreferredSize(new java.awt.Dimension(248, 327));
         receipt_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
-
-        javax.swing.GroupLayout main_receipt_panelLayout = new javax.swing.GroupLayout(main_receipt_panel);
-        main_receipt_panel.setLayout(main_receipt_panelLayout);
-        main_receipt_panelLayout.setHorizontalGroup(
-            main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(main_receipt_panelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        main_receipt_panelLayout.setVerticalGroup(
-            main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(main_receipt_panelLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
+        main_receipt_panel.add(receipt_panel);
 
         cart_panel.add(main_receipt_panel);
 
