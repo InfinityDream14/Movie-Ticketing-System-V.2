@@ -36,7 +36,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         left_panel_bg(); // putting image background to left panel
         get_info_in_database();
         
-        create_ticket_list();
+        //create_ticket_list();
     }
     
 
@@ -52,12 +52,12 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     //this method will get the exact seat count of a cinema where a movie will be played
     
     String qry = "select m.Title, m.MovieID, st.ShowtimeMovieID ,st.startTime, st.ShowtimeCinemaID,\n" +
-                    "        c.CinemaID, c.NumofSteats, m.price, st.showtimeID\n" +
+                    "        c.CinemaID, c.NumofSteats, m.price, st.showtimeID, m.Movie_pic_loc\n" +
                     "from cinema c inner join(movie m inner join showtime st\n" +
                     "              on m.MovieID = st.ShowtimeMovieID)\n" +
                     "     on c.CinemaID = st.ShowtimeCinemaID";
     
-    String st1, cid, mprc;
+    String st1, cid, mprc, mimgloc;
     String tixid = "T1";
     ArrayList<String> time_choice = new ArrayList();
     void get_info_in_database() throws SQLException, ParseException{
@@ -137,6 +137,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 st1 = rs2.getString(9);
                 cid = rs2.getString(5);
                 mprc = rs2.getString(8);
+                mimgloc = rs2.getString(10);
             }
         }
         
@@ -162,12 +163,14 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                                 !(jr.getBackground().equals(new Color(255,204,102)))){
                             jr.setBackground(Color.cyan);
                             seat_choices.add(jr.getText());
+                            create_ticket_list(jr);
                             System.out.println("added to list");
                             
                         }
                         else if(jr.getBackground().equals(Color.cyan)){
                             jr.setBackground(Color.white);
                             seat_choices.remove(jr.getText());
+                            receipt_panel.remove(jr);
                             System.out.println("removed to list");
                         }
                         
@@ -287,7 +290,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             main_receipt_panel.add(scrollPane);
     }
     
-    public void create_ticket_list(){
+    public void create_ticket_list(JRadioButton rb){
+        
         JPanel receipt_panel1 = new JPanel();
         receipt_panel1.setPreferredSize(new Dimension(225,95));
         receipt_panel1.setLayout(null);
@@ -308,8 +312,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         main_receipt_panel.add(scrollPane);
         
         JLabel m_title = new JLabel(ticket_title);
-        JLabel s_num = new JLabel("Seat No:");
-        JLabel amt = new JLabel("Amount:");
+        JLabel s_num = new JLabel("Seat No:" + rb.getText());
+        JLabel amt = new JLabel("Amount:" + mprc);
         m_title.setBounds(100, 20, 80, 20);
         s_num.setBounds(100, 40, 80, 20);
         amt.setBounds(100, 60, 80, 20);
@@ -323,7 +327,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         image_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         image_panel.setPreferredSize(new Dimension(89, 85));
         image_panel.setBounds(5, 5, 89, 85);
-        ImageIcon image = new ImageIcon("theavengers.png");
+        ImageIcon image = new ImageIcon(mimgloc);
         JLabel new_image = new JLabel(image);
         new_image.setSize(89, 85);
         image_panel.add(new_image);
@@ -444,10 +448,13 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
 
         Cart_label.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Cart_label.setText("CART");
+        cart_panel.add(Cart_label);
 
         main_receipt_panel.setPreferredSize(new java.awt.Dimension(260, 348));
 
         receipt_panel.setBackground(new java.awt.Color(255, 255, 255));
+        receipt_panel.setMaximumSize(new java.awt.Dimension(20, 20));
+        receipt_panel.setName(""); // NOI18N
         receipt_panel.setPreferredSize(new java.awt.Dimension(248, 327));
         receipt_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
 
@@ -457,35 +464,18 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(main_receipt_panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         main_receipt_panelLayout.setVerticalGroup(
             main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(main_receipt_panelLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
-        javax.swing.GroupLayout cart_panelLayout = new javax.swing.GroupLayout(cart_panel);
-        cart_panel.setLayout(cart_panelLayout);
-        cart_panelLayout.setHorizontalGroup(
-            cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(cart_panelLayout.createSequentialGroup()
-                .addGap(112, 112, 112)
-                .addComponent(Cart_label)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(main_receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-        cart_panelLayout.setVerticalGroup(
-            cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(cart_panelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(Cart_label)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(main_receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        cart_panel.add(main_receipt_panel);
 
         Left_yellow_Panel.add(cart_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, 260, 380));
         Left_yellow_Panel.add(lp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));

@@ -29,7 +29,7 @@ public class Movie_List extends javax.swing.JFrame {
         right_panel_bg();
         
         create_movie_list_panel();
-        create_ticket_list();
+        //create_ticket_list();
         
     }
     static String title_to_sm;
