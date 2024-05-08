@@ -33,9 +33,10 @@ public class Main_Staff {
            e.printStackTrace();
        }
        
-            new Movie_List().setVisible(true);
+           // new Movie_List().setVisible(true);
             //new Seat_Management().setVisible(true);
             //new Payment_Method().setVisible(true);
+              new Staffs_Profile().setVisible(true);
         
     }
     
