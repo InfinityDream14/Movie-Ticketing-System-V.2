@@ -422,10 +422,20 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         Left_yellow_Panel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         profile_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
+        profile_icon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                profile_iconMouseClicked(evt);
+            }
+        });
         Left_yellow_Panel.add(profile_icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 15, -1, -1));
 
         staff_name.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staff_name.setText("STAFF NAME");
+        staff_name.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                staff_nameMouseClicked(evt);
+            }
+        });
         Left_yellow_Panel.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 24, -1, -1));
 
         log_out.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
@@ -675,6 +685,18 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     private void time_jcbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_time_jcbActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_time_jcbActionPerformed
+
+    private void profile_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profile_iconMouseClicked
+         Staffs_Profile sp =new Staffs_Profile();
+        sp.setVisible(true);
+         this.dispose();
+    }//GEN-LAST:event_profile_iconMouseClicked
+
+    private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
+         Staffs_Profile sp =new Staffs_Profile();
+        sp.setVisible(true);
+         this.dispose();
+    }//GEN-LAST:event_staff_nameMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

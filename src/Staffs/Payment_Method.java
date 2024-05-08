@@ -61,8 +61,8 @@ public class Payment_Method extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        icon = new javax.swing.JLabel();
+        staff_name = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -94,12 +94,22 @@ public class Payment_Method extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(280, 480));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 15, -1, -1));
+        icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
+        icon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                iconMouseClicked(evt);
+            }
+        });
+        jPanel1.add(icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 15, -1, -1));
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel7.setText("STAFF NAME");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 24, -1, -1));
+        staff_name.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staff_name.setText("STAFF NAME");
+        staff_name.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                staff_nameMouseClicked(evt);
+            }
+        });
+        jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 24, -1, -1));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
         jLabel8.setText("LOG OUT");
@@ -284,6 +294,18 @@ public class Payment_Method extends javax.swing.JFrame {
         }
         this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconMouseClicked
+        Staffs_Profile sp =new Staffs_Profile();
+        sp.setVisible(true);
+         this.dispose();
+    }//GEN-LAST:event_iconMouseClicked
+
+    private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
+        Staffs_Profile sp =new Staffs_Profile();
+        sp.setVisible(true);
+         this.dispose();
+    }//GEN-LAST:event_staff_nameMouseClicked
    
     // Add an action listener to the GCash label/icon
 
@@ -298,15 +320,14 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JLabel Maya;
     private javax.swing.JLabel UnionBank;
     private javax.swing.JTextField amount_field;
+    private javax.swing.JLabel icon;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
@@ -315,5 +336,6 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JLabel lp_bg;
     private javax.swing.JLabel rp_bg;
+    private javax.swing.JLabel staff_name;
     // End of variables declaration//GEN-END:variables
 }

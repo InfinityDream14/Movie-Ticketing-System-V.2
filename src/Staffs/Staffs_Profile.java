@@ -88,6 +88,11 @@ public class Staffs_Profile extends javax.swing.JFrame {
         Log_out.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         Log_out.setForeground(new java.awt.Color(255, 255, 255));
         Log_out.setText("Log out");
+        Log_out.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Log_outMouseClicked(evt);
+            }
+        });
         jPanel1.add(Log_out, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, -1, -1));
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
@@ -255,6 +260,11 @@ public class Staffs_Profile extends javax.swing.JFrame {
         System.out.println("Password:"+ pass.getText());
         System.out.println("Phone No."+phone_no.getText());
     }//GEN-LAST:event_Edit_profActionPerformed
+
+    private void Log_outMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Log_outMouseClicked
+       
+        this.dispose();
+    }//GEN-LAST:event_Log_outMouseClicked
 
     /**
      * @param args the command line arguments

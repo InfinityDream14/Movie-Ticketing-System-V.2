@@ -168,8 +168,8 @@ public class Movie_List extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        prof_icon = new javax.swing.JLabel();
+        staff_name = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         cart_panel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -195,12 +195,22 @@ public class Movie_List extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 204, 102));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 15, -1, -1));
+        prof_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
+        prof_icon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                prof_iconMouseClicked(evt);
+            }
+        });
+        jPanel1.add(prof_icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 15, -1, -1));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jLabel2.setText("STAFF NAME");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 24, -1, -1));
+        staff_name.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        staff_name.setText("STAFF NAME");
+        staff_name.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                staff_nameMouseClicked(evt);
+            }
+        });
+        jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 24, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
         jLabel3.setText("LOG OUT");
@@ -354,11 +364,21 @@ public class Movie_List extends javax.swing.JFrame {
          }
     }//GEN-LAST:event_exit_staff
 
+    private void prof_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prof_iconMouseClicked
+        Staffs_Profile sp =new Staffs_Profile();
+        sp.setVisible(true);
+         this.dispose();
+    }//GEN-LAST:event_prof_iconMouseClicked
+
+    private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
+         Staffs_Profile sp =new Staffs_Profile();
+        sp.setVisible(true);
+         this.dispose();
+    }//GEN-LAST:event_staff_nameMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel cart_panel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -368,8 +388,10 @@ public class Movie_List extends javax.swing.JFrame {
     private javax.swing.JPanel main_panel;
     private javax.swing.JPanel main_receipt_panel;
     private javax.swing.JPanel movie_panel;
+    private javax.swing.JLabel prof_icon;
     private javax.swing.JPanel receipt_panel;
     private javax.swing.JLabel rp_bg;
+    private javax.swing.JLabel staff_name;
     // End of variables declaration//GEN-END:variables
 
 }
