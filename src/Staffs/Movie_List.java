@@ -29,10 +29,13 @@ public class Movie_List extends javax.swing.JFrame {
         right_panel_bg();
         
         create_movie_list_panel();
+        create_ticket_list();
         
     }
     static String title_to_sm;
     static String genre_to_sm;
+    
+    String ticket_title = "The Avengers";
     public void create_movie_list_panel() throws SQLException{
         Main_Staff ms = new Main_Staff();
         
@@ -112,6 +115,48 @@ public class Movie_List extends javax.swing.JFrame {
                 
     }
     
+    public void create_ticket_list(){
+        JPanel receipt_panel1 = new JPanel();
+        receipt_panel1.setPreferredSize(new Dimension(225,95));
+        receipt_panel1.setLayout(null);
+        receipt_panel1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        receipt_panel1.setBackground(Color.WHITE);
+        receipt_panel.add(receipt_panel1);
+        
+        main_receipt_panel.add(receipt_panel);
+        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
+        receipt_panel.setPreferredSize(new Dimension(235,900));
+        JScrollPane scrollPane = new JScrollPane(receipt_panel);
+        scrollPane.setMinimumSize(new Dimension(5, 5));
+        scrollPane.setPreferredSize(new Dimension(230,270));
+        scrollPane.setBounds(5, 5, 255, 280);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setOpaque(false);
+        main_receipt_panel.add(scrollPane);
+        
+        JLabel m_title = new JLabel(ticket_title);
+        JLabel s_num = new JLabel("Seat No:");
+        JLabel amt = new JLabel("Amount:");
+        m_title.setBounds(100, 20, 80, 20);
+        s_num.setBounds(100, 40, 80, 20);
+        amt.setBounds(100, 60, 80, 20);
+        receipt_panel1.add(m_title);
+        receipt_panel1.add(amt);
+        receipt_panel1.add(s_num);
+        
+        JPanel image_panel =new JPanel();
+        receipt_panel1.add(image_panel);
+        image_panel.setLayout(new FlowLayout(FlowLayout.CENTER,1,-7));
+        image_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        image_panel.setPreferredSize(new Dimension(89, 85));
+        image_panel.setBounds(5, 5, 89, 85);
+        ImageIcon image = new ImageIcon("theavengers.png");
+        JLabel new_image = new JLabel(image);
+        new_image.setSize(89, 85);
+        image_panel.add(new_image);
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -126,8 +171,10 @@ public class Movie_List extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
+        cart_panel = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
+        main_receipt_panel = new javax.swing.JPanel();
+        receipt_panel = new javax.swing.JPanel();
         lp_bg = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         main_panel = new javax.swing.JPanel();
@@ -164,27 +211,54 @@ public class Movie_List extends javax.swing.JFrame {
         });
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 44, -1, -1));
 
+        cart_panel.setPreferredSize(new java.awt.Dimension(280, 386));
+
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("CART");
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(112, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(112, 112, 112))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
+        main_receipt_panel.setPreferredSize(new java.awt.Dimension(260, 348));
+
+        receipt_panel.setBackground(new java.awt.Color(255, 255, 255));
+        receipt_panel.setPreferredSize(new java.awt.Dimension(248, 327));
+
+        javax.swing.GroupLayout main_receipt_panelLayout = new javax.swing.GroupLayout(main_receipt_panel);
+        main_receipt_panel.setLayout(main_receipt_panelLayout);
+        main_receipt_panelLayout.setHorizontalGroup(
+            main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(main_receipt_panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4)
-                .addContainerGap(354, Short.MAX_VALUE))
+                .addComponent(receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        main_receipt_panelLayout.setVerticalGroup(
+            main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(main_receipt_panelLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, -1, 380));
+        javax.swing.GroupLayout cart_panelLayout = new javax.swing.GroupLayout(cart_panel);
+        cart_panel.setLayout(cart_panelLayout);
+        cart_panelLayout.setHorizontalGroup(
+            cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, cart_panelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addGap(112, 112, 112))
+            .addComponent(main_receipt_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        cart_panelLayout.setVerticalGroup(
+            cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cart_panelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(main_receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(cart_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, 260, 380));
         jPanel1.add(lp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
@@ -282,6 +356,7 @@ public class Movie_List extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel cart_panel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -289,10 +364,11 @@ public class Movie_List extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JLabel lp_bg;
     private javax.swing.JPanel main_panel;
+    private javax.swing.JPanel main_receipt_panel;
     private javax.swing.JPanel movie_panel;
+    private javax.swing.JPanel receipt_panel;
     private javax.swing.JLabel rp_bg;
     // End of variables declaration//GEN-END:variables
 

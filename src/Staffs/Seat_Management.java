@@ -13,7 +13,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
+import java.util.*;
+import java.util.Date;
 import java.util.logging.Level;
 /**
  *
@@ -35,7 +36,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         left_panel_bg(); // putting image background to left panel
         get_info_in_database();
         
-        create_receipt_panel();
+        create_ticket_list();
     }
     
 
@@ -43,6 +44,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     String mvg = mlst.genre_to_sm;
     static String mvp;
     static String mvd;
+    
+    String ticket_title = "The Avengers";
     
     Main_Staff ms = new Main_Staff();
     Statement stmt = ms.mc.createStatement();
@@ -54,27 +57,29 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                     "              on m.MovieID = st.ShowtimeMovieID)\n" +
                     "     on c.CinemaID = st.ShowtimeCinemaID";
     
-    String st1;
+    String st1, cid, mprc;
+    String tixid = "T1";
+    ArrayList<String> time_choice = new ArrayList();
     void get_info_in_database() throws SQLException, ParseException{
         sm_mtitle.setText(mvt);
         sm_mgenre.setText(mvg);
-        String t1,t2;
         ResultSet rs = stmt.executeQuery(qry);
         while(rs.next()){
             if(rs.getString(1).trim().equals(mvt)){
-                st1 = rs.getString(9);
+                
                 String ttime = rs.getString(4);
                 ttime = ttime.substring(0,5);
                 String result = LocalTime.parse(ttime, DateTimeFormatter.ofPattern("HH:mm"))
                             .format(DateTimeFormatter.ofPattern("hh:mm a"));
-                if(av_time1.getText().equals("unavailable")){
-                    av_time1.setText(result);
-                }
-                if(av_time2.getText().equals("unavailable")&& !(av_time1.getText().equals(result))){
-                    av_time2.setText(result);
-                }
+                time_choice.add(result);
             }
         }
+        String[]times = new String[time_choice.size()];
+        for(int i=0; i<time_choice.size(); i++){
+            times[i] = time_choice.get(i);
+        }
+        time_jcb.setModel(new DefaultComboBoxModel(times));
+        
 
         String qry1 = "select * from movie";
         
@@ -97,10 +102,10 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         }
         sm_mduration.setText(mvd);
         sm_mprice.setText(mvp);
-        av_time1.setBackground(new Color(255,204,102));
-        av_time2.setBackground(Color.LIGHT_GRAY);
+//        av_time1.setBackground(new Color(255,204,102));
+//        av_time2.setBackground(Color.LIGHT_GRAY);
         
-        String real_time = convert_12hr_to_24hr(av_time1.getText());
+        String real_time = convert_12hr_to_24hr(times[0]);
         
         change_seat_list(real_time);
     }
@@ -116,13 +121,22 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     
     ArrayList<String> seat_choices = new ArrayList();
     void change_seat_list(String rt) throws SQLException, ParseException{
-        String st1="";
+        left_seat_panel.removeAll();
+        mid_seat_panel.removeAll();
+        right_seat_panel.removeAll();
+        left_seat_panel.revalidate();
+        mid_seat_panel.revalidate();
+        right_seat_panel.revalidate();
+        
         ResultSet rs2 = stmt.executeQuery(qry);
        
         while(rs2.next()){
-            if(rs2.getString(1).equals(sm_mtitle.getText()) 
-                    && rs2.getString(4).equals(rt) ){
+            if(rs2.getString(4).equals(rt) ){
+                System.out.println("Nakuhang time: " + rt);
+                System.out.println("nakuhang showtimeid: " + rs2.getString(9));
                 st1 = rs2.getString(9);
+                cid = rs2.getString(5);
+                mprc = rs2.getString(8);
             }
         }
         
@@ -176,6 +190,9 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 }
             }
         }
+        left_seat_panel.repaint();
+        mid_seat_panel.repaint();
+        right_seat_panel.repaint();
     }
     //this methods add JRadioButton for seat_management
  
@@ -201,7 +218,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 
     }
         
-    public void create_receipt_panel(){
+    public void create_receipt_panel(JRadioButton jrb){
             
             JPanel receipt_panel1 = new JPanel();
             receipt_panel1.setPreferredSize(new Dimension(228,268));
@@ -217,21 +234,26 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             receipt_panel1.add(loc);
             loc.setBounds(30, 20, 200, 30);
             
-            JLabel date_time = new JLabel("DATE & TIME: ");
+            Date date = new Date();
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+                     String str = formatter.format(date);
+                    System.out.print("Current date: "+str);
+            
+            JLabel date_time = new JLabel("DATE & TIME: " + str);
             receipt_panel1.add(date_time);
             date_time.setBounds(5, 60, 105, 30);
             
-            JLabel m_ttl = new JLabel("TITLE");
+            JLabel m_ttl = new JLabel("TITLE" + mvt);
             receipt_panel1.add(m_ttl);
             m_ttl.setBounds(95, 90, 200, 30);
             m_ttl.setFont(new Font("Segoe UI",Font.BOLD,15));
             
-            JLabel c_id = new JLabel("C_ID");
+            JLabel c_id = new JLabel("C_ID" + cid);
             receipt_panel1.add(c_id);
             c_id.setBounds(20, 125, 100, 30);
             c_id.setFont(new Font("Segoe UI",Font.BOLD,11));
             
-            JLabel s_num = new JLabel("SEAT. NUM");
+            JLabel s_num = new JLabel("SEAT. NUM" + jrb.getText() );
             receipt_panel1.add(s_num);
             s_num.setBounds(150, 125, 100, 30);
             s_num.setFont(new Font("Segoe UI",Font.BOLD,11));
@@ -244,11 +266,11 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             square.setSize(new Dimension(190,70));
             square.setBounds(20, 150, 190, 70);
             
-            JLabel price = new JLabel("PRICE: ");
+            JLabel price = new JLabel("PRICE: " + mprc);
             square.add(price);
             price.setBounds(5, 10, 105, 30);
             
-            JLabel t_id = new JLabel("TICKET ID: ");
+            JLabel t_id = new JLabel("TICKET ID: " + tixid );
             square.add(t_id);
             t_id.setBounds(5, 30, 105, 30);
             
@@ -263,6 +285,48 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
             scrollPane.setOpaque(false);
             main_receipt_panel.add(scrollPane);
+    }
+    
+    public void create_ticket_list(){
+        JPanel receipt_panel1 = new JPanel();
+        receipt_panel1.setPreferredSize(new Dimension(225,95));
+        receipt_panel1.setLayout(null);
+        receipt_panel1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        receipt_panel1.setBackground(Color.WHITE);
+        receipt_panel.add(receipt_panel1);
+        
+        main_receipt_panel.add(receipt_panel);
+        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
+        receipt_panel.setPreferredSize(new Dimension(235,900));
+        JScrollPane scrollPane = new JScrollPane(receipt_panel);
+        scrollPane.setMinimumSize(new Dimension(5, 5));
+        scrollPane.setPreferredSize(new Dimension(230,270));
+        scrollPane.setBounds(5, 5, 255, 280);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setOpaque(false);
+        main_receipt_panel.add(scrollPane);
+        
+        JLabel m_title = new JLabel(ticket_title);
+        JLabel s_num = new JLabel("Seat No:");
+        JLabel amt = new JLabel("Amount:");
+        m_title.setBounds(100, 20, 80, 20);
+        s_num.setBounds(100, 40, 80, 20);
+        amt.setBounds(100, 60, 80, 20);
+        receipt_panel1.add(m_title);
+        receipt_panel1.add(amt);
+        receipt_panel1.add(s_num);
+        
+        JPanel image_panel =new JPanel();
+        receipt_panel1.add(image_panel);
+        image_panel.setLayout(new FlowLayout(FlowLayout.CENTER,1,-7));
+        image_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        image_panel.setPreferredSize(new Dimension(89, 85));
+        image_panel.setBounds(5, 5, 89, 85);
+        ImageIcon image = new ImageIcon("theavengers.png");
+        JLabel new_image = new JLabel(image);
+        new_image.setSize(89, 85);
+        image_panel.add(new_image);
     }
     
     
@@ -331,8 +395,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         jLabel3 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
-        av_time1 = new javax.swing.JButton();
-        av_time2 = new javax.swing.JButton();
+        time_jcb = new javax.swing.JComboBox<>();
         jPanel6 = new javax.swing.JPanel();
         sm_image_slot = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -372,9 +435,11 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         Cart_label.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Cart_label.setText("CART");
 
+        main_receipt_panel.setPreferredSize(new java.awt.Dimension(260, 348));
+
         receipt_panel.setBackground(new java.awt.Color(255, 255, 255));
-        receipt_panel.setPreferredSize(new java.awt.Dimension(260, 320));
-        receipt_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT));
+        receipt_panel.setPreferredSize(new java.awt.Dimension(248, 327));
+        receipt_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
 
         javax.swing.GroupLayout main_receipt_panelLayout = new javax.swing.GroupLayout(main_receipt_panel);
         main_receipt_panel.setLayout(main_receipt_panelLayout);
@@ -382,15 +447,15 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(main_receipt_panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         main_receipt_panelLayout.setVerticalGroup(
             main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(main_receipt_panelLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
-                .addGap(17, 17, 17))
+                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout cart_panelLayout = new javax.swing.GroupLayout(cart_panel);
@@ -400,8 +465,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             .addGroup(cart_panelLayout.createSequentialGroup()
                 .addGap(112, 112, 112)
                 .addComponent(Cart_label)
-                .addContainerGap(112, Short.MAX_VALUE))
-            .addComponent(main_receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(main_receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         cart_panelLayout.setVerticalGroup(
             cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -409,7 +474,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 .addContainerGap()
                 .addComponent(Cart_label)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(main_receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(main_receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         Left_yellow_Panel.add(cart_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, 260, 380));
@@ -468,27 +533,25 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         right_main_panel.add(panel_for_seats, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 122, 530, 310));
 
         jPanel5.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 3));
+        jPanel5.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 50, 8));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel11.setText("Available Time");
         jPanel5.add(jLabel11);
 
-        av_time1.setText("unavailable");
-        av_time1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                av_time1ActionPerformed(evt);
+        time_jcb.setBackground(new java.awt.Color(204, 204, 204));
+        time_jcb.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "time1", "time2" }));
+        time_jcb.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                change_time(evt);
             }
         });
-        jPanel5.add(av_time1);
-
-        av_time2.setText("unavailable");
-        av_time2.addActionListener(new java.awt.event.ActionListener() {
+        time_jcb.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                av_time2ActionPerformed(evt);
+                time_jcbActionPerformed(evt);
             }
         });
-        jPanel5.add(av_time2);
+        jPanel5.add(time_jcb);
 
         right_main_panel.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 40, 110, 80));
 
@@ -577,9 +640,9 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-
-        this.setVisible(false);
         new Payment_Method().setVisible(true);
+        this.setVisible(false);
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -589,47 +652,6 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         //mlst.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void av_time1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_av_time1ActionPerformed
-        if(!(av_time1.getText().equals("unavailable"))){
-            av_time1.setBackground(new Color(255,204,102));
-            av_time2.setBackground(Color.lightGray);
-            String time1="";
-            try {
-                time1 = convert_12hr_to_24hr(av_time1.getText());
-            } catch (ParseException ex) {
-                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                change_seat_list(time1);
-            } catch (SQLException ex) {
-                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParseException ex) {
-                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        
-    }//GEN-LAST:event_av_time1ActionPerformed
-
-    private void av_time2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_av_time2ActionPerformed
-        if(!(av_time2.getText().equals("unavailable"))){
-            av_time2.setBackground(new Color(255,204,102));
-            av_time1.setBackground(Color.lightGray);
-            String time1="";
-            try {
-                time1 = convert_12hr_to_24hr(av_time2.getText());
-            } catch (ParseException ex) {
-                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            try {
-                change_seat_list(time1);
-            } catch (SQLException ex) {
-                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ParseException ex) {
-                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }//GEN-LAST:event_av_time2ActionPerformed
-
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         try {
             update_seat_list();
@@ -638,12 +660,26 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         }
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
+    private void change_time(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_change_time
+        String ntime = evt.getItem().toString();
+        try {
+            ntime = convert_12hr_to_24hr(ntime);
+            change_seat_list(ntime);
+        } catch (ParseException ex) {
+            java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_change_time
+
+    private void time_jcbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_time_jcbActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_time_jcbActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Cart_label;
     private javax.swing.JPanel Left_yellow_Panel;
-    private javax.swing.JButton av_time1;
-    private javax.swing.JButton av_time2;
     private javax.swing.JPanel cart_panel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -675,6 +711,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     private javax.swing.JLabel sm_mprice;
     private javax.swing.JLabel sm_mtitle;
     private javax.swing.JLabel staff_name;
+    private javax.swing.JComboBox<String> time_jcb;
     // End of variables declaration//GEN-END:variables
 
     @Override
