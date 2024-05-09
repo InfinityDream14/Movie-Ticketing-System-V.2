@@ -30,10 +30,14 @@ public class Movie_List extends javax.swing.JFrame {
         
         create_movie_list_panel();
         //create_ticket_list();
+        ticklist_scrollpane();
         
     }
     static String title_to_sm;
     static String genre_to_sm;
+    
+    String st1, cid, mprc, mimgloc;
+    String tixid = "T1";
     
     String ticket_title = "The Avengers";
     public void create_movie_list_panel() throws SQLException {
@@ -86,7 +90,7 @@ public class Movie_List extends javax.swing.JFrame {
             
             main_panel.add(movie_panel);
             movie_panel.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
-            movie_panel.setPreferredSize(new Dimension(500,900));
+            movie_panel.setPreferredSize(new Dimension(500,2000));
             //movie_panel.setBounds(10, 50, 280,530);
             JScrollPane scrollPane = new JScrollPane(movie_panel);
             scrollPane.setMinimumSize(new Dimension(10, 10));
@@ -115,7 +119,21 @@ public class Movie_List extends javax.swing.JFrame {
                 
     }
     
-    public void create_ticket_list(){
+    public void ticklist_scrollpane() {
+        main_receipt_panel.add(receipt_panel);
+        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
+        receipt_panel.setPreferredSize(new Dimension(228,900));
+        JScrollPane scrollPane = new JScrollPane(receipt_panel);
+        scrollPane.setMinimumSize(new Dimension(5, 5));
+        scrollPane.setPreferredSize(new Dimension(248,327));
+        scrollPane.setBounds(5, 5, 248, 327);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setOpaque(false);
+        main_receipt_panel.add(scrollPane);
+    }
+    
+    public void create_ticket_list(JRadioButton rb){
         JPanel receipt_panel1 = new JPanel();
         receipt_panel1.setPreferredSize(new Dimension(225,95));
         receipt_panel1.setLayout(null);
@@ -123,21 +141,9 @@ public class Movie_List extends javax.swing.JFrame {
         receipt_panel1.setBackground(Color.WHITE);
         receipt_panel.add(receipt_panel1);
         
-        main_receipt_panel.add(receipt_panel);
-        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
-        receipt_panel.setPreferredSize(new Dimension(235,900));
-        JScrollPane scrollPane = new JScrollPane(receipt_panel);
-        scrollPane.setMinimumSize(new Dimension(5, 5));
-        scrollPane.setPreferredSize(new Dimension(230,270));
-        scrollPane.setBounds(5, 5, 255, 280);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setOpaque(false);
-        main_receipt_panel.add(scrollPane);
-        
         JLabel m_title = new JLabel(ticket_title);
-        JLabel s_num = new JLabel("Seat No:");
-        JLabel amt = new JLabel("Amount:");
+        JLabel s_num = new JLabel("Seat No:" + rb.getText());
+        JLabel amt = new JLabel("Amount:" + mprc);
         m_title.setBounds(100, 20, 80, 20);
         s_num.setBounds(100, 40, 80, 20);
         amt.setBounds(100, 60, 80, 20);
@@ -151,24 +157,10 @@ public class Movie_List extends javax.swing.JFrame {
         image_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         image_panel.setPreferredSize(new Dimension(89, 85));
         image_panel.setBounds(5, 5, 89, 85);
-        ImageIcon image = new ImageIcon("theavengers.png");
+        ImageIcon image = new ImageIcon(mimgloc);
         JLabel new_image = new JLabel(image);
         new_image.setSize(89, 85);
         image_panel.add(new_image);
-    }
-    
-    public void ticklist_panel(){
-        //main_receipt_panel.add(receipt_panel);
-        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
-        receipt_panel.setPreferredSize(new Dimension(235,900));
-        JScrollPane scrollPane = new JScrollPane(receipt_panel);
-        scrollPane.setMinimumSize(new Dimension(5, 5));
-        scrollPane.setPreferredSize(new Dimension(230,270));
-        scrollPane.setBounds(5, 5, 255, 280);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setOpaque(false);
-        main_receipt_panel.add(scrollPane);
     }
     
     /**
@@ -238,47 +230,15 @@ public class Movie_List extends javax.swing.JFrame {
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setText("CART");
+        cart_panel.add(jLabel4);
 
         main_receipt_panel.setPreferredSize(new java.awt.Dimension(260, 348));
 
         receipt_panel.setBackground(new java.awt.Color(255, 255, 255));
         receipt_panel.setPreferredSize(new java.awt.Dimension(248, 327));
+        main_receipt_panel.add(receipt_panel);
 
-        javax.swing.GroupLayout main_receipt_panelLayout = new javax.swing.GroupLayout(main_receipt_panel);
-        main_receipt_panel.setLayout(main_receipt_panelLayout);
-        main_receipt_panelLayout.setHorizontalGroup(
-            main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, main_receipt_panelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        main_receipt_panelLayout.setVerticalGroup(
-            main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(main_receipt_panelLayout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addComponent(receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(15, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout cart_panelLayout = new javax.swing.GroupLayout(cart_panel);
-        cart_panel.setLayout(cart_panelLayout);
-        cart_panelLayout.setHorizontalGroup(
-            cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, cart_panelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel4)
-                .addGap(112, 112, 112))
-            .addComponent(main_receipt_panel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        cart_panelLayout.setVerticalGroup(
-            cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(cart_panelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(main_receipt_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        cart_panel.add(main_receipt_panel);
 
         jPanel1.add(cart_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, 260, 380));
         jPanel1.add(lp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));

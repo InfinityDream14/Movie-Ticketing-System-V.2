@@ -37,6 +37,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         left_panel_bg(); // putting image background to left panel
         get_info_in_database();
         //create_ticket_list();
+        ticklist_scrollpane();
     }
     
 
@@ -291,11 +292,12 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             scrollPane.setOpaque(false);
             main_receipt_panel.add(scrollPane);
     }
+    //JPanel receipt_panel1 = new JPanel();
     
     public void ticklist_scrollpane() {
         main_receipt_panel.add(receipt_panel);
-        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
-        receipt_panel.setPreferredSize(new Dimension(228,600));
+        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
+        receipt_panel.setPreferredSize(new Dimension(228,2000));
         JScrollPane scrollPane = new JScrollPane(receipt_panel);
         scrollPane.setMinimumSize(new Dimension(5, 5));
         scrollPane.setPreferredSize(new Dimension(248,327));
@@ -303,7 +305,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setOpaque(false);
-        add(scrollPane);
+        main_receipt_panel.add(scrollPane);
     }
     
     public void create_ticket_list(JRadioButton rb){
@@ -334,13 +336,12 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         JLabel new_image = new JLabel(image);
         new_image.setSize(89, 85);
         image_panel.add(new_image);
-        
     }
-    
     
     String qry2 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
                 "from showtime st inner join seat_list sl\n" +
                 "	on st.showtimeid = sl.showtimeid";
+    
     void update_seat_list() throws SQLException{
         
        Statement stm = ms.mc.createStatement();
@@ -452,31 +453,31 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
 
         Cart_label.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Cart_label.setText("CART");
+        cart_panel.add(Cart_label);
 
         main_receipt_panel.setPreferredSize(new java.awt.Dimension(260, 348));
 
         receipt_panel.setBackground(new java.awt.Color(255, 255, 255));
+        receipt_panel.setMaximumSize(new java.awt.Dimension(20, 20));
+        receipt_panel.setName(""); // NOI18N
         receipt_panel.setPreferredSize(new java.awt.Dimension(248, 327));
-        receipt_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
-        main_receipt_panel.add(receipt_panel);
 
-        javax.swing.GroupLayout cart_panelLayout = new javax.swing.GroupLayout(cart_panel);
-        cart_panel.setLayout(cart_panelLayout);
-        cart_panelLayout.setHorizontalGroup(
-            cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(main_receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addGroup(cart_panelLayout.createSequentialGroup()
-                .addGap(112, 112, 112)
-                .addComponent(Cart_label))
-        );
-        cart_panelLayout.setVerticalGroup(
-            cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(cart_panelLayout.createSequentialGroup()
+        javax.swing.GroupLayout main_receipt_panelLayout = new javax.swing.GroupLayout(main_receipt_panel);
+        main_receipt_panel.setLayout(main_receipt_panelLayout);
+        main_receipt_panelLayout.setHorizontalGroup(
+            main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(main_receipt_panelLayout.createSequentialGroup()
                 .addGap(6, 6, 6)
-                .addComponent(Cart_label)
-                .addGap(6, 6, 6)
-                .addComponent(main_receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+        main_receipt_panelLayout.setVerticalGroup(
+            main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(main_receipt_panelLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        cart_panel.add(main_receipt_panel);
 
         Left_yellow_Panel.add(cart_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, 260, 380));
         Left_yellow_Panel.add(lp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
@@ -678,15 +679,15 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     }//GEN-LAST:event_time_jcbActionPerformed
 
     private void profile_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profile_iconMouseClicked
-         Staffs_Profile sp =new Staffs_Profile();
+        Staffs_Profile sp =new Staffs_Profile();
         sp.setVisible(true);
-         this.dispose();
+        this.dispose();
     }//GEN-LAST:event_profile_iconMouseClicked
 
     private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
-         Staffs_Profile sp =new Staffs_Profile();
+        Staffs_Profile sp =new Staffs_Profile();
         sp.setVisible(true);
-         this.dispose();
+        this.dispose();
     }//GEN-LAST:event_staff_nameMouseClicked
 
 
