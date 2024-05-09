@@ -171,6 +171,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                             jr.setBackground(Color.white);
                             seat_choices.remove(jr.getText());
                             receipt_panel.remove(jr);
+                            receipt_panel.revalidate();
+                            receipt_panel.repaint();
                             System.out.println("removed to list");
                         }
                         
