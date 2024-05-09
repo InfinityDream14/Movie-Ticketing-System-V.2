@@ -49,18 +49,12 @@ public class Staffs_Profile extends javax.swing.JFrame {
     }
     
     void move_pf_file() throws FileNotFoundException{
+        
         JFileChooser jfc = new JFileChooser();
-        //JFileChooser jfc1 = new JFileChooser();
-        
         jfc.setCurrentDirectory(new File("D:\\Users\\Backup\\Desktop"));
-        //jfc1.setCurrentDirectory(new File("."));
-        
         int response = jfc.showOpenDialog(null);
+        String fildest = System.getProperty("user.dir");
         
-        //File file0 = new File(jfc1.getSelectedFile().getAbsolutePath());
-        String fildest = "D:\\Users\\Backup\\Documents\\Java Projects\\Movie-Ticketing-System-V.2";
-        
-       
         if(response == JFileChooser.APPROVE_OPTION){
             File file = new File(jfc.getSelectedFile().getAbsolutePath());
             System.out.println(file);
@@ -78,7 +72,7 @@ public class Staffs_Profile extends javax.swing.JFrame {
                     while( (len = is.read(byt)) > 0){
                         os.write(byt, 0, len);
                         totalcopied += len;
-                        System.out.println("/rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
+                        System.out.println("\rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
                         Thread.sleep(5);
                     }
                     
