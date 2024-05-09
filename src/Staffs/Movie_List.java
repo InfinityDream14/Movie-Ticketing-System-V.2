@@ -18,7 +18,9 @@ public class Movie_List extends javax.swing.JFrame {
 
     //Seat_Management sm = new Seat_Management();
     //Payment_Method pm= new Payment_Method();
-    public Movie_List() throws SQLException {
+    static Temp_Data tempd = new Temp_Data();
+    
+    public Movie_List() throws SQLException{
         initComponents();
         setLocationRelativeTo(null);
         
@@ -32,10 +34,22 @@ public class Movie_List extends javax.swing.JFrame {
         //create_ticket_list();
         ticklist_scrollpane();
         
+        components = tempd.jp_mlist.getComponents();
+        try{
+            if(components.length !=0){
+                for(Component c : components){
+                    receipt_panel.add(c);
+                }
+                receipt_panel.revalidate();
+                receipt_panel.repaint();
+            }
+        }catch(Exception e){
+            e.getStackTrace();
+        }
     }
     static String title_to_sm;
     static String genre_to_sm;
-    
+    static Component[] components = {};
     String st1, cid, mprc, mimgloc;
     String tixid = "T1";
     
@@ -73,9 +87,9 @@ public class Movie_List extends javax.swing.JFrame {
                             title_to_sm = jt.getText();
                             JLabel jg = (JLabel)movie_panel1.getComponent(2);
                             genre_to_sm = jg.getText();
-                            Seat_Management sm;
+                            
                             try {
-                                sm = new Seat_Management();
+                                Seat_Management sm = new Seat_Management();
                                 sm.setVisible(true);
                             } catch (ParseException ex) {
                                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
@@ -163,6 +177,13 @@ public class Movie_List extends javax.swing.JFrame {
         image_panel.add(new_image);
     }
     
+    public void add_movie_comp_to_receipt_panel() throws SQLException, ParseException{
+        for(Component c : components){
+            receipt_panel.add(c);
+        }
+        receipt_panel.revalidate();
+        receipt_panel.repaint();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

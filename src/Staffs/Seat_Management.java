@@ -25,6 +25,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     //Movie_List mlst = new Movie_List();
 
     Movie_List mlst = new Movie_List();
+    static Temp_Data tempd = new Temp_Data();
     public Seat_Management() throws SQLException, ParseException {
         initComponents();
         setLocationRelativeTo(null);
@@ -36,8 +37,22 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         left_panel_bg(); // putting image background to left panel
         get_info_in_database();
         
-        //create_ticket_list();
+        
+        components = tempd.jp_mlist.getComponents();
+        try{
+            if(components.length !=0){
+                for(Component c : components){
+                    receipt_panel.add(c);
+                }
+                receipt_panel.revalidate();
+                receipt_panel.repaint();
+            }
+        }catch(Exception e){
+            e.getStackTrace();
+        }
+        
         ticklist_scrollpane();
+
     }
     
 
@@ -45,7 +60,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     String mvg = mlst.genre_to_sm;
     static String mvp;
     static String mvd;
-    
+    Component[] components;
     String ticket_title = "The Avengers";
     
     Main_Staff ms = new Main_Staff();
@@ -103,8 +118,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         }
         sm_mduration.setText(mvd);
         sm_mprice.setText(mvp);
-//        av_time1.setBackground(new Color(255,204,102));
-//        av_time2.setBackground(Color.LIGHT_GRAY);
+
         
         String real_time = convert_12hr_to_24hr(times[0]);
         
@@ -171,7 +185,14 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                         else if(jr.getBackground().equals(Color.cyan)){
                             jr.setBackground(Color.white);
                             seat_choices.remove(jr.getText());
-                            receipt_panel.remove(jr);
+                            Component[] complist = receipt_panel.getComponents();
+                            for(Component c : complist){
+                                if(c.getName().equals(jr.getText())){
+                                    receipt_panel.remove(c);
+                                }
+                            }
+                            receipt_panel.revalidate();
+                            receipt_panel.repaint();
                             System.out.println("removed to list");
                         }
                         
@@ -305,14 +326,15 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         scrollPane.setOpaque(false);
         main_receipt_panel.add(scrollPane);
     }
-    
+    JPanel receipt_panel1;
     public void create_ticket_list(JRadioButton rb){
         
-        JPanel receipt_panel1 = new JPanel();
+        receipt_panel1 = new JPanel();
         receipt_panel1.setPreferredSize(new Dimension(225,95));
         receipt_panel1.setLayout(null);
         receipt_panel1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         receipt_panel1.setBackground(Color.WHITE);
+        receipt_panel1.setName(rb.getText());
         receipt_panel.add(receipt_panel1);
         
         JLabel m_title = new JLabel(ticket_title);
@@ -337,6 +359,14 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         image_panel.add(new_image);
     }
     
+    public void send_receipt_panel_comp(){
+        
+        Component[] c = receipt_panel.getComponents();
+        for(Component cp : c){
+            tempd.jp_mlist.add(cp);
+        }
+        
+    }
     String qry2 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
                 "from showtime st inner join seat_list sl\n" +
                 "	on st.showtimeid = sl.showtimeid";
@@ -644,13 +674,22 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        new Payment_Method().setVisible(true);
+        send_receipt_panel_comp();
+        try {
+            new Movie_List().setVisible(true);
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.setVisible(false);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        mlst.setVisible(true);
+        try {
+            new Movie_List().setVisible(true);
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+        }
         this.setVisible(false);
         
         //mlst.setVisible(true);

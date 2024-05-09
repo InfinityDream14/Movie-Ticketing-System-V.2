@@ -2,6 +2,7 @@
 package Staffs;
 
 import java.sql.*;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -9,7 +10,7 @@ import java.util.logging.Logger;
 public class Main_Staff {
     static Connection mc;
     
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
         
        try{
             String hostname = "localhost";

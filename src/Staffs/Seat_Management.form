@@ -111,7 +111,6 @@
                 </Property>
               </Properties>
 
-<<<<<<< HEAD
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
@@ -130,9 +129,6 @@
                   </Group>
                 </DimensionLayout>
               </Layout>
-=======
-              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
->>>>>>> origin/staffs
               <SubComponents>
                 <Container class="javax.swing.JPanel" name="receipt_panel">
                   <Properties>
@@ -148,10 +144,7 @@
                     </Property>
                   </Properties>
 
-                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout">
-                    <Property name="horizontalGap" type="int" value="10"/>
-                    <Property name="verticalGap" type="int" value="10"/>
-                  </Layout>
+                  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
                 </Container>
               </SubComponents>
             </Container>
