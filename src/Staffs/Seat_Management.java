@@ -16,7 +16,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.Date;
 import java.util.logging.Level;
-import javax.swing.border.LineBorder;
 /**
  *
  * @author Administrator
@@ -36,6 +35,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         right_panel_bg(); // putting image background to right panel
         left_panel_bg(); // putting image background to left panel
         get_info_in_database();
+        
         //create_ticket_list();
         ticklist_scrollpane();
     }
@@ -172,8 +172,6 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                             jr.setBackground(Color.white);
                             seat_choices.remove(jr.getText());
                             receipt_panel.remove(jr);
-                            receipt_panel.revalidate();
-                            receipt_panel.repaint();
                             System.out.println("removed to list");
                         }
                         
@@ -241,9 +239,9 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
             loc.setBounds(30, 20, 200, 30);
             
             Date date = new Date();
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
-            String str = formatter.format(date);
-            System.out.print("Current date: "+str);
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+                     String str = formatter.format(date);
+                    System.out.print("Current date: "+str);
             
             JLabel date_time = new JLabel("DATE & TIME: " + str);
             receipt_panel1.add(date_time);
@@ -309,6 +307,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     }
     
     public void create_ticket_list(JRadioButton rb){
+        
         JPanel receipt_panel1 = new JPanel();
         receipt_panel1.setPreferredSize(new Dimension(225,95));
         receipt_panel1.setLayout(null);
@@ -461,6 +460,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         receipt_panel.setMaximumSize(new java.awt.Dimension(20, 20));
         receipt_panel.setName(""); // NOI18N
         receipt_panel.setPreferredSize(new java.awt.Dimension(248, 327));
+        receipt_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
 
         javax.swing.GroupLayout main_receipt_panelLayout = new javax.swing.GroupLayout(main_receipt_panel);
         main_receipt_panel.setLayout(main_receipt_panelLayout);
@@ -476,6 +476,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 .addGap(5, 5, 5)
                 .addComponent(receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        cart_panel.add(main_receipt_panel);
 
         cart_panel.add(main_receipt_panel);
 
