@@ -163,7 +163,7 @@
                               <Component id="lname" max="32767" attributes="0"/>
                               <Component id="email" alignment="0" max="32767" attributes="0"/>
                               <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="jPasswordField1" alignment="0" pref="180" max="32767" attributes="0"/>
+                                  <Component id="Password" alignment="0" pref="180" max="32767" attributes="0"/>
                                   <Component id="pass" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
@@ -207,7 +207,7 @@
                   <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="jPasswordField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="Password" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                   <Component id="Edit_prof" min="-2" max="-2" attributes="0"/>
@@ -312,8 +312,11 @@
               <Image iconType="3" name="/Resources/seat.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="edit_nameMouseDragged"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JPasswordField" name="jPasswordField1">
+        <Component class="javax.swing.JPasswordField" name="Password">
           <Properties>
             <Property name="text" type="java.lang.String" value="jPasswordField1"/>
           </Properties>

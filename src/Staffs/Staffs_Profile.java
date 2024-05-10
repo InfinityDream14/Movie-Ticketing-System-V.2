@@ -114,7 +114,7 @@ public class Staffs_Profile extends javax.swing.JFrame {
         p_no = new javax.swing.JLabel();
         Edit_prof = new javax.swing.JButton();
         edit_name = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        Password = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -203,8 +203,13 @@ public class Staffs_Profile extends javax.swing.JFrame {
         });
 
         edit_name.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
+        edit_name.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                edit_nameMouseDragged(evt);
+            }
+        });
 
-        jPasswordField1.setText("jPasswordField1");
+        Password.setText("jPasswordField1");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -235,7 +240,7 @@ public class Staffs_Profile extends javax.swing.JFrame {
                             .addComponent(lname)
                             .addComponent(email)
                             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jPasswordField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                .addComponent(Password, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                                 .addComponent(pass, javax.swing.GroupLayout.Alignment.LEADING)))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(edit_name)
@@ -268,7 +273,7 @@ public class Staffs_Profile extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36)
                 .addComponent(Edit_prof)
                 .addContainerGap(47, Short.MAX_VALUE))
@@ -291,19 +296,19 @@ public class Staffs_Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_lnameActionPerformed
 
     private void Edit_profActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_profActionPerformed
-           if(!fname.getText().equals("") && !lname.getText().equals("")&& !email.getText().equals("")&& !pass.getText().equals("")&& !phone_no.getText().equals("")){
+           if(!fname.getText().equals("") && !lname.getText().equals("")&& !email.getText().equals("")&& !pass.getText().equals("")){
             fname.getText();
             lname.getText();
             email.getText();
             pass.getText();
-            phone_no.getText();
+            
         }
         JOptionPane.showMessageDialog(null, "Confirm");
         System.out.println("First Name:"+ fname.getText());
         System.out.println("Last Name:"+ lname.getText());
         System.out.println("Email:"+email.getText());
         System.out.println("Password:"+ pass.getText());
-        System.out.println("Phone No."+phone_no.getText());
+      
     }//GEN-LAST:event_Edit_profActionPerformed
 
     private void Log_outMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Log_outMouseClicked
@@ -327,6 +332,17 @@ public class Staffs_Profile extends javax.swing.JFrame {
         }   
     }//GEN-LAST:event_icon_profMouseClicked
 
+    private void edit_nameMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_nameMouseDragged
+       Staff_Name sb= new Staff_Name();
+        sb.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_edit_nameMouseDragged
+    public void setTextfname(String text){
+        fname.setText(text);
+    }
+    public void setTextlname(String text){
+        lname.setText(text);
+    }
     /**
      * @param args the command line arguments
      */
@@ -334,6 +350,7 @@ public class Staffs_Profile extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Edit_prof;
     private javax.swing.JButton Log_out;
+    private javax.swing.JPasswordField Password;
     private javax.swing.JButton back;
     private javax.swing.JLabel edit_name;
     private javax.swing.JTextField email;
@@ -345,7 +362,6 @@ public class Staffs_Profile extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JTextField lname;
     private javax.swing.JLabel lp_bg;
     private javax.swing.JLabel p_no;
