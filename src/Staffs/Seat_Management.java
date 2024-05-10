@@ -45,7 +45,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
             if(components.length !=0){
                 for(Component c : components){
                     receipt_panel.add(c);
-                    System.out.println("Nakuhang components: " + c);
+                    System.out.println("Nakuhang components: " + c.getName());
                 }
                 receipt_panel.revalidate();
                 receipt_panel.repaint();
@@ -63,7 +63,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     static String mvp;
     static String mvd;
     static Component[] components = {};
-    String ticket_title = "The Avengers";
+    String ticket_title = "";
     
     Main_Staff ms = new Main_Staff();
     Statement stmt = ms.mc.createStatement();
@@ -346,9 +346,9 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         receipt_panel1.setName(rb.getText());
         receipt_panel.add(receipt_panel1);
         
-        JLabel m_title = new JLabel(ticket_title);
-        JLabel s_num = new JLabel("Seat No:" + rb.getText());
-        JLabel amt = new JLabel("Amount:" + mprc);
+        JLabel m_title = new JLabel(mvt);
+        JLabel s_num = new JLabel("Seat No: " + rb.getText());
+        JLabel amt = new JLabel("Amount: " + mprc.substring(0,5));
         m_title.setBounds(100, 20, 80, 20);
         s_num.setBounds(100, 40, 80, 20);
         amt.setBounds(100, 60, 80, 20);
@@ -683,7 +683,11 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     }// </editor-fold>//GEN-END:initComponents
 
     private void confirm_seat_choice_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirm_seat_choice_buttonActionPerformed
-        
+        try {
+            update_seat_list();
+        } catch (SQLException ex) {
+            java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+        }
         send_receipt_panel_comp();
         
         try {
@@ -696,22 +700,29 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     }//GEN-LAST:event_confirm_seat_choice_buttonActionPerformed
 
     private void cancel_seat_choicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_seat_choicesActionPerformed
+        
+        Component[] c = Movie_List.components;
+        
+        tempd.jp_mlist.removeAll();
+        tempd.jp_mlist.revalidate();
+         
+        for(Component cp : c){
+            tempd.jp_mlist.add(cp);
+            System.out.println("nalagay na: " + cp.getName());
+        }
+        
         try {
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setVisible(false);
+        dispose();
         
         //mlst.setVisible(true);
     }//GEN-LAST:event_cancel_seat_choicesActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        try {
-            update_seat_list();
-        } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void change_time(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_change_time

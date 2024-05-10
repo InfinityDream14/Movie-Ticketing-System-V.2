@@ -217,6 +217,7 @@ public class Movie_List extends javax.swing.JFrame {
         main_panel = new javax.swing.JPanel();
         movie_panel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
+        p_to_payment = new javax.swing.JButton();
         rp_bg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -308,6 +309,15 @@ public class Movie_List extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel5.setText("AVAILABLE MOVIES");
         jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(173, 20, -1, -1));
+
+        p_to_payment.setBackground(new java.awt.Color(255, 204, 102));
+        p_to_payment.setText("Proceed to Payment");
+        p_to_payment.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                p_to_paymentActionPerformed(evt);
+            }
+        });
+        jPanel2.add(p_to_payment, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 440, -1, -1));
         jPanel2.add(rp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 570, 480));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 570, 480));
@@ -357,7 +367,7 @@ public class Movie_List extends javax.swing.JFrame {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jPanel5MouseClicked
-
+ 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         System.exit(0);
     }//GEN-LAST:event_jLabel3MouseClicked
@@ -380,6 +390,12 @@ public class Movie_List extends javax.swing.JFrame {
          this.dispose();
     }//GEN-LAST:event_staff_nameMouseClicked
 
+    private void p_to_paymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_p_to_paymentActionPerformed
+        Payment_Method pm = new Payment_Method();
+        pm.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_p_to_paymentActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel cart_panel;
@@ -392,6 +408,7 @@ public class Movie_List extends javax.swing.JFrame {
     private javax.swing.JPanel main_panel;
     private javax.swing.JPanel main_receipt_panel;
     private javax.swing.JPanel movie_panel;
+    private javax.swing.JButton p_to_payment;
     private javax.swing.JLabel prof_icon;
     private javax.swing.JPanel receipt_panel;
     private javax.swing.JLabel rp_bg;
