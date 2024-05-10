@@ -90,7 +90,6 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                 String result = LocalTime.parse(ttime, DateTimeFormatter.ofPattern("HH:mm"))
                             .format(DateTimeFormatter.ofPattern("hh:mm a"));
                 time_choice.add(result);
-                ticket_time = result;
                 //ticket_time = ttime;
             }
         }
@@ -137,6 +136,14 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         return real_time;
     }
     
+    String convert_24hr_to_12hr(String tm){
+        String ttime = tm;
+                ttime = ttime.substring(0,5);
+                String result = LocalTime.parse(ttime, DateTimeFormatter.ofPattern("HH:mm"))
+                            .format(DateTimeFormatter.ofPattern("hh:mm a"));
+        return result;
+    }
+    
     ArrayList<String> seat_choices = new ArrayList();
     void change_seat_list(String rt) throws SQLException, ParseException{
         left_seat_panel.removeAll();
@@ -156,7 +163,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                 cid = rs2.getString(5);
                 mprc = rs2.getString(8);
                 mimgloc = rs2.getString(10);
-                //ticket_time = rs2.getString(4);
+                ticket_time = convert_24hr_to_12hr(rs2.getString(4));
             }
         }
         
