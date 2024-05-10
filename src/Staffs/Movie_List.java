@@ -29,7 +29,6 @@ public class Movie_List extends javax.swing.JFrame {
         
         left_panel_bg();
         right_panel_bg();
-        
         create_movie_list_panel();
         //create_ticket_list();
         ticklist_scrollpane();
@@ -39,7 +38,7 @@ public class Movie_List extends javax.swing.JFrame {
             if(components.length !=0){
                 for(Component c : components){
                     receipt_panel.add(c);
-                    System.out.println("Nakuha na: " + c.getName());
+                    System.out.println("Nakuha na ng movie list: " + c.getName());
                 }
                 receipt_panel.revalidate();
                 receipt_panel.repaint();
@@ -124,8 +123,6 @@ public class Movie_List extends javax.swing.JFrame {
             tempd.jp_mlist.add(cp);
             System.out.println("nalagay na ulit sa tempd for seat: " + cp.getName());
         }
-        receipt_panel.revalidate();
-        receipt_panel.repaint();
         
     }
     

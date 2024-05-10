@@ -39,12 +39,12 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         
         ticklist_scrollpane();
         
-        this.components = tempd.jp_mlist.getComponents();
+        Seat_Management.components = Movie_List.components;
 
         try{
             if(components.length !=0){
                 for(Component c : components){
-                    receipt_panel1.add(c);
+                    receipt_panel.add(c);
                     System.out.println("Nakuhang components: " + c);
                 }
                 receipt_panel.revalidate();
