@@ -75,7 +75,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                     "              on m.MovieID = st.ShowtimeMovieID)\n" +
                     "     on c.CinemaID = st.ShowtimeCinemaID";
     
-    String st1, cid, mprc, mimgloc;
+    String st1, cid, mprc, mimgloc, ticket_time;
     String tixid = "T1";
     ArrayList<String> time_choice = new ArrayList();
     void get_info_in_database() throws SQLException, ParseException{
@@ -90,6 +90,8 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                 String result = LocalTime.parse(ttime, DateTimeFormatter.ofPattern("HH:mm"))
                             .format(DateTimeFormatter.ofPattern("hh:mm a"));
                 time_choice.add(result);
+                ticket_time = result;
+                //ticket_time = ttime;
             }
         }
         String[]times = new String[time_choice.size()];
@@ -98,7 +100,6 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         }
         time_jcb.setModel(new DefaultComboBoxModel(times));
         
-
         String qry1 = "select * from movie";
         
         ResultSet rs1 = stmt.executeQuery(qry1);
@@ -155,6 +156,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                 cid = rs2.getString(5);
                 mprc = rs2.getString(8);
                 mimgloc = rs2.getString(10);
+                //ticket_time = rs2.getString(4);
             }
         }
         
@@ -348,16 +350,19 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         
         JLabel m_title = new JLabel(mvt);
         JLabel s_num = new JLabel("Seat No: " + rb.getText());
-        JLabel c_id = new JLabel("Cinema: ");
+        JLabel c_id = new JLabel("Cinema: " + cid);
+        JLabel time = new JLabel(ticket_time.substring(0, 8));
         JLabel amt = new JLabel("Amount: " + mprc.substring(0,5));
-        m_title.setBounds(100, 10, 80, 20);
-        s_num.setBounds(100, 28, 80, 20);
-        c_id.setBounds(100, 47, 80, 20);
+        m_title.setBounds(100, 5, 80, 20);
+        s_num.setBounds(100, 20, 80, 20);
+        c_id.setBounds(100, 35, 80, 20);
+        time.setBounds(100, 50, 80, 20);
         amt.setBounds(100, 65, 80, 20);
         receipt_panel1.add(m_title);
         receipt_panel1.add(amt);
         receipt_panel1.add(s_num);
         receipt_panel1.add(c_id);
+        receipt_panel1.add(time);
         
         JPanel image_panel =new JPanel();
         receipt_panel1.add(image_panel);
