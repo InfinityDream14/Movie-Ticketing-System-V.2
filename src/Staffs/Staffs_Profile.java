@@ -96,24 +96,25 @@ public class Staffs_Profile extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         Log_out = new javax.swing.JButton();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        icon_prof = new javax.swing.JLabel();
+        staff_name = new javax.swing.JLabel();
         lp_bg = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        back = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
+        rp_bg = new javax.swing.JLabel();
+        profile = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         fname = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         lname = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
+        f_n = new javax.swing.JLabel();
         email = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         pass = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        phone_no = new javax.swing.JTextField();
+        p_no = new javax.swing.JLabel();
         Edit_prof = new javax.swing.JButton();
-        rp_bg = new javax.swing.JLabel();
+        edit_name = new javax.swing.JLabel();
+        Password = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -134,33 +135,35 @@ public class Staffs_Profile extends javax.swing.JFrame {
         });
         jPanel1.add(Log_out, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, -1, -1));
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
-        jLabel8.addMouseListener(new java.awt.event.MouseAdapter() {
+        icon_prof.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
+        icon_prof.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel8MouseClicked(evt);
+                icon_profMouseClicked(evt);
             }
         });
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 140, 80, 80));
+        jPanel1.add(icon_prof, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 140, 80, 80));
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel7.setText("Staff name");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, -1, -1));
+        staff_name.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        staff_name.setText("Staff name");
+        jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, -1, -1));
         jPanel1.add(lp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
-        jButton1.setText("BACK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        back.setText("BACK");
+        back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                backActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, -1));
+        jPanel1.add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        jLabel2.setText("Profile");
+        rp_bg.setPreferredSize(new java.awt.Dimension(570, 480));
+
+        profile.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        profile.setText("Profile");
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel1.setText("Email:");
@@ -180,20 +183,14 @@ public class Staffs_Profile extends javax.swing.JFrame {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel4.setText("Frist Name:");
+        f_n.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        f_n.setText("Frist Name:");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Last Name");
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel6.setText("Phone no.");
-
-        phone_no.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                phone_noActionPerformed(evt);
-            }
-        });
+        p_no.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        p_no.setText("Phone no.");
 
         Edit_prof.setBackground(new java.awt.Color(255, 204, 102));
         Edit_prof.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -205,7 +202,14 @@ public class Staffs_Profile extends javax.swing.JFrame {
             }
         });
 
-        rp_bg.setPreferredSize(new java.awt.Dimension(570, 480));
+        edit_name.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
+        edit_name.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                edit_nameMouseDragged(evt);
+            }
+        });
+
+        Password.setText("jPasswordField1");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -219,40 +223,41 @@ public class Staffs_Profile extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(280, 280, 280)
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(91, 91, 91)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jLabel4)
+                                .addComponent(f_n)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel1)
                                     .addComponent(jLabel5)))
-                            .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(p_no, javax.swing.GroupLayout.Alignment.LEADING))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(fname)
+                            .addComponent(fname, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
                             .addComponent(lname)
                             .addComponent(email)
-                            .addComponent(pass)
-                            .addComponent(phone_no, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE))))
-                .addContainerGap(91, Short.MAX_VALUE))
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(Password, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                                .addComponent(pass, javax.swing.GroupLayout.Alignment.LEADING)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(edit_name)
+                .addContainerGap(65, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(rp_bg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(rp_bg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(fname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
+                    .addComponent(f_n)
+                    .addComponent(edit_name))
                 .addGap(35, 35, 35)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -264,19 +269,16 @@ public class Staffs_Profile extends javax.swing.JFrame {
                 .addGap(35, 35, 35)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(p_no))
                 .addGap(35, 35, 35)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(phone_no, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3)
+                    .addComponent(Password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(36, 36, 36)
                 .addComponent(Edit_prof)
                 .addContainerGap(47, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(rp_bg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+                .addComponent(rp_bg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 570, 480));
@@ -293,47 +295,54 @@ public class Staffs_Profile extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_lnameActionPerformed
 
-    private void phone_noActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phone_noActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_phone_noActionPerformed
-
     private void Edit_profActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_profActionPerformed
-           if(!fname.getText().equals("") && !lname.getText().equals("")&& !email.getText().equals("")&& !pass.getText().equals("")&& !phone_no.getText().equals("")){
+           if(!fname.getText().equals("") && !lname.getText().equals("")&& !email.getText().equals("")&& !pass.getText().equals("")){
             fname.getText();
             lname.getText();
             email.getText();
             pass.getText();
-            phone_no.getText();
+            
         }
         JOptionPane.showMessageDialog(null, "Confirm");
         System.out.println("First Name:"+ fname.getText());
         System.out.println("Last Name:"+ lname.getText());
         System.out.println("Email:"+email.getText());
         System.out.println("Password:"+ pass.getText());
-        System.out.println("Phone No."+phone_no.getText());
+      
     }//GEN-LAST:event_Edit_profActionPerformed
 
     private void Log_outMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Log_outMouseClicked
        this.dispose();
     }//GEN-LAST:event_Log_outMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
         try {
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(Staffs_Profile.class.getName()).log(Level.SEVERE, null, ex);
         }
         dispose();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_backActionPerformed
 
-    private void jLabel8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel8MouseClicked
+    private void icon_profMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_icon_profMouseClicked
         try {      
             move_pf_file();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Staffs_Profile.class.getName()).log(Level.SEVERE, null, ex);
         }   
-    }//GEN-LAST:event_jLabel8MouseClicked
+    }//GEN-LAST:event_icon_profMouseClicked
 
+    private void edit_nameMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_nameMouseDragged
+       Staff_Name sb= new Staff_Name();
+        sb.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_edit_nameMouseDragged
+    public void setTextfname(String text){
+        fname.setText(text);
+    }
+    public void setTextlname(String text){
+        lname.setText(text);
+    }
     /**
      * @param args the command line arguments
      */
@@ -341,23 +350,24 @@ public class Staffs_Profile extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Edit_prof;
     private javax.swing.JButton Log_out;
+    private javax.swing.JPasswordField Password;
+    private javax.swing.JButton back;
+    private javax.swing.JLabel edit_name;
     private javax.swing.JTextField email;
+    private javax.swing.JLabel f_n;
     private javax.swing.JTextField fname;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel icon_prof;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTextField lname;
     private javax.swing.JLabel lp_bg;
+    private javax.swing.JLabel p_no;
     private javax.swing.JTextField pass;
-    private javax.swing.JTextField phone_no;
+    private javax.swing.JLabel profile;
     private javax.swing.JLabel rp_bg;
+    private javax.swing.JLabel staff_name;
     // End of variables declaration//GEN-END:variables
 }
