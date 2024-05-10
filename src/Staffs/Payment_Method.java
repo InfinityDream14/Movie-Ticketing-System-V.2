@@ -3,6 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Staffs;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.geom.RoundRectangle2D;
 import java.sql.Connection;
@@ -10,6 +14,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -31,6 +37,9 @@ public class Payment_Method extends javax.swing.JFrame {
         
         left_panel_bg();
         right_panel_bg();
+        
+        receipt_scrollpane();
+        create_receipt_panel();
     }
     
     void left_panel_bg(){
@@ -50,6 +59,81 @@ public class Payment_Method extends javax.swing.JFrame {
                 
     }
     
+    public void create_receipt_panel() {
+        JPanel receipt_panel1 = new JPanel();
+        receipt_panel1.setPreferredSize(new Dimension(228, 268));
+        receipt_panel1.setLayout(null);
+        receipt_panel.add(receipt_panel1);
+
+        JLabel rob = new JLabel("ROBINSON");
+        receipt_panel1.add(rob);
+        rob.setBounds(80, 0, 200, 30);
+        rob.setFont(new Font("Segoe UI", Font.BOLD, 15));
+
+        JLabel loc = new JLabel("ROBINSON PLACE MALOLOS");
+        receipt_panel1.add(loc);
+        loc.setBounds(30, 20, 200, 30);
+
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+        String str = formatter.format(date);
+        System.out.print("Current date: " + str);
+
+        JLabel date_time = new JLabel("DATE & TIME: " + str);
+        receipt_panel1.add(date_time);
+        date_time.setBounds(5, 60, 200, 30);
+
+        JLabel m_ttl = new JLabel("TITLE");
+        receipt_panel1.add(m_ttl);
+        m_ttl.setBounds(95, 90, 200, 30);
+        m_ttl.setFont(new Font("Segoe UI", Font.BOLD, 15));
+
+        JLabel c_id = new JLabel("C_ID");
+        receipt_panel1.add(c_id);
+        c_id.setBounds(20, 125, 100, 30);
+        c_id.setFont(new Font("Segoe UI", Font.BOLD, 11));
+
+        JLabel s_num = new JLabel("SEAT. NUM");
+        receipt_panel1.add(s_num);
+        s_num.setBounds(150, 125, 100, 30);
+        s_num.setFont(new Font("Segoe UI", Font.BOLD, 11));
+
+        JPanel square = new JPanel();
+        square.setLayout(null);
+        receipt_panel1.add(square);
+        square.setBackground(Color.WHITE);
+        square.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        square.setSize(new Dimension(190, 70));
+        square.setBounds(20, 150, 190, 70);
+
+        JLabel price = new JLabel("PRICE: ");
+        square.add(price);
+        price.setBounds(5, 10, 105, 30);
+
+        JLabel t_id = new JLabel("TICKET ID: ");
+        square.add(t_id);
+        t_id.setBounds(5, 30, 105, 30);
+        
+        JLabel total = new JLabel("Total: ");
+        total.setBounds(70, 330, 150, 30);
+        total.setFont(new Font("Segoe UI", Font.BOLD, 13));
+        cart_panel.add(total);
+    }
+    
+    public void receipt_scrollpane(){
+        main_receipt_panel.add(receipt_panel);
+        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
+        receipt_panel.setPreferredSize(new Dimension(235,900));
+        JScrollPane scrollPane = new JScrollPane(receipt_panel);
+        scrollPane.setMinimumSize(new Dimension(5, 5));
+        scrollPane.setPreferredSize(new Dimension(230,270));
+        scrollPane.setBounds(5, 5, 255, 280);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setOpaque(false);
+        main_receipt_panel.add(scrollPane);
+        
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -64,8 +148,10 @@ public class Payment_Method extends javax.swing.JFrame {
         icon = new javax.swing.JLabel();
         staff_name = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jPanel6 = new javax.swing.JPanel();
+        cart_panel = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
+        main_receipt_panel = new javax.swing.JPanel();
+        receipt_panel = new javax.swing.JPanel();
         lp_bg = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
@@ -118,24 +204,47 @@ public class Payment_Method extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel9.setText("CART");
 
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
-                .addGap(112, 112, 112)
-                .addComponent(jLabel9)
-                .addGap(120, 120, 120))
+        main_receipt_panel.setPreferredSize(new java.awt.Dimension(260, 300));
+
+        receipt_panel.setBackground(new java.awt.Color(255, 255, 255));
+        receipt_panel.setPreferredSize(new java.awt.Dimension(228, 268));
+
+        javax.swing.GroupLayout main_receipt_panelLayout = new javax.swing.GroupLayout(main_receipt_panel);
+        main_receipt_panel.setLayout(main_receipt_panelLayout);
+        main_receipt_panelLayout.setHorizontalGroup(
+            main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(main_receipt_panelLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
+        main_receipt_panelLayout.setVerticalGroup(
+            main_receipt_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(main_receipt_panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel9)
-                .addContainerGap(350, Short.MAX_VALUE))
+                .addComponent(receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40))
         );
 
-        jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, 260, -1));
+        javax.swing.GroupLayout cart_panelLayout = new javax.swing.GroupLayout(cart_panel);
+        cart_panel.setLayout(cart_panelLayout);
+        cart_panelLayout.setHorizontalGroup(
+            cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cart_panelLayout.createSequentialGroup()
+                .addGap(112, 112, 112)
+                .addComponent(jLabel9))
+            .addComponent(main_receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        cart_panelLayout.setVerticalGroup(
+            cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cart_panelLayout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addComponent(jLabel9)
+                .addGap(5, 5, 5)
+                .addComponent(main_receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        jPanel1.add(cart_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, 260, 380));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
         getContentPane().add(lp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
@@ -320,6 +429,7 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JLabel UnionBank;
     private javax.swing.JTextField amount_field;
     private javax.swing.JButton cancel_payment;
+    private javax.swing.JPanel cart_panel;
     private javax.swing.JLabel icon;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
@@ -331,9 +441,10 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JLabel lp_bg;
+    private javax.swing.JPanel main_receipt_panel;
+    private javax.swing.JPanel receipt_panel;
     private javax.swing.JLabel rp_bg;
     private javax.swing.JLabel staff_name;
     // End of variables declaration//GEN-END:variables

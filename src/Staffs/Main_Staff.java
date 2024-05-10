@@ -35,10 +35,10 @@ public class Main_Staff {
        }
        
            new Movie_List().setVisible(true);
-            //new Seat_Management().setVisible(true);
-            //new Payment_Method().setVisible(true);
-            //new Staffs_Profile().setVisible(true);
-            //new Staff_Name().setVisible(true);
+           //new Seat_Management().setVisible(true);
+           //new Payment_Method().setVisible(true);
+           //new Staffs_Profile().setVisible(true);
+           //new Staff_Name().setVisible(true);
         
     }
     
