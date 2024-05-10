@@ -391,9 +391,16 @@ public class Movie_List extends javax.swing.JFrame {
     }//GEN-LAST:event_staff_nameMouseClicked
 
     private void p_to_paymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_p_to_paymentActionPerformed
-        Payment_Method pm = new Payment_Method();
-        pm.setVisible(true);
-        this.setVisible(false);
+        
+        if(receipt_panel.getComponents().length !=0){
+            Payment_Method pm = new Payment_Method();
+            pm.setVisible(true);
+            this.setVisible(false);
+        }
+        else{
+            JOptionPane.showMessageDialog(null,
+                    "Please add to cart firs", "System Notice", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_p_to_paymentActionPerformed
 
 
