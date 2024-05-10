@@ -4,6 +4,7 @@
  */
 package Staffs;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -39,7 +40,8 @@ public class Payment_Method extends javax.swing.JFrame {
         right_panel_bg();
         
         receipt_scrollpane();
-        create_receipt_panel();
+        //create_receipt_panel();
+        get_ticklist_info();
     }
     
     void left_panel_bg(){
@@ -83,19 +85,24 @@ public class Payment_Method extends javax.swing.JFrame {
         receipt_panel1.add(date_time);
         date_time.setBounds(5, 60, 200, 30);
 
-        JLabel m_ttl = new JLabel("TITLE");
+        JLabel m_ttl = new JLabel("Title: " + mt);
         receipt_panel1.add(m_ttl);
-        m_ttl.setBounds(95, 90, 200, 30);
+        m_ttl.setBounds(5, 80, 200, 30);
         m_ttl.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        
+        JLabel stime = new JLabel("Show Time: " + time);
+        receipt_panel1.add(stime);
+        stime.setBounds(5, 100, 200, 30);
+        stime.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 
-        JLabel c_id = new JLabel("C_ID");
+        JLabel c_id = new JLabel("Cinema: " + cnm.charAt(9));
         receipt_panel1.add(c_id);
         c_id.setBounds(20, 125, 100, 30);
         c_id.setFont(new Font("Segoe UI", Font.BOLD, 11));
 
-        JLabel s_num = new JLabel("SEAT. NUM");
+        JLabel s_num = new JLabel(stno);
         receipt_panel1.add(s_num);
-        s_num.setBounds(150, 125, 100, 30);
+        s_num.setBounds(135, 125, 100, 30);
         s_num.setFont(new Font("Segoe UI", Font.BOLD, 11));
 
         JPanel square = new JPanel();
@@ -106,7 +113,7 @@ public class Payment_Method extends javax.swing.JFrame {
         square.setSize(new Dimension(190, 70));
         square.setBounds(20, 150, 190, 70);
 
-        JLabel price = new JLabel("PRICE: ");
+        JLabel price = new JLabel(prc);
         square.add(price);
         price.setBounds(5, 10, 105, 30);
 
@@ -114,10 +121,10 @@ public class Payment_Method extends javax.swing.JFrame {
         square.add(t_id);
         t_id.setBounds(5, 30, 105, 30);
         
-        JLabel total = new JLabel("Total: ");
-        total.setBounds(70, 330, 150, 30);
-        total.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        cart_panel.add(total);
+//        JLabel total = new JLabel("Total: ");
+//        total.setBounds(70, 330, 150, 30);
+//        total.setFont(new Font("Segoe UI", Font.BOLD, 13));
+//        cart_panel.add(total);
     }
     
     public void receipt_scrollpane(){
@@ -133,6 +140,37 @@ public class Payment_Method extends javax.swing.JFrame {
         scrollPane.setOpaque(false);
         main_receipt_panel.add(scrollPane);
         
+    }
+    
+    String mt, cnm, stno, time, prc;
+    void get_ticklist_info(){
+        Component[] c = new Temp_Data().jp_mlist.getComponents();
+        for(Component cp : c){
+            
+            JPanel jpl = (JPanel) cp;
+            System.out.println(jpl.getComponent(0));
+            JLabel title = (JLabel) jpl.getComponent(0);
+            mt = title.getText();
+            
+            System.out.println(jpl.getComponent(1));
+            JLabel amount = (JLabel) jpl.getComponent(1);
+            prc = amount.getText();
+            
+            System.out.println(jpl.getComponent(2));
+            JLabel seat = (JLabel) jpl.getComponent(2);
+            stno = seat.getText();
+            
+            System.out.println(jpl.getComponent(3));
+            JLabel cinema = (JLabel) jpl.getComponent(3);
+            cnm = cinema.getText();
+            
+            System.out.println(jpl.getComponent(4));
+            JLabel tm = (JLabel) jpl.getComponent(4);
+            time = tm.getText();
+            
+            create_receipt_panel();
+
+        }
     }
 
     /**

@@ -737,7 +737,20 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     }//GEN-LAST:event_cancel_seat_choicesActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-        
+       
+        Component[] c = receipt_panel.getComponents();
+        for(Component cp : c){
+            
+            JPanel jpl = (JPanel) cp;
+            System.out.println(jpl.getComponent(0));
+            System.out.println(jpl.getComponent(1));
+            System.out.println(jpl.getComponent(2));
+            System.out.println(jpl.getComponent(3));
+            System.out.println(jpl.getComponent(4));
+            System.out.println(jpl.getComponent(5));
+            System.out.println(jpl.getComponent(6));
+        }
+
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
     private void change_time(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_change_time

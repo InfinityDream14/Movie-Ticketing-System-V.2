@@ -391,8 +391,9 @@ public class Movie_List extends javax.swing.JFrame {
     }//GEN-LAST:event_staff_nameMouseClicked
 
     private void p_to_paymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_p_to_paymentActionPerformed
-        
+
         if(receipt_panel.getComponents().length !=0){
+            send_receipt_panel_comp();
             Payment_Method pm = new Payment_Method();
             pm.setVisible(true);
             this.setVisible(false);
