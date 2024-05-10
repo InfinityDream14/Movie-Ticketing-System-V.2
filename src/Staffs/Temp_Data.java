@@ -1,7 +1,6 @@
 
 package Staffs;
 
-import java.awt.*;
 import javax.swing.*;
 
 public class Temp_Data {

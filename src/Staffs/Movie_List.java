@@ -39,6 +39,7 @@ public class Movie_List extends javax.swing.JFrame {
             if(components.length !=0){
                 for(Component c : components){
                     receipt_panel.add(c);
+                    System.out.println("Nakuha na: " + c.getName());
                 }
                 receipt_panel.revalidate();
                 receipt_panel.repaint();
@@ -87,7 +88,7 @@ public class Movie_List extends javax.swing.JFrame {
                             title_to_sm = jt.getText();
                             JLabel jg = (JLabel)movie_panel1.getComponent(2);
                             genre_to_sm = jg.getText();
-                            
+                            send_receipt_panel_comp();
                             try {
                                 Seat_Management sm = new Seat_Management();
                                 sm.setVisible(true);
@@ -115,6 +116,18 @@ public class Movie_List extends javax.swing.JFrame {
             scrollPane.setOpaque(false);
             main_panel.add(scrollPane);
         }
+    
+    public void send_receipt_panel_comp(){
+        
+        Component[] c = receipt_panel.getComponents();
+        for(Component cp : c){
+            tempd.jp_mlist.add(cp);
+            System.out.println("nalagay na ulit sa tempd for seat: " + cp.getName());
+        }
+        receipt_panel.revalidate();
+        receipt_panel.repaint();
+        
+    }
     
     void left_panel_bg(){
         ImageIcon rpbg = new ImageIcon("lpbg.png");
@@ -178,6 +191,7 @@ public class Movie_List extends javax.swing.JFrame {
     }
     
     public void add_movie_comp_to_receipt_panel() throws SQLException, ParseException{
+        
         for(Component c : components){
             receipt_panel.add(c);
         }

@@ -20,7 +20,7 @@ import java.util.logging.Level;
  *
  * @author Administrator
  */
-public class Seat_Management extends javax.swing.JFrame implements MouseListener{
+public final class Seat_Management extends javax.swing.JFrame implements MouseListener{
 
     //Movie_List mlst = new Movie_List();
 
@@ -37,22 +37,24 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         left_panel_bg(); // putting image background to left panel
         get_info_in_database();
         
+        ticklist_scrollpane();
         
-        components = tempd.jp_mlist.getComponents();
+        this.components = tempd.jp_mlist.getComponents();
+
         try{
             if(components.length !=0){
                 for(Component c : components){
-                    receipt_panel.add(c);
+                    receipt_panel1.add(c);
+                    System.out.println("Nakuhang components: " + c);
                 }
                 receipt_panel.revalidate();
                 receipt_panel.repaint();
             }
+            else
+                System.out.println("No component inside panel");
         }catch(Exception e){
             e.getStackTrace();
         }
-        
-        ticklist_scrollpane();
-
     }
     
 
@@ -60,7 +62,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     String mvg = mlst.genre_to_sm;
     static String mvp;
     static String mvd;
-    Component[] components;
+    static Component[] components = {};
     String ticket_title = "The Avengers";
     
     Main_Staff ms = new Main_Staff();
@@ -159,59 +161,65 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         String qry3 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
                         "from showtime st inner join seat_list sl\n" +
                         "	on st.showtimeid = sl.showtimeid";
+        Statement stmt1 = ms.mc.createStatement();
         ResultSet rs = stmt.executeQuery(qry3);
-        while(rs.next()){
-            if(rs.getString(1).equals(st1)){
-                
-                String cn="";
-                ImageIcon seat_icon = new ImageIcon("seat.png");
-                JRadioButton jr = new JRadioButton();
-                if(rs.getString(5).equals("A")){
-                    jr.setBackground(Color.white);
-                }
-                else
-                    jr.setBackground(new Color(255,204,102));
-                jr.addMouseListener(new MouseAdapter(){
-                    @Override
-                    public void mouseClicked(MouseEvent e){
-                        if(!(jr.getBackground().equals(Color.cyan))&&
-                                !(jr.getBackground().equals(new Color(255,204,102)))){
-                            jr.setBackground(Color.cyan);
-                            seat_choices.add(jr.getText());
-                            create_ticket_list(jr);
-                            System.out.println("added to list");
-                            
-                        }
-                        else if(jr.getBackground().equals(Color.cyan)){
+        ResultSet rs1 = stmt1.executeQuery(qry);
+        while(rs1.next()){
+            if(rs1.getString(1).equals(mvt)){
+                while(rs.next()){
+                    if(rs.getString(1).equals(st1)){
+
+                        String cn="";
+                        ImageIcon seat_icon = new ImageIcon("seat.png");
+                        JRadioButton jr = new JRadioButton();
+                        if(rs.getString(5).equals("A")){
                             jr.setBackground(Color.white);
-                            seat_choices.remove(jr.getText());
-                            Component[] complist = receipt_panel.getComponents();
-                            for(Component c : complist){
-                                if(c.getName().equals(jr.getText())){
-                                    receipt_panel.remove(c);
-                                }
-                            }
-                            receipt_panel.revalidate();
-                            receipt_panel.repaint();
-                            System.out.println("removed to list");
                         }
-                        
+                        else
+                            jr.setBackground(new Color(255,204,102));
+                        jr.addMouseListener(new MouseAdapter(){
+                            @Override
+                            public void mouseClicked(MouseEvent e){
+                                if(!(jr.getBackground().equals(Color.cyan))&&
+                                        !(jr.getBackground().equals(new Color(255,204,102)))){
+                                    jr.setBackground(Color.cyan);
+                                    seat_choices.add(jr.getText());
+                                    create_ticket_list(jr);
+                                    System.out.println("added to list");
+
+                                }
+                                else if(jr.getBackground().equals(Color.cyan)){
+                                    jr.setBackground(Color.white);
+                                    seat_choices.remove(jr.getText());
+                                    Component[] complist = receipt_panel.getComponents();
+                                    for(Component c : complist){
+                                        if(c.getName().equals(jr.getText())){
+                                            receipt_panel.remove(c);
+                                        }
+                                    }
+                                    receipt_panel.revalidate();
+                                    receipt_panel.repaint();
+                                    System.out.println("removed to list");
+                                }
+
+                            }
+                        });
+                        if(rs.getString(3).equals("L")){
+                            cn = cn+"L"+rs.getString(4);
+                            jr.setText(cn); jr.setIcon(seat_icon);
+                            left_seat_panel.add(jr);
+                        }
+                        else if(rs.getString(3).equals("M")){
+                            cn = cn+"M"+rs.getString(4);
+                            jr.setText(cn);jr.setIcon(seat_icon);
+                            mid_seat_panel.add(jr);
+                        }
+                        else if(rs.getString(3).equals("R")){
+                            cn = cn+"R"+rs.getString(4);
+                            jr.setText(cn);jr.setIcon(seat_icon);
+                            right_seat_panel.add(jr);
+                        }
                     }
-                });
-                if(rs.getString(3).equals("L")){
-                    cn = cn+"L"+rs.getString(4);
-                    jr.setText(cn); jr.setIcon(seat_icon);
-                    left_seat_panel.add(jr);
-                }
-                else if(rs.getString(3).equals("M")){
-                    cn = cn+"M"+rs.getString(4);
-                    jr.setText(cn);jr.setIcon(seat_icon);
-                    mid_seat_panel.add(jr);
-                }
-                else if(rs.getString(3).equals("R")){
-                    cn = cn+"R"+rs.getString(4);
-                    jr.setText(cn);jr.setIcon(seat_icon);
-                    right_seat_panel.add(jr);
                 }
             }
         }
@@ -326,7 +334,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         scrollPane.setOpaque(false);
         main_receipt_panel.add(scrollPane);
     }
-    JPanel receipt_panel1;
+    
+    static JPanel receipt_panel1;
     public void create_ticket_list(JRadioButton rb){
         
         receipt_panel1 = new JPanel();
@@ -364,7 +373,10 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         Component[] c = receipt_panel.getComponents();
         for(Component cp : c){
             tempd.jp_mlist.add(cp);
+            System.out.println("nalagay na: " + cp.getName());
         }
+        receipt_panel.revalidate();
+        receipt_panel.repaint();
         
     }
     String qry2 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
@@ -437,8 +449,8 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         jPanel6 = new javax.swing.JPanel();
         sm_image_slot = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        confirm_seat_choice_button = new javax.swing.JButton();
+        cancel_seat_choices = new javax.swing.JButton();
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
         jPanel1 = new javax.swing.JPanel();
@@ -490,7 +502,6 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         receipt_panel.setMaximumSize(new java.awt.Dimension(20, 20));
         receipt_panel.setName(""); // NOI18N
         receipt_panel.setPreferredSize(new java.awt.Dimension(248, 327));
-        receipt_panel.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 10, 10));
 
         javax.swing.GroupLayout main_receipt_panelLayout = new javax.swing.GroupLayout(main_receipt_panel);
         main_receipt_panel.setLayout(main_receipt_panelLayout);
@@ -506,8 +517,6 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
                 .addGap(5, 5, 5)
                 .addComponent(receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-
-        cart_panel.add(main_receipt_panel);
 
         cart_panel.add(main_receipt_panel);
 
@@ -602,21 +611,21 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         jLabel5.setText("SEATS");
         right_main_panel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, -1, -1));
 
-        jButton1.setText("Confirm");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        confirm_seat_choice_button.setText("Confirm");
+        confirm_seat_choice_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                confirm_seat_choice_buttonActionPerformed(evt);
             }
         });
-        right_main_panel.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 440, -1, -1));
+        right_main_panel.add(confirm_seat_choice_button, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 440, -1, -1));
 
-        jButton2.setText("Cancel");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        cancel_seat_choices.setText("Cancel");
+        cancel_seat_choices.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                cancel_seat_choicesActionPerformed(evt);
             }
         });
-        right_main_panel.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, -1, -1));
+        right_main_panel.add(cancel_seat_choices, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, -1, -1));
 
         jRadioButton2.setBackground(new java.awt.Color(255, 255, 255));
         jRadioButton2.setText("Available");
@@ -673,18 +682,20 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void confirm_seat_choice_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirm_seat_choice_buttonActionPerformed
+        
         send_receipt_panel_comp();
+        
         try {
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setVisible(false);
+        dispose();
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_confirm_seat_choice_buttonActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void cancel_seat_choicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_seat_choicesActionPerformed
         try {
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
@@ -693,7 +704,7 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
         this.setVisible(false);
         
         //mlst.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_cancel_seat_choicesActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
         try {
@@ -735,9 +746,9 @@ public class Seat_Management extends javax.swing.JFrame implements MouseListener
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Cart_label;
     private javax.swing.JPanel Left_yellow_Panel;
+    private javax.swing.JButton cancel_seat_choices;
     private javax.swing.JPanel cart_panel;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton confirm_seat_choice_button;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
