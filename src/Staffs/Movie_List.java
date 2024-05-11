@@ -1,4 +1,3 @@
-
 package Staffs;
 
 import java.awt.*;
@@ -10,7 +9,9 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import java.sql.*;
 import java.text.ParseException;
+import java.time.LocalTime;
 import main.Main;
+
 /**
  *
  * @author Administrator
@@ -22,100 +23,105 @@ public final class Movie_List extends javax.swing.JFrame {
     public Movie_List() throws SQLException, ClassNotFoundException {
         initComponents();
         setLocationRelativeTo(null);
-        
-        this.setShape(new RoundRectangle2D.Double(0, 0, (850), 
-        (480), 25, 25));
-        
+
+        this.setShape(new RoundRectangle2D.Double(0, 0, (850),
+                (480), 25, 25));
+
         left_panel_bg();
         right_panel_bg();
-        
+
         create_movie_list_panel();
-        
+
     }
     static String title_to_sm;
     static String genre_to_sm;
-    public void create_movie_list_panel() throws SQLException, ClassNotFoundException, ClassNotFoundException{
-        Main ms = new Main();
-        ms.connectToDatabase();
-        Statement stmt = ms.mc.createStatement();
-            
-            String qry = "select * from movie";
-            ResultSet rs = stmt.executeQuery(qry);
-            while(rs.next()){
-                String mposter = rs.getString(7);
-                ImageIcon m1 = new ImageIcon(mposter);
-                JLabel mve1 = new JLabel(m1);
-                String mtitle = rs.getString(2);
-                JLabel mt = new JLabel(mtitle);
-                String mgenre = rs.getString(3);
-                JLabel gr = new JLabel("Genre: " + mgenre);
-                JPanel movie_panel1 = new JPanel();
-                movie_panel1.setPreferredSize(new Dimension(160,225));
-                movie_panel1.setLayout(new FlowLayout(FlowLayout.CENTER,20,2));
-                
-                movie_panel1.add(mve1);
-                movie_panel1.add(mt);
-                movie_panel1.add(gr);
-                
-                movie_panel.add(movie_panel1);
-                
-                movie_panel1.addMouseListener(new MouseAdapter(){
-                    @Override
-                    public void mouseClicked(MouseEvent e){
+    Statement stmt;
+    ResultSet rs;
+    PreparedStatement myStmt;
+    Main ms;
+
+    public void create_movie_list_panel() throws SQLException, ClassNotFoundException, ClassNotFoundException {
+        this.ms = new Main();
+        this.ms.connectToDatabase();
+        this.stmt = this.ms.mc.createStatement();
+
+        String qry = "select * from movie";
+        this.rs = stmt.executeQuery(qry);
+        while (rs.next()) {
+            String mposter = rs.getString(7);
+            ImageIcon m1 = new ImageIcon(mposter);
+            JLabel mve1 = new JLabel(m1);
+            String mtitle = rs.getString(2);
+            JLabel mt = new JLabel(mtitle);
+            String mgenre = rs.getString(3);
+            JLabel gr = new JLabel("Genre: " + mgenre);
+            JPanel movie_panel1 = new JPanel();
+            movie_panel1.setPreferredSize(new Dimension(160, 225));
+            movie_panel1.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 2));
+
+            movie_panel1.add(mve1);
+            movie_panel1.add(mt);
+            movie_panel1.add(gr);
+
+            movie_panel.add(movie_panel1);
+
+            movie_panel1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    try {
+                        JLabel jt = (JLabel) movie_panel1.getComponent(1);
+                        title_to_sm = jt.getText();
+                        JLabel jg = (JLabel) movie_panel1.getComponent(2);
+                        genre_to_sm = jg.getText();
+                        Seat_Management sm;
+                        new Movie_List().setVisible(false);
                         try {
-                            JLabel jt = (JLabel)movie_panel1.getComponent(1);
-                            title_to_sm = jt.getText();
-                            JLabel jg = (JLabel)movie_panel1.getComponent(2);
-                            genre_to_sm = jg.getText();
-                            Seat_Management sm;
-                            new Movie_List().setVisible(false);
-                            try {
-                                sm = new Seat_Management();
-                                sm.setVisible(true);
-                            } catch (ParseException ex) {
-                                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
+                            sm = new Seat_Management();
+                            sm.setVisible(true);
+                        } catch (ParseException ex) {
                             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                });
-            }
-            
-            main_panel.add(movie_panel);
-            movie_panel.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
-            movie_panel.setPreferredSize(new Dimension(500,900));
-            //movie_panel.setBounds(10, 50, 280,530);
-            JScrollPane scrollPane = new JScrollPane(movie_panel);
-            scrollPane.setMinimumSize(new Dimension(10, 10));
-            scrollPane.setPreferredSize(new Dimension(500,300));
-            scrollPane.setBounds(15, 15, 500, 335);
-            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            scrollPane.setOpaque(false);
-            main_panel.add(scrollPane);
+                }
+            });
         }
-    
-    void left_panel_bg(){
+
+        main_panel.add(movie_panel);
+        movie_panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 5));
+        movie_panel.setPreferredSize(new Dimension(500, 900));
+        //movie_panel.setBounds(10, 50, 280,530);
+        JScrollPane scrollPane = new JScrollPane(movie_panel);
+        scrollPane.setMinimumSize(new Dimension(10, 10));
+        scrollPane.setPreferredSize(new Dimension(500, 300));
+        scrollPane.setBounds(15, 15, 500, 335);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setOpaque(false);
+        main_panel.add(scrollPane);
+    }
+
+    void left_panel_bg() {
         ImageIcon rpbg = new ImageIcon("lpbg.png");
         Image image = rpbg.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(570, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        Image newimg = image.getScaledInstance(570, 480, java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
         rpbg = new ImageIcon(newimg);
         lp_bg.setIcon(rpbg);
     }
-    void right_panel_bg(){
+
+    void right_panel_bg() {
 
         ImageIcon rpbg = new ImageIcon("rpbg.png");
         Image image = rpbg.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(570, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        Image newimg = image.getScaledInstance(570, 480, java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
         rpbg = new ImageIcon(newimg);
         rp_bg.setIcon(rpbg);
-                
+
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -264,7 +270,7 @@ public final class Movie_List extends javax.swing.JFrame {
 
     private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
         try {
-            new Movie_List().setVisible(false); 
+            new Movie_List().setVisible(false);
         } catch (SQLException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
@@ -284,13 +290,39 @@ public final class Movie_List extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel5MouseClicked
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+
+        String q1 = "select * from viewLogs";
+        String q2 = "update logs"
+                + "where Employee_ID = ?"
+                + "set Log_Out = ?";
+        
+        LocalTime lTime = LocalTime.now();
+        Time cTime = Time.valueOf(lTime);
+        
+        String empID = "";
+        
+        try {
+            myStmt = ms.mc.prepareStatement(q2);
+            rs = stmt.executeQuery(q1);
+            
+            while(rs.next()){
+                empID = rs.getString(1);
+            }
+            
+            myStmt.setString(1, empID);
+            myStmt.setTime(2, cTime);
+            myStmt.executeQuery();
+                            
+        } catch (SQLException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        }
         System.exit(0);
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void exit_staff(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_exit_staff
-        if(evt.getKeyCode() == KeyEvent.VK_END){
-             System.exit(0);
-         }
+        if (evt.getKeyCode() == KeyEvent.VK_END) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_exit_staff
 
 

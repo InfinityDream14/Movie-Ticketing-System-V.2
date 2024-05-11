@@ -3,10 +3,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package LogIn;
-import LogIn.LogInProcess;
+
 import Staffs.Movie_List;
 import java.awt.Color;
-import javax.swing.JOptionPane;
 import admin.Admin;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -22,14 +21,22 @@ public class LogIn extends javax.swing.JFrame {
     /**
      * Creates new form LogIn
      */
-    
     Main main;
-    
-    public LogIn() {
-        initComponents();
-        SignUp.setVisible(false);
+    LogInProcess process;
+
+    public LogIn() throws SQLException, ClassNotFoundException {
         main = new Main();
-        
+
+        process = new LogInProcess();
+
+        switch (process.checkIfLoged()) {
+            case 1 -> new Admin().setVisible(true);
+            case 2 -> new Movie_List().setVisible(true);
+            case 0 -> {
+                initComponents();
+                SignUp.setVisible(false);
+            }
+        }
     }
 
     /**
@@ -336,7 +343,7 @@ public class LogIn extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void logInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInActionPerformed
-        LogInProcess process = new LogInProcess();
+
         try {
             int flag = process.checkAcc(lUserIn.getText(), lPassIn.getText());
             switch (flag) {
@@ -450,7 +457,13 @@ public class LogIn extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LogIn().setVisible(true);
+                try {
+                    new LogIn().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }

@@ -28,7 +28,7 @@ public class Main {
 //        new Movie_List().setVisible(true);
         new LogIn.LogIn().setVisible(true);
     }
-
+    
     public void connectToDatabase() throws SQLException, ClassNotFoundException {
         try {
             String hostname = "user";
@@ -55,5 +55,4 @@ public class Main {
         //new Payment_Method().setVisible(true);
 
     }
-
 }
