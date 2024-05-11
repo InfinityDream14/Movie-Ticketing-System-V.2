@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -45,6 +46,8 @@ public class Payment_Method extends javax.swing.JFrame {
         get_last_ticketid();
         get_last_paymentid();
         get_ticklist_info();
+        
+        total_prc.setText(Double.toString(totalp));
     }
     
     void left_panel_bg(){
@@ -120,6 +123,7 @@ public class Payment_Method extends javax.swing.JFrame {
         JLabel price = new JLabel(prc);
         square.add(price);
         price.setBounds(5, 10, 105, 30);
+        totalp+= Double.parseDouble(prc.substring(8));
 
         JLabel t_id = new JLabel("TICKET ID: " + newticketid);
         square.add(t_id);
@@ -172,8 +176,9 @@ public class Payment_Method extends javax.swing.JFrame {
         
     }
     
-    String lsttid, newticketid, lstpaymentid, newpaymentid;
+    String lsttid, newticketid, lstpaymentid, newpaymentid,payment_m,emplog;
     static int lnum,lnumpm;
+    static double totalp = 0;
     
     void get_last_ticketid() throws SQLException {
         
@@ -203,7 +208,7 @@ public class Payment_Method extends javax.swing.JFrame {
             System.out.println(rs.getString(1));
 
         }
-        lnumpm = Integer.parseInt(lstpaymentid.substring(1));
+        lnumpm = Integer.parseInt(lstpaymentid.substring(1))+1;
         String nmpd = "";
         newpaymentid = "P" + String.valueOf(lnumpm);
         System.out.println(newpaymentid);
@@ -240,6 +245,21 @@ public class Payment_Method extends javax.swing.JFrame {
         }
     }
     
+    void insert_whole_payment() throws SQLException{
+        Statement stmt = ms.mc.createStatement();
+        
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        
+        String in_payment ="INSERT INTO payment ([PaymentID],[PaymentMethod],[Amount],[PaymentDate],[EmployeeID])\n" +
+                        "VALUES \n" +"('"+newpaymentid+"','"+payment_m+"',"
+                        +totalp+",'"+timeStamp+"','"+emplog+"')";
+        
+        int in = stmt.executeUpdate(in_payment);
+        if(in>0){
+            System.out.println("Payment added to database");
+        }
+    }
+    
     String convert_12hr_to_24hr(String tm) throws ParseException{
         SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
         SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mm a");
@@ -266,6 +286,8 @@ public class Payment_Method extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         main_receipt_panel = new javax.swing.JPanel();
         receipt_panel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        total_prc = new javax.swing.JLabel();
         lp_bg = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
@@ -340,6 +362,10 @@ public class Payment_Method extends javax.swing.JFrame {
                 .addGap(40, 40, 40))
         );
 
+        jLabel2.setText("Total Amount:");
+
+        total_prc.setText("0.00");
+
         javax.swing.GroupLayout cart_panelLayout = new javax.swing.GroupLayout(cart_panel);
         cart_panel.setLayout(cart_panelLayout);
         cart_panelLayout.setHorizontalGroup(
@@ -348,6 +374,11 @@ public class Payment_Method extends javax.swing.JFrame {
                 .addGap(112, 112, 112)
                 .addComponent(jLabel9))
             .addComponent(main_receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(cart_panelLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(total_prc))
         );
         cart_panelLayout.setVerticalGroup(
             cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -355,7 +386,12 @@ public class Payment_Method extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(jLabel9)
                 .addGap(5, 5, 5)
-                .addComponent(main_receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(main_receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(total_prc))
+                .addGap(28, 28, 28))
         );
 
         jPanel1.add(cart_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, 260, 380));
@@ -549,6 +585,7 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
@@ -561,5 +598,6 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JPanel receipt_panel;
     private javax.swing.JLabel rp_bg;
     private javax.swing.JLabel staff_name;
+    private javax.swing.JLabel total_prc;
     // End of variables declaration//GEN-END:variables
 }
