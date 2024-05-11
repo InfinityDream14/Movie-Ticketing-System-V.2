@@ -181,7 +181,7 @@ public class BPI extends javax.swing.JFrame {
             System.out.println(Payment_Method.emp_log);
         }
         else if(totalp > money){
-            JOptionPane.showMessageDialog(null, "Insuficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Insufficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_jButton1MouseClicked
 
