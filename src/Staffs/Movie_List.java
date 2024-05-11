@@ -1,5 +1,6 @@
 package Staffs;
 
+import admin.Admin;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
@@ -288,7 +289,8 @@ public final class Movie_List extends javax.swing.JFrame {
 
         String q1 = """
                     select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
-                    \tfrom LOGS l left join staff s on l.Employee_ID = s.EmployeeID""";
+                    	from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    	order by l.Log_In, l.DateLog""";
 
         try {
 
@@ -296,7 +298,7 @@ public final class Movie_List extends javax.swing.JFrame {
 
             while (rs.next()) {
 //                System.out.println(rs.getString(1)+", "+rs.getString(3)+ ", "+rs.getString(4));
-                if (rs.getString("Employee_ID").charAt(0) != 'a') {
+                if (rs.getString("Employee_ID").charAt(0) != 'A') {
                     empID = rs.getString("Employee_ID");
                     dateLog = rs.getString("DateLog");
                     logIn = rs.getString("Log_In");
@@ -304,12 +306,18 @@ public final class Movie_List extends javax.swing.JFrame {
             }
 
             String q2 = "UPDATE logs SET Log_Out = '" + cTime + "' where Employee_ID = '" + empID + "' AND DateLog = '" + dateLog + "' AND Log_In = '" + logIn + "';";
-            System.out.println(empID + ", " + dateLog + ", " + logIn);
             stmt.executeQuery(q2);
 
         } catch (SQLException ex) {
         }
-        System.exit(0);
+        try {
+            new LogIn.LogIn().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        dispose();
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void exit_staff(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_exit_staff
