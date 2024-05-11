@@ -10,12 +10,13 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.geom.RoundRectangle2D;
-import java.sql.Connection;
+import java.sql.*;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +30,8 @@ public class Payment_Method extends javax.swing.JFrame {
     /**
      * Creates new form Payment_Method
      */
-    public Payment_Method() {
+    Main_Staff ms = new Main_Staff();
+    public Payment_Method() throws SQLException, ParseException {
         initComponents();
         setLocationRelativeTo(null);
         
@@ -40,7 +42,8 @@ public class Payment_Method extends javax.swing.JFrame {
         right_panel_bg();
         
         receipt_scrollpane();
-        //create_receipt_panel();
+        get_last_ticketid();
+        get_last_paymentid();
         get_ticklist_info();
     }
     
@@ -61,7 +64,8 @@ public class Payment_Method extends javax.swing.JFrame {
                 
     }
     
-    public void create_receipt_panel() {
+    ArrayList<String> ticket_insert = new ArrayList();
+    public void create_receipt_panel() throws SQLException, ParseException {
         JPanel receipt_panel1 = new JPanel();
         receipt_panel1.setPreferredSize(new Dimension(228, 268));
         receipt_panel1.setLayout(null);
@@ -117,9 +121,35 @@ public class Payment_Method extends javax.swing.JFrame {
         square.add(price);
         price.setBounds(5, 10, 105, 30);
 
-        JLabel t_id = new JLabel("TICKET ID: ");
+        JLabel t_id = new JLabel("TICKET ID: " + newticketid);
         square.add(t_id);
         t_id.setBounds(5, 30, 105, 30);
+        
+        String mid="m1";
+        Statement stmt_mid = ms.mc.createStatement();
+        String qry_mid = "select m.title, m.movieid, st.showtimemovieid, st.showtimeid,st.starttime\n" +
+                            "from movie m left join showtime st\n" +
+                            "on m.movieid = st.showtimemovieid";
+        
+        ResultSet rsmid = stmt_mid.executeQuery(qry_mid);
+        String ttime = convert_12hr_to_24hr(time);
+        
+        while(rsmid.next()){
+            if(rsmid.getString(1).equalsIgnoreCase(mt)
+                    && rsmid.getString(5).equals(ttime)){
+                mid = rsmid.getString(2);
+            }
+        }
+        
+        String seatn = stno.substring(9);
+        String cid = cnm.substring(8);
+        String insertticket = "INSERT INTO ticket\n" +"VALUES \n" 
+                    + "('"+newticketid+"','"+str+"','"+seatn+"','"+cid+"','"+
+                    newpaymentid+"','"+mid+"')";
+        
+        System.out.println(insertticket);
+        
+        ticket_insert.add(insertticket);
         
 //        JLabel total = new JLabel("Total: ");
 //        total.setBounds(70, 330, 150, 30);
@@ -142,35 +172,81 @@ public class Payment_Method extends javax.swing.JFrame {
         
     }
     
+    String lsttid, newticketid, lstpaymentid, newpaymentid;
+    static int lnum,lnumpm;
+    
+    void get_last_ticketid() throws SQLException {
+        
+        Statement stmt = ms.mc.createStatement();
+        lsttid = "";
+        
+        String qry = "select * from ticket order by len(ticketID), ticketID";
+        ResultSet rs = stmt.executeQuery(qry);
+        while (rs.next()) {
+            lsttid = rs.getString(1);
+            System.out.println(rs.getString(1));
+
+        }
+        lnum = 1;//Integer.parseInt(lsttid.substring(1, lsttid.length()));
+        String nmpd = "";
+        newticketid = "T" + String.valueOf(lnum);
+        System.out.println(newticketid);
+    }
+    void get_last_paymentid() throws SQLException{
+        Statement stmt = ms.mc.createStatement();
+        lstpaymentid = "";
+        
+        String qry = "select * from payment order by len(paymentid), paymentid";
+        ResultSet rs = stmt.executeQuery(qry);
+        while (rs.next()) {
+            lstpaymentid = rs.getString(1);
+            System.out.println(rs.getString(1));
+
+        }
+        lnumpm = Integer.parseInt(lstpaymentid.substring(1));
+        String nmpd = "";
+        newpaymentid = "P" + String.valueOf(lnumpm);
+        System.out.println(newpaymentid);
+    }
+    
+    
     String mt, cnm, stno, time, prc;
-    void get_ticklist_info(){
+    void get_ticklist_info() throws SQLException, ParseException{
         Component[] c = new Temp_Data().jp_mlist.getComponents();
         for(Component cp : c){
             
             JPanel jpl = (JPanel) cp;
-            System.out.println(jpl.getComponent(0));
             JLabel title = (JLabel) jpl.getComponent(0);
             mt = title.getText();
             
-            System.out.println(jpl.getComponent(1));
             JLabel amount = (JLabel) jpl.getComponent(1);
             prc = amount.getText();
             
-            System.out.println(jpl.getComponent(2));
             JLabel seat = (JLabel) jpl.getComponent(2);
             stno = seat.getText();
             
-            System.out.println(jpl.getComponent(3));
             JLabel cinema = (JLabel) jpl.getComponent(3);
             cnm = cinema.getText();
             
-            System.out.println(jpl.getComponent(4));
             JLabel tm = (JLabel) jpl.getComponent(4);
             time = tm.getText();
             
+            newticketid = "T" + Integer.toString(lnum+1);
+            
             create_receipt_panel();
+            
+            lnum++;
 
         }
+    }
+    
+    String convert_12hr_to_24hr(String tm) throws ParseException{
+        SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mm a");
+        java.util.Date date = parseFormat.parse(tm);
+        String real_time = displayFormat.format(date);
+        real_time = real_time +":00.0000000";
+        return real_time;
     }
 
     /**

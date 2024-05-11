@@ -4,6 +4,10 @@
  */
 package Staffs;
 
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -152,14 +156,21 @@ public class GCash extends javax.swing.JFrame {
     }//GEN-LAST:event_backMouseClicked
 
     private void paynowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paynowMouseClicked
-        Payment_Method pm = new Payment_Method();
+        Payment_Method pm;
+        try {
+            pm = new Payment_Method();
+        } catch (SQLException ex) {
+            Logger.getLogger(GCash.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(GCash.class.getName()).log(Level.SEVERE, null, ex);
+        }
         if(!acc_num.getText().equals("") && !amount.getText().equals("")){
             amount.getText();
         }
         JOptionPane.showMessageDialog(null, "Confirm");
-        System.out.println(pm.payment);
+        System.out.println(Payment_Method.payment);
         System.out.println(amount.getText());
-        System.out.println(pm.emp_log);
+        System.out.println(Payment_Method.emp_log);
     }//GEN-LAST:event_paynowMouseClicked
 
     /**

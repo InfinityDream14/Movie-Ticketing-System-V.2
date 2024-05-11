@@ -331,7 +331,13 @@ public class Movie_List extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
-        new Payment_Method().setVisible(true);
+        try {
+            new Payment_Method().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
@@ -394,8 +400,16 @@ public class Movie_List extends javax.swing.JFrame {
 
         if(receipt_panel.getComponents().length !=0){
             send_receipt_panel_comp();
-            Payment_Method pm = new Payment_Method();
-            pm.setVisible(true);
+            Payment_Method pm;
+            try {
+                pm = new Payment_Method();
+                pm.setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
             this.setVisible(false);
         }
         else{

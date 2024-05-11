@@ -698,11 +698,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     }// </editor-fold>//GEN-END:initComponents
 
     private void confirm_seat_choice_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirm_seat_choice_buttonActionPerformed
-        try {
-            update_seat_list();
-        } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
         send_receipt_panel_comp();
         
         try {

@@ -4,6 +4,10 @@
  */
 package Staffs;
 
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -140,14 +144,20 @@ public class BDO extends javax.swing.JFrame {
     }//GEN-LAST:event_backMouseClicked
 
     private void paynowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paynowActionPerformed
-        Payment_Method pm = new Payment_Method();
-        if(!acc_num.getText().equals("") && !amount.getText().equals("")){
-            amount.getText();
+        try {
+            Payment_Method pm = new Payment_Method();
+            if(!acc_num.getText().equals("") && !amount.getText().equals("")){
+                amount.getText();
+            }
+            JOptionPane.showMessageDialog(null, "Confirm");
+            System.out.println(pm.payment);
+            System.out.println(amount.getText());
+            System.out.println(pm.emp_log);
+        } catch (SQLException ex) {
+            Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
         }
-        JOptionPane.showMessageDialog(null, "Confirm");
-        System.out.println(pm.payment);
-        System.out.println(amount.getText());
-        System.out.println(pm.emp_log);
     }//GEN-LAST:event_paynowActionPerformed
 
     /**
