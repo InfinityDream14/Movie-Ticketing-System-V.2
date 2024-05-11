@@ -32,6 +32,7 @@ public class Payment_Method extends javax.swing.JFrame {
      * Creates new form Payment_Method
      */
     Main_Staff ms = new Main_Staff();
+    Temp_Data td = new Temp_Data();
     public Payment_Method() throws SQLException, ParseException {
         initComponents();
         setLocationRelativeTo(null);
@@ -42,11 +43,14 @@ public class Payment_Method extends javax.swing.JFrame {
         left_panel_bg();
         right_panel_bg();
         
-        receipt_scrollpane();
-        get_last_ticketid();
-        get_last_paymentid();
-        get_ticklist_info();
-        update_seat_list();
+        if(td.stopper == 0){
+            receipt_scrollpane();
+            get_last_ticketid();
+            get_last_paymentid();
+            get_ticklist_info();
+        }
+        td.stopper++;
+        //insert_whole_payment();
         
         total_prc.setText(Double.toString(totalp));
     }
@@ -125,7 +129,8 @@ public class Payment_Method extends javax.swing.JFrame {
         JLabel price = new JLabel(prc);
         square.add(price);
         price.setBounds(5, 10, 105, 30);
-        totalp+= Double.parseDouble(prc.substring(8));
+        totalp = totalp + Double.parseDouble(prc.substring(8));
+        System.out.println("THIS IS TOTAL PRICE: " + totalp);
 
         JLabel t_id = new JLabel("TICKET ID: " + newticketid);
         square.add(t_id);
@@ -179,9 +184,11 @@ public class Payment_Method extends javax.swing.JFrame {
         
     }
     
-    String lsttid, newticketid, lstpaymentid, newpaymentid,payment_m,emplog;
+    static String lsttid, lstpaymentid,emplog;
+    static String newticketid;
+    static String newpaymentid,payment_m;
     static int lnum,lnumpm;
-    static double totalp = 0;
+    public static double totalp = 0;
     
     void get_last_ticketid() throws SQLException {
         
@@ -195,7 +202,7 @@ public class Payment_Method extends javax.swing.JFrame {
             System.out.println(rs.getString(1));
 
         }
-        lnum = 1;//Integer.parseInt(lsttid.substring(1, lsttid.length()));
+        lnum = Integer.parseInt(lsttid.substring(1));
         String nmpd = "";
         newticketid = "T" + String.valueOf(lnum);
         System.out.println(newticketid);
@@ -214,13 +221,15 @@ public class Payment_Method extends javax.swing.JFrame {
         lnumpm = Integer.parseInt(lstpaymentid.substring(1))+1;
         String nmpd = "";
         newpaymentid = "P" + String.valueOf(lnumpm);
-        System.out.println(newpaymentid);
+        System.out.println("THIS IS THE NEW PMID: "+newpaymentid);
     }
     
     
     String mt, cnm, stno, time, prc;
     void get_ticklist_info() throws SQLException, ParseException{
+        
         Component[] c = new Temp_Data().jp_mlist.getComponents();
+        
         for(Component cp : c){
             
             JPanel jpl = (JPanel) cp;
@@ -248,19 +257,25 @@ public class Payment_Method extends javax.swing.JFrame {
         }
     }
     
-    void insert_whole_payment() throws SQLException{
-        Statement stmt = ms.mc.createStatement();
+    void insert_whole_payment(String pm) throws SQLException, ParseException{
+        Statement stmtp = ms.mc.createStatement();
         
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
-        
+        System.out.println(newpaymentid);
+        System.out.println(payment);
+        System.out.println(totalp);
+        System.out.println(timeStamp);
+        System.out.println(emp_log);
         String in_payment ="INSERT INTO payment ([PaymentID],[PaymentMethod],[Amount],[PaymentDate],[EmployeeID])\n" +
-                        "VALUES \n" +"('"+newpaymentid+"','"+payment_m+"',"
-                        +totalp+",'"+timeStamp+"','"+emplog+"')";
-        
-        int in = stmt.executeUpdate(in_payment);
+                        "VALUES \n" +"('"+newpaymentid+"','"+pm+"',"
+                        +totalp+",'"+ timeStamp+"','"+emp_log+"')";
+        System.out.println(in_payment);
+        int in = stmtp.executeUpdate(in_payment);
         if(in>0){
             System.out.println("Payment added to database");
         }
+        stmtp.close();
+        update_ticket_on_database();
     }
     
     String convert_12hr_to_24hr(String tm) throws ParseException{
@@ -272,7 +287,7 @@ public class Payment_Method extends javax.swing.JFrame {
         return real_time;
     }
     //this method get the info in the receipt and change the seat_status in database
-    void update_seat_list() throws ParseException, SQLException{
+    public  void update_seat_list() throws ParseException, SQLException{
         Component[] c = receipt_panel.getComponents();
         
         for(Component cp : c){
@@ -350,6 +365,20 @@ public class Payment_Method extends javax.swing.JFrame {
             }
         }
     }
+    public void update_ticket_on_database() throws SQLException{
+        
+        
+        
+        for(int i=0; i<ticket_insert.size(); i++){
+            Statement tstmt = ms.mc.createStatement();
+            int tins = 0;
+            tins = tstmt.executeUpdate(ticket_insert.get(i));
+            if(tins>0){
+                System.out.println("ticket inserted in database");
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -595,7 +624,7 @@ public class Payment_Method extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_cancel_paymentActionPerformed
     
-    static String payment = "";
+    static String payment = "Cash";
     static String emp_log = "E1";
     private void GCashMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GCashMouseClicked
        payment="E-Wallet";
@@ -628,7 +657,7 @@ public class Payment_Method extends javax.swing.JFrame {
     }//GEN-LAST:event_UnionBankMouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+        td.stopper =0;
         try {
             update_seat_list();
             new Movie_List().setVisible(true);

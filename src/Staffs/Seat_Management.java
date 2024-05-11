@@ -507,6 +507,8 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
             }
         }
     }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -775,9 +777,11 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         try {
             if(receipt_panel.getComponentCount() !=0){
                 update_seat_list_to_selected();
+                System.out.println("Removing Selected seats");
             }
             else{
                 update_seat_list_to_unselected();
+                System.out.println("Seat List Updated");
             }
             send_receipt_panel_comp();
             new Movie_List().setVisible(true);
@@ -789,7 +793,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     }//GEN-LAST:event_confirm_seat_choice_buttonActionPerformed
 
     private void cancel_seat_choicesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_seat_choicesActionPerformed
-        
+
         Component[] c = Movie_List.components;
         
         tempd.jp_mlist.removeAll();
@@ -801,6 +805,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         }
         
         try {
+            
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
