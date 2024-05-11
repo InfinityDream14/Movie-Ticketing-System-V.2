@@ -46,6 +46,7 @@ public class Payment_Method extends javax.swing.JFrame {
         get_last_ticketid();
         get_last_paymentid();
         get_ticklist_info();
+        update_seat_list();
         
         total_prc.setText(Double.toString(totalp));
     }
@@ -68,6 +69,7 @@ public class Payment_Method extends javax.swing.JFrame {
     }
     
     ArrayList<String> ticket_insert = new ArrayList();
+    ArrayList<String> seat_update = new ArrayList();
     public void create_receipt_panel() throws SQLException, ParseException {
         JPanel receipt_panel1 = new JPanel();
         receipt_panel1.setPreferredSize(new Dimension(228, 268));
@@ -150,6 +152,7 @@ public class Payment_Method extends javax.swing.JFrame {
         String insertticket = "INSERT INTO ticket\n" +"VALUES \n" 
                     + "('"+newticketid+"','"+str+"','"+seatn+"','"+cid+"','"+
                     newpaymentid+"','"+mid+"')";
+        
         
         System.out.println(insertticket);
         
@@ -268,7 +271,85 @@ public class Payment_Method extends javax.swing.JFrame {
         real_time = real_time +":00.0000000";
         return real_time;
     }
+    //this method get the info in the receipt and change the seat_status in database
+    void update_seat_list() throws ParseException, SQLException{
+        Component[] c = receipt_panel.getComponents();
+        
+        for(Component cp : c){
+            
+            JPanel jpl = (JPanel) cp;
+            
+            JPanel jpu = (JPanel) cp;
+            JLabel title = (JLabel) jpu.getComponent(3);
+            String stitle = title.getText();
+            stitle = stitle.substring(7);
+            System.out.println("The Title: " + stitle);
 
+            JLabel time = (JLabel) jpu.getComponent(4);
+            String stime = time.getText();
+            System.out.println(stime);
+            stime = stime.substring(11);
+            stime = convert_12hr_to_24hr(stime);
+            System.out.println("The time: " + stime);
+
+            JLabel stnu = (JLabel) jpu.getComponent(6);
+            String sstnu = stnu.getText();
+            sstnu = sstnu.substring(9);
+            System.out.println("The Seat Num: " + sstnu);
+
+            Statement stmt = ms.mc.createStatement();
+            
+            String qry = "select m.Title, m.MovieID, st.ShowtimeMovieID ,st.startTime, st.ShowtimeCinemaID,\n" +
+                    "        c.CinemaID, c.NumofSteats, m.price, st.showtimeID, m.Movie_pic_loc\n" +
+                    "from cinema c inner join(movie m inner join showtime st\n" +
+                    "              on m.MovieID = st.ShowtimeMovieID)\n" +
+                    "     on c.CinemaID = st.ShowtimeCinemaID";
+            
+            ResultSet rs2 = stmt.executeQuery(qry);
+            String st1="S1";
+            while(rs2.next()){
+                if(rs2.getString(4).equals(stime) ){
+                    System.out.println("Nakuhang time: " + stime);
+                    System.out.println("nakuhang showtimeid: " + rs2.getString(9));
+                    st1 = rs2.getString(9);
+                }
+            }
+            
+            Statement stm = ms.mc.createStatement();
+            String qry2 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
+                "from showtime st inner join seat_list sl\n" +
+                "	on st.showtimeid = sl.showtimeid";
+            
+            ResultSet rs = stm.executeQuery(qry2);
+            
+            String scode = sstnu;
+            String sloc="";
+            sloc = sloc + scode.charAt(0);
+            String snum = scode.substring(1,scode.length());
+            System.out.println(sloc);
+            System.out.println(snum);
+            System.out.println(scode);
+            
+            while(rs.next()){
+
+                if(rs.getString(2).equals(st1) && rs.getString(3).equals(sloc)
+                        && rs.getString(4).equals(snum)){
+                    
+                    String rsin = "UPDATE seat_list\n" +
+                                "set seat_status = 'U'\n" +
+                                "Where seat_number="+ snum +"and seat_location = '"+ sloc
+                            +"' and showtimeid = '" +st1 +"'";
+                    
+                    int ups = stmt.executeUpdate(rsin);
+                    if(ups>0){
+                        System.out.println("seat Updated on database");
+                    }
+
+                }
+
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -549,8 +630,11 @@ public class Payment_Method extends javax.swing.JFrame {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         
         try {
+            update_seat_list();
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.dispose();

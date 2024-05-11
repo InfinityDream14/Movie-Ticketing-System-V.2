@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Staffs;
+import static Staffs.Payment_Method.lnum;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
@@ -183,6 +184,9 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                         JRadioButton jr = new JRadioButton();
                         if(rs.getString(5).equals("A")){
                             jr.setBackground(Color.white);
+                        }
+                        else if(rs.getString(5).equals("S")){
+                            jr.setBackground(Color.cyan);
                         }
                         else
                             jr.setBackground(new Color(255,204,102));
@@ -399,7 +403,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                 "from showtime st inner join seat_list sl\n" +
                 "	on st.showtimeid = sl.showtimeid";
     
-    void update_seat_list() throws SQLException{
+    void update_seat_list_to_selected() throws SQLException{
         
        Statement stm = ms.mc.createStatement();
         
@@ -421,9 +425,77 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                         && rs.getString(4).equals(snum)){
                     
                     String rsin = "UPDATE seat_list\n" +
-                                "set seat_status = 'U'\n" +
+                                "set seat_status = 'S'\n" +
                                 "Where seat_number="+ snum +"and seat_location = '"+ sloc
                             +"' and showtimeid = '" +st1 +"'";
+                    
+                    int ups = stmt.executeUpdate(rsin);
+                    if(ups>0){
+                        System.out.println("seat Updated on database");
+                    }
+                  
+                }
+                
+            }
+        }
+    }
+    void update_seat_list_to_unselected() throws SQLException{
+        
+       Statement stm = ms.mc.createStatement();
+        Component[] c = left_seat_panel.getComponents();
+        for(Component cp : c){
+            
+            JRadioButton jrb = (JRadioButton) cp;
+            
+            if(jrb.getBackground().equals(Color.cyan)){
+                seat_choices.add(jrb.getText()); 
+            }
+   
+
+        }
+        c = mid_seat_panel.getComponents();
+        for(Component cp : c){
+            
+            JRadioButton jrb = (JRadioButton) cp;
+            
+            if(jrb.getBackground().equals(Color.cyan)){
+                seat_choices.add(jrb.getText()); 
+            }
+   
+
+        }
+        c = right_seat_panel.getComponents();
+        for(Component cp : c){
+            
+            JRadioButton jrb = (JRadioButton) cp;
+            
+            if(jrb.getBackground().equals(Color.cyan)){
+                seat_choices.add(jrb.getText()); 
+            }
+   
+
+        }
+        for(int i=0; i<seat_choices.size(); i++){
+            
+            ResultSet rs = stm.executeQuery(qry2);
+            
+            String scode = seat_choices.get(i);
+            String sloc="";
+            sloc = sloc + scode.charAt(0);
+            String snum = scode.substring(1,scode.length());
+            System.out.println(sloc);
+            System.out.println(snum);
+            System.out.println(scode);
+            
+            while(rs.next()){
+
+                if(rs.getString(2).equals(st1) && rs.getString(3).equals(sloc)
+                        && rs.getString(4).equals(snum)){
+                    
+                    String rsin = "UPDATE seat_list\n" +
+                                "set seat_status = 'A'\n" +
+                                "Where seat_number="+ snum +"and seat_location = '"+ sloc
+                            +"' and showtimeid = '" +st1 +"'"+"and seat_status = 'S'";
                     
                     int ups = stmt.executeUpdate(rsin);
                     if(ups>0){
@@ -699,10 +771,15 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     }// </editor-fold>//GEN-END:initComponents
 
     private void confirm_seat_choice_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirm_seat_choice_buttonActionPerformed
-        
-        send_receipt_panel_comp();
-        
+
         try {
+            if(receipt_panel.getComponentCount() !=0){
+                update_seat_list_to_selected();
+            }
+            else{
+                update_seat_list_to_unselected();
+            }
+            send_receipt_panel_comp();
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
             java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
