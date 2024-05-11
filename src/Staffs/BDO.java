@@ -158,14 +158,12 @@ public class BDO extends javax.swing.JFrame {
                 pm.update_seat_list();
                 pm.insert_whole_payment(payment_m);
                 //pm.update_ticket_on_database();
-                
-                
             } catch (SQLException ex) {
                 Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
                 Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println(Payment_Method.payment);
+            System.out.println(Payment_Method.payment_m);
             System.out.println(price);
             System.out.println(Payment_Method.emp_log);
         }

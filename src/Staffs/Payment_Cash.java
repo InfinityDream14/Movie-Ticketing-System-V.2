@@ -4,7 +4,7 @@
  */
 package Staffs;
 
-import static Staffs.Payment_Method.totalp;
+import static Staffs.Payment_Method.*;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -65,21 +65,31 @@ public class Payment_Cash extends javax.swing.JFrame {
         main_panel.add(cancelBtn);
         cancelBtn.setBounds(60,110, 80, 25);
         
+        double price = Payment_Method.totalp;
         okBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
                 if (okBtn.getActionCommand().equals("OK")) {
                     String pera = cash_amount.getText();
                     int money = Integer.parseInt(pera);
-                    if (!cash_amount.getText().equals("") && totalp <= money) {
+                    if (!cash_amount.getText().equals("") && price <= money) {
+                        try {
+                            Payment_Method pm = new Payment_Method();
+                            pm.update_seat_list();
+                            pm.insert_whole_payment(payment_m);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Payment_Cash.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ParseException ex) {
+                            Logger.getLogger(Payment_Cash.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                         cash_amount.getText();
-                        double sukli = money - totalp;
+                        double sukli = money - price;
                         JOptionPane.showMessageDialog(null, "Successfull, your change is " + sukli, "Payment Success", JOptionPane.INFORMATION_MESSAGE);
                         setVisible(false);
-                        System.out.println(Payment_Method.payment);
-                        System.out.println(totalp);
+                        System.out.println(Payment_Method.payment_m);
+                        System.out.println(price);
                         System.out.println(Payment_Method.emp_log);
-                    } else if (totalp > money) {
+                    } else if (price > money) {
                         JOptionPane.showMessageDialog(null, "Insufficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
                     }
                 }
