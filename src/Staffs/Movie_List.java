@@ -81,9 +81,7 @@ public final class Movie_List extends javax.swing.JFrame {
                         } catch (ParseException ex) {
                             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (ClassNotFoundException ex) {
+                    } catch (SQLException | ClassNotFoundException ex) {
                         Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
@@ -239,9 +237,7 @@ public final class Movie_List extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             new Movie_List().setVisible(false);
-        } catch (SQLException ex) {
-            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
         new Payment_Method().setVisible(true);
@@ -250,17 +246,13 @@ public final class Movie_List extends javax.swing.JFrame {
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         try {
             new Movie_List().setVisible(false);
-        } catch (SQLException ex) {
-            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             try {
                 new Seat_Management().setVisible(true);
-            } catch (ParseException ex) {
-                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (ParseException | ClassNotFoundException ex) {
                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (SQLException ex) {
@@ -271,17 +263,13 @@ public final class Movie_List extends javax.swing.JFrame {
     private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
         try {
             new Movie_List().setVisible(false);
-        } catch (SQLException ex) {
-            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             try {
                 new Seat_Management().setVisible(true);
-            } catch (ParseException ex) {
-                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (ParseException | ClassNotFoundException ex) {
                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (SQLException ex) {
@@ -291,30 +279,35 @@ public final class Movie_List extends javax.swing.JFrame {
 
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
 
-        String q1 = "select * from viewLogs";
-        String q2 = "update logs"
-                + "where Employee_ID = ?"
-                + "set Log_Out = ?";
-        
         LocalTime lTime = LocalTime.now();
         Time cTime = Time.valueOf(lTime);
-        
-        String empID = "";
-        
+
+        String empID = "", dateLog = "", logIn = "";
+
+        System.out.println(cTime);
+
+        String q1 = """
+                    select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+                    \tfrom LOGS l left join staff s on l.Employee_ID = s.EmployeeID""";
+
         try {
-            myStmt = ms.mc.prepareStatement(q2);
+
             rs = stmt.executeQuery(q1);
-            
-            while(rs.next()){
-                empID = rs.getString(1);
+
+            while (rs.next()) {
+//                System.out.println(rs.getString(1)+", "+rs.getString(3)+ ", "+rs.getString(4));
+                if (rs.getString("Employee_ID").charAt(0) != 'a') {
+                    empID = rs.getString("Employee_ID");
+                    dateLog = rs.getString("DateLog");
+                    logIn = rs.getString("Log_In");
+                }
             }
-            
-            myStmt.setString(1, empID);
-            myStmt.setTime(2, cTime);
-            myStmt.executeQuery();
-                            
+
+            String q2 = "UPDATE logs SET Log_Out = '" + cTime + "' where Employee_ID = '" + empID + "' AND DateLog = '" + dateLog + "' AND Log_In = '" + logIn + "';";
+            System.out.println(empID + ", " + dateLog + ", " + logIn);
+            stmt.executeQuery(q2);
+
         } catch (SQLException ex) {
-            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.exit(0);
     }//GEN-LAST:event_jLabel3MouseClicked

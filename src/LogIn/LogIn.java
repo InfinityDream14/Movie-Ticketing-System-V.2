@@ -30,13 +30,21 @@ public class LogIn extends javax.swing.JFrame {
         process = new LogInProcess();
 
         switch (process.checkIfLoged()) {
-            case 1 -> new Admin().setVisible(true);
-            case 2 -> new Movie_List().setVisible(true);
+            case 1 -> {
+                System.out.println("1");
+                new Admin().setVisible(true);
+            }
+            case 2 -> {
+                System.out.println("2");
+                new Movie_List().setVisible(true);
+            }
             case 0 -> {
                 initComponents();
                 SignUp.setVisible(false);
             }
+            
         }
+        dispose();
     }
 
     /**

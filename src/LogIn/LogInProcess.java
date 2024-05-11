@@ -4,12 +4,8 @@
  */
 package LogIn;
 
-import Staffs.Movie_List;
-import admin.Admin;
 import java.sql.*;
 import java.time.LocalTime;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.*;
 import main.*;
 
@@ -27,17 +23,20 @@ public class LogInProcess implements Logs {
         this.main.connectToDatabase();
         this.stmt = (Statement) this.main.mc.createStatement();
         
-        String sql = "select * from viewLogs";
-        String empID = "", logIn = "", logOut = "";
+        String sql = """
+                     select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+                     \tfrom LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                     \torder by l.Log_In, l.DateLog""";
+        String empID = "", logOut = "";
         
         ResultSet rs = stmt.executeQuery(sql);
         while(rs.next()){
             empID = rs.getString(1);
-            logIn = rs.getString(4);
             logOut = rs.getString(5);
         }
         if(logOut == null){
-           if(empID.charAt(0) == 'a'){
+            System.out.println(empID);
+           if(empID.charAt(0) == 'A'){
                return 1;               
            } else {
                return 2;               
@@ -63,7 +62,6 @@ public class LogInProcess implements Logs {
         while (rs.next()) {
             System.out.println(rs.getString(1).charAt(0));
             if (userN.equals(rs.getString(1)) && userP.equals(rs.getString(2))) {
-                System.out.println("HIII");
                 if (userN.charAt(0) == 'a') {
                     flag = 1;
                 } else {
@@ -91,7 +89,7 @@ public class LogInProcess implements Logs {
     @Override
     public void logs(String employeeID) {
         LocalTime now = LocalTime.now();
-        System.out.println(now);
+        System.out.println(employeeID);
         String query = "insert into logs (Employee_ID, Log_In) values ('" + employeeID + "', '" + now + "')";
 
         try {
