@@ -312,7 +312,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
             square.add(price);
             price.setBounds(5, 10, 105, 30);
             
-            JLabel t_id = new JLabel("TICKET ID: " + tixid );
+            JLabel t_id = new JLabel("TICKET ID: " + tixid);
             square.add(t_id);
             t_id.setBounds(5, 30, 105, 30);
             
@@ -360,6 +360,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         JLabel c_id = new JLabel("Cinema: " + cid);
         JLabel time = new JLabel(ticket_time.substring(0, 8));
         JLabel amt = new JLabel("Amount: " + mprc.substring(0,5));
+        
         m_title.setBounds(100, 5, 80, 20);
         s_num.setBounds(100, 20, 80, 20);
         c_id.setBounds(100, 35, 80, 20);

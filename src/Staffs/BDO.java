@@ -4,6 +4,7 @@
  */
 package Staffs;
 
+import static Staffs.Payment_Method.totalp;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.logging.Level;
@@ -144,19 +145,19 @@ public class BDO extends javax.swing.JFrame {
     }//GEN-LAST:event_backMouseClicked
 
     private void paynowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paynowActionPerformed
-        try {
-            Payment_Method pm = new Payment_Method();
-            if(!acc_num.getText().equals("") && !amount.getText().equals("")){
-                amount.getText();
-            }
-            JOptionPane.showMessageDialog(null, "Confirm");
-            System.out.println(pm.payment);
-            System.out.println(amount.getText());
-            System.out.println(pm.emp_log);
-        } catch (SQLException ex) {
-            Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
+        String pera = amount.getText();
+        int money = Integer.parseInt(pera);
+        if(!acc_num.getText().equals("") && !amount.getText().equals("") && totalp <= money){
+            amount.getText();
+            double sukli = money - totalp;
+            JOptionPane.showMessageDialog(null, "Successfull, your change is " + sukli, "Payment Success", JOptionPane.INFORMATION_MESSAGE);
+            setVisible(false);
+            System.out.println(Payment_Method.payment);
+            System.out.println(totalp);
+            System.out.println(Payment_Method.emp_log);
+        }
+        else if(totalp > money){
+            JOptionPane.showMessageDialog(null, "Insuficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_paynowActionPerformed
 

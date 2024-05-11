@@ -299,9 +299,8 @@ public class Payment_Method extends javax.swing.JFrame {
         BDO = new javax.swing.JLabel();
         BPI = new javax.swing.JLabel();
         UnionBank = new javax.swing.JLabel();
-        amount_field = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        pay_cash = new javax.swing.JButton();
         cancel_payment = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         rp_bg = new javax.swing.JLabel();
@@ -458,15 +457,19 @@ public class Payment_Method extends javax.swing.JFrame {
             }
         });
         jPanel8.add(UnionBank, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, -1, -1));
-        jPanel8.add(amount_field, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 270, 139, 30));
-
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel13.setText("AMOUNT");
-        jPanel8.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, -1, 30));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel6.setText("Cards");
         jPanel8.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, -1, -1));
+
+        pay_cash.setBackground(new java.awt.Color(255, 204, 102));
+        pay_cash.setText("Cash");
+        pay_cash.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pay_cashActionPerformed(evt);
+            }
+        });
+        jPanel8.add(pay_cash, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 280, 100, 30));
 
         jPanel2.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(79, 69, 412, 352));
 
@@ -564,6 +567,12 @@ public class Payment_Method extends javax.swing.JFrame {
         sp.setVisible(true);
          this.dispose();
     }//GEN-LAST:event_staff_nameMouseClicked
+
+    private void pay_cashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pay_cashActionPerformed
+        Payment_Cash pc = new Payment_Cash();
+        pc.setVisible(true);
+        payment="Cash";
+    }//GEN-LAST:event_pay_cashActionPerformed
    
     // Add an action listener to the GCash label/icon
 
@@ -577,14 +586,12 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JLabel GCash;
     private javax.swing.JLabel Maya;
     private javax.swing.JLabel UnionBank;
-    private javax.swing.JTextField amount_field;
     private javax.swing.JButton cancel_payment;
     private javax.swing.JPanel cart_panel;
     private javax.swing.JLabel icon;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
@@ -595,6 +602,7 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JLabel lp_bg;
     private javax.swing.JPanel main_receipt_panel;
+    private javax.swing.JButton pay_cash;
     private javax.swing.JPanel receipt_panel;
     private javax.swing.JLabel rp_bg;
     private javax.swing.JLabel staff_name;

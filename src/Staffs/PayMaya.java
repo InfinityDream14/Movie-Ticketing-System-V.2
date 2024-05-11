@@ -4,6 +4,7 @@
  */
 package Staffs;
 
+import static Staffs.Payment_Method.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.*;
@@ -166,21 +167,20 @@ public class PayMaya extends javax.swing.JFrame {
     }//GEN-LAST:event_paynowActionPerformed
 
     private void paynowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paynowMouseClicked
-        Payment_Method pm;
-        try {
-            pm = new Payment_Method();
-        } catch (SQLException ex) {
-            Logger.getLogger(PayMaya.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(PayMaya.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        if(!acc_num.getText().equals("") && !amount.getText().equals("")){
+        String pera = amount.getText();
+        int money = Integer.parseInt(pera);
+        if(!acc_num.getText().equals("") && !amount.getText().equals("") && totalp <= money){
             amount.getText();
+            double sukli = money - totalp;
+            JOptionPane.showMessageDialog(null, "Successfull, your change is " + sukli, "Payment Success", JOptionPane.INFORMATION_MESSAGE);
+            setVisible(false);
+            System.out.println(Payment_Method.payment);
+            System.out.println(totalp);
+            System.out.println(Payment_Method.emp_log);
         }
-        JOptionPane.showMessageDialog(null, "Confirm");
-        System.out.println(Payment_Method.payment);
-        System.out.println(amount.getText());
-        System.out.println(Payment_Method.emp_log);
+        else if(totalp > money){
+            JOptionPane.showMessageDialog(null, "Insuficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_paynowMouseClicked
 
     /**
