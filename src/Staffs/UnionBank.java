@@ -20,8 +20,11 @@ public class UnionBank extends javax.swing.JFrame {
     /**
      * Creates new form UnionBank
      */
-    public UnionBank() {
+    Payment_Method pm = new Payment_Method();
+    public UnionBank() throws SQLException, ParseException{
         initComponents();
+        pm.setVisible(true);
+        this.setVisible(true);
     }
 
     /**
@@ -143,29 +146,33 @@ public class UnionBank extends javax.swing.JFrame {
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
         this.dispose();
     }//GEN-LAST:event_backMouseClicked
-    double price = new Temp_Data().total_amount;
+    double price = new Payment_Method().totalp;
     String payment_m = "Credit Card";
     private void paynowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paynowMouseClicked
         String pera = amount.getText();
-        int money = Integer.parseInt(pera);
+        double money = Double.parseDouble(pera);
         if(!acc_num.getText().equals("") && !amount.getText().equals("") && price <= money){
             amount.getText();
             double sukli = money - price;
             JOptionPane.showMessageDialog(null, "Successfull, your change is " + sukli, "Payment Success", JOptionPane.INFORMATION_MESSAGE);
             setVisible(false);
             try {
-                Payment_Method pm = new Payment_Method();
+                Temp_Data td = new Temp_Data();
+                td.jp_mlist.removeAll();
+                td.jp_mlist.revalidate();
+                td.jp_mlist.repaint();
+                //Payment_Method pm = new Payment_Method();
                 pm.update_seat_list();
                 pm.insert_whole_payment(payment_m);
+                new Movie_List().setVisible(true);
+                pm.dispose();
+                this.dispose();
                 //pm.update_ticket_on_database();
             } catch (SQLException ex) {
                 Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
                 Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println(Payment_Method.payment_m);
-            System.out.println(price);
-            System.out.println(Payment_Method.emp_log);
         }
         else if(price> money){
             JOptionPane.showMessageDialog(null, "Insufficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);

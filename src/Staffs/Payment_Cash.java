@@ -28,9 +28,12 @@ public class Payment_Cash extends javax.swing.JFrame {
     /**
      * Creates new form Payment_Cash
      */
-    public Payment_Cash() {
+    Payment_Method pm = new Payment_Method();
+    public Payment_Cash() throws SQLException, ParseException{
         initComponents();
         setLocationRelativeTo(null);
+        pm.setVisible(true);
+        this.setVisible(true);
         
         this.setShape(new RoundRectangle2D.Double(0, 0, (300), 
         (200), 25, 25));
@@ -49,7 +52,7 @@ public class Payment_Cash extends javax.swing.JFrame {
                 
     }
     
-    public void pay_cash(){
+    public void pay_cash() throws SQLException, ParseException{
         JLabel cash_label = new JLabel("Cash Amount");
         main_panel.add(cash_label);
         cash_label.setBounds(60,50, 95, 50);
@@ -65,13 +68,18 @@ public class Payment_Cash extends javax.swing.JFrame {
         main_panel.add(cancelBtn);
         cancelBtn.setBounds(60,110, 80, 25);
         
-        double price = new Temp_Data().total_amount;
+        double price = new Payment_Method().totalp;
+        String payment_m = "Cash";
         okBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                String pera = cash_amount.getText();
+                int money = Integer.parseInt(pera);
                 if (okBtn.getActionCommand().equals("OK")) {
-                    String pera = cash_amount.getText();
-                    int money = Integer.parseInt(pera);
+                    cash_amount.getText();
+                    double sukli = money - price;
+                    JOptionPane.showMessageDialog(null, "Successfull, your change is " + sukli, "Payment Success", JOptionPane.INFORMATION_MESSAGE);
+                    setVisible(false);
                     if (!cash_amount.getText().equals("") && price <= money) {
                         try {
                             Payment_Method pm = new Payment_Method();
@@ -82,13 +90,26 @@ public class Payment_Cash extends javax.swing.JFrame {
                         } catch (ParseException ex) {
                             Logger.getLogger(Payment_Cash.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        cash_amount.getText();
-                        double sukli = money - price;
-                        JOptionPane.showMessageDialog(null, "Successfull, your change is " + sukli, "Payment Success", JOptionPane.INFORMATION_MESSAGE);
-                        setVisible(false);
-                        System.out.println(Payment_Method.payment_m);
-                        System.out.println(price);
-                        System.out.println(Payment_Method.emp_log);
+                        try {
+                            Temp_Data td = new Temp_Data();
+                            td.jp_mlist.removeAll();
+                            td.jp_mlist.revalidate();
+                            td.jp_mlist.repaint();
+                            //Payment_Method pm = new Payment_Method();
+                            pm.update_seat_list();
+                            pm.insert_whole_payment(payment_m);
+                            new Movie_List().setVisible(true);
+                            pm.dispose();
+                            dispose();
+                            //pm.update_ticket_on_database();
+                        } catch (SQLException ex) {
+                            Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ParseException ex) {
+                            Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+//                        System.out.println(Payment_Method.payment_m);
+//                        System.out.println("ito yung total_amount: " + price);
+//                        System.out.println(Payment_Method.emp_log);
                     } else if (price > money) {
                         JOptionPane.showMessageDialog(null, "Insufficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
                     }

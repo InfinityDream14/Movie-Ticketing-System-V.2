@@ -670,21 +670,42 @@ public class Payment_Method extends javax.swing.JFrame {
     static String payment = "Cash";
     static String emp_log = "E1";
     private void GCashMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GCashMouseClicked
-       payment_m="E-Wallet";
-       GCash gc = new GCash();
-       gc.setVisible(true);
+       try {
+            GCash gc=new GCash();
+            gc.setVisible(true);
+            payment_m="E-Wallet";
+            dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_GCashMouseClicked
 
     private void MayaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MayaMouseClicked
-        payment_m="E-Wallet";
-        PayMaya py= new PayMaya();
-        py.setVisible(true);
+        try {
+            PayMaya py=new PayMaya();
+            py.setVisible(true);
+            payment_m="E-Wallet";
+            dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_MayaMouseClicked
 
     private void BPIMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BPIMouseClicked
-        BPI bp =new BPI();
-        bp.setVisible(true);
-        payment_m="Credit Card";
+        try {
+            BPI bp=new BPI();
+            bp.setVisible(true);
+            payment_m="Credit Card";
+            dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_BPIMouseClicked
 
     private void BDOMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BDOMouseClicked
@@ -701,9 +722,16 @@ public class Payment_Method extends javax.swing.JFrame {
     }//GEN-LAST:event_BDOMouseClicked
 
     private void UnionBankMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UnionBankMouseClicked
-        UnionBank ub= new UnionBank();
-        ub.setVisible(true);
-        payment_m="Credit Card";
+        try {
+            UnionBank ub=new UnionBank();
+            ub.setVisible(true);
+            payment_m="Credit Card";
+            dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_UnionBankMouseClicked
 
     private void iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconMouseClicked
@@ -719,10 +747,16 @@ public class Payment_Method extends javax.swing.JFrame {
     }//GEN-LAST:event_staff_nameMouseClicked
         
     private void pay_cashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pay_cashActionPerformed
-        Payment_Cash pc = new Payment_Cash();
-        pc.setVisible(true);
-        //double price = Payment_Method.totalp;
-        payment_m = "Cash";
+        try {
+            Payment_Cash pc=new Payment_Cash();
+            pc.setVisible(true);
+            payment_m="Cash";
+            dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_pay_cashActionPerformed
    
     // Add an action listener to the GCash label/icon
