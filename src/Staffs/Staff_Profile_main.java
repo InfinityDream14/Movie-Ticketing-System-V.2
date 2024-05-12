@@ -104,6 +104,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         Password_textfield = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
+        change_password_button = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         f_n = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -114,7 +115,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         email_textfield = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         phone_textfield = new javax.swing.JTextField();
-        back = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         rp_bg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -160,10 +161,19 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(204, 204, 204));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)), "Security", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(102, 102, 102))); // NOI18N
 
+        Password_textfield.setEditable(false);
         Password_textfield.setText("Password");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Password:");
+
+        change_password_button.setFont(new java.awt.Font("Segoe UI", 0, 10)); // NOI18N
+        change_password_button.setText("change password");
+        change_password_button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                change_password_buttonMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -174,7 +184,9 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(Password_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(124, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(change_password_button)
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,7 +194,8 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Password_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(change_password_button))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
@@ -289,14 +302,14 @@ public class Staff_Profile_main extends javax.swing.JFrame {
 
         jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 209, 400, -1));
 
-        back.setBackground(new java.awt.Color(204, 204, 204));
-        back.setText("BACK");
-        back.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backActionPerformed(evt);
+        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setText("Back");
+        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel1MouseClicked(evt);
             }
         });
-        jPanel2.add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 0, -1, -1));
+        jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 10, -1, -1));
         jPanel2.add(rp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 570, 480));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 570, 480));
@@ -317,14 +330,18 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         }   
     }//GEN-LAST:event_icon_profMouseClicked
 
-    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
-        try {
+    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+       try {
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
         }
         dispose();
-    }//GEN-LAST:event_backActionPerformed
+    }//GEN-LAST:event_jLabel1MouseClicked
+
+    private void change_password_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_change_password_buttonMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_change_password_buttonMouseClicked
       
     /**
      * @param args the command line arguments
@@ -333,10 +350,11 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Edit_prof;
     private javax.swing.JPasswordField Password_textfield;
-    private javax.swing.JButton back;
+    private javax.swing.JLabel change_password_button;
     private javax.swing.JTextField email_textfield;
     private javax.swing.JLabel f_n;
     private javax.swing.JLabel icon_prof;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
