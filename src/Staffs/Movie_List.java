@@ -410,7 +410,7 @@ public class Movie_List extends javax.swing.JFrame {
                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            this.setVisible(false);
+            this.dispose();
         }
         else{
             JOptionPane.showMessageDialog(null,

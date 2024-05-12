@@ -51,8 +51,10 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                 receipt_panel.revalidate();
                 receipt_panel.repaint();
             }
-            else
+            else{
                 System.out.println("No component inside panel");
+                update_seat_list_to_unselected();
+            }
         }catch(Exception e){
             e.getStackTrace();
         }

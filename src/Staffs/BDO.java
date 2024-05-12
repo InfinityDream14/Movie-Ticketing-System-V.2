@@ -4,7 +4,7 @@
  */
 package Staffs;
 
-//import static Staffs.Payment_Method.totalp;
+//import static Staffs.Payment_Method;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.logging.Level;
@@ -20,9 +20,15 @@ public class BDO extends javax.swing.JFrame {
     /**
      * Creates new form BDO
      */
-    public BDO() {
+    Payment_Method pm = new Payment_Method();
+    public BDO() throws SQLException, ParseException{
         initComponents();
+        pm.setVisible(true);
+        this.setVisible(true);
+
+        
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -154,18 +160,22 @@ public class BDO extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Successfull, your change is " + sukli, "Payment Success", JOptionPane.INFORMATION_MESSAGE);
             setVisible(false);
             try {
-                Payment_Method pm = new Payment_Method();
+                Temp_Data td = new Temp_Data();
+                td.jp_mlist.removeAll();
+                td.jp_mlist.revalidate();
+                td.jp_mlist.repaint();
+                //Payment_Method pm = new Payment_Method();
                 pm.update_seat_list();
                 pm.insert_whole_payment(payment_m);
+                new Movie_List().setVisible(true);
+                pm.dispose();
+                this.dispose();
                 //pm.update_ticket_on_database();
             } catch (SQLException ex) {
                 Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
             } catch (ParseException ex) {
                 Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println(Payment_Method.payment_m);
-            System.out.println(price);
-            System.out.println(Payment_Method.emp_log);
         }
         else if(price> money){
             JOptionPane.showMessageDialog(null, "Insufficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);

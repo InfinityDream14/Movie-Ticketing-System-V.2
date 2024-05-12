@@ -43,13 +43,13 @@ public class Payment_Method extends javax.swing.JFrame {
         left_panel_bg();
         right_panel_bg();
         
-        if(td.stopper == 0){
+        //if(td.stopper == 0){
             receipt_scrollpane();
             get_last_ticketid();
             get_last_paymentid();
             get_ticklist_info();
-        }
-        td.stopper++;
+        //}
+        //td.stopper++;
         //insert_whole_payment();
         
         total_prc.setText(Double.toString(totalp));
@@ -378,7 +378,34 @@ public class Payment_Method extends javax.swing.JFrame {
             }
         }
     }
-    
+    void revert_selected_seat() throws SQLException{
+        
+        Statement stmt1 = ms.mc.createStatement();
+        
+        String qry2 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
+                "from showtime st inner join seat_list sl\n" +
+                "	on st.showtimeid = sl.showtimeid";
+        
+        ResultSet rs = stmt1.executeQuery(qry2);
+            
+        while(rs.next()){
+            stmt1 = ms.mc.createStatement();
+            if(rs.getString(5).equals("S")){
+
+                String rsin = "UPDATE seat_list\n" +
+                            "set seat_status = 'A'\n" +
+                            "Where seat_status = 'S'";
+
+                int ups = stmt1.executeUpdate(rsin);
+                if(ups>0){
+                    System.out.println("All Selected Seat has been removed");
+                }
+
+            }
+
+        }
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -412,7 +439,6 @@ public class Payment_Method extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         pay_cash = new javax.swing.JButton();
         cancel_payment = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         rp_bg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -579,7 +605,7 @@ public class Payment_Method extends javax.swing.JFrame {
                 pay_cashActionPerformed(evt);
             }
         });
-        jPanel8.add(pay_cash, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 280, 100, 30));
+        jPanel8.add(pay_cash, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 280, 150, 30));
 
         jPanel2.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(79, 69, 412, 352));
 
@@ -591,17 +617,7 @@ public class Payment_Method extends javax.swing.JFrame {
                 cancel_paymentActionPerformed(evt);
             }
         });
-        jPanel2.add(cancel_payment, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 430, 100, -1));
-
-        jButton3.setBackground(new java.awt.Color(255, 204, 102));
-        jButton3.setText("Proceed");
-        jButton3.setPreferredSize(new java.awt.Dimension(137, 30));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        jPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 430, 100, -1));
+        jPanel2.add(cancel_payment, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 430, 90, -1));
 
         rp_bg.setMaximumSize(new java.awt.Dimension(570, 480));
         rp_bg.setMinimumSize(new java.awt.Dimension(570, 480));
@@ -616,6 +632,11 @@ public class Payment_Method extends javax.swing.JFrame {
     private void cancel_paymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_paymentActionPerformed
 
         try {
+            revert_selected_seat();
+            Temp_Data td = new Temp_Data();
+            td.jp_mlist.removeAll();
+            td.jp_mlist.revalidate();
+            td.jp_mlist.repaint();
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
@@ -645,9 +666,16 @@ public class Payment_Method extends javax.swing.JFrame {
     }//GEN-LAST:event_BPIMouseClicked
 
     private void BDOMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BDOMouseClicked
-        BDO bd=new BDO();
-        bd.setVisible(true);
-        payment_m="Credit Card";
+        try {
+            BDO bd=new BDO();
+            //bd.setVisible(true);
+            payment_m="Credit Card";
+            dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_BDOMouseClicked
 
     private void UnionBankMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UnionBankMouseClicked
@@ -655,19 +683,6 @@ public class Payment_Method extends javax.swing.JFrame {
         ub.setVisible(true);
         payment_m="Credit Card";
     }//GEN-LAST:event_UnionBankMouseClicked
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        td.stopper =0;
-        try {
-            update_seat_list();
-            new Movie_List().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        this.dispose();
-    }//GEN-LAST:event_jButton3ActionPerformed
 
     private void iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconMouseClicked
         Staffs_Profile sp =new Staffs_Profile();
@@ -703,7 +718,6 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JButton cancel_payment;
     private javax.swing.JPanel cart_panel;
     private javax.swing.JLabel icon;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
