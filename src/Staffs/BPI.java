@@ -4,7 +4,7 @@
  */
 package Staffs;
 
-import static Staffs.Payment_Method.totalp;
+//import static Staffs.Payment_Method.totalp;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.logging.Level;
@@ -167,7 +167,7 @@ public class BPI extends javax.swing.JFrame {
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
         this.dispose();
     }//GEN-LAST:event_backMouseClicked
-    double price = Payment_Method.totalp;
+    double price = new Temp_Data().total_amount;
     String payment_m = "Credit Card";
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         String pera = amount.getText();

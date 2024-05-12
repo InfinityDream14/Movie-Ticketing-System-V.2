@@ -65,7 +65,7 @@ public class Payment_Cash extends javax.swing.JFrame {
         main_panel.add(cancelBtn);
         cancelBtn.setBounds(60,110, 80, 25);
         
-        double price = Payment_Method.totalp;
+        double price = new Temp_Data().total_amount;
         okBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {

@@ -165,7 +165,7 @@ public class PayMaya extends javax.swing.JFrame {
     private void paynowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paynowActionPerformed
         
     }//GEN-LAST:event_paynowActionPerformed
-    double price = Payment_Method.totalp;
+    double price = new Temp_Data().total_amount;
     String payment_m = "E-Wallet";
     private void paynowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paynowMouseClicked
         String pera = amount.getText();

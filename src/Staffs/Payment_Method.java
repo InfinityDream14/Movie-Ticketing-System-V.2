@@ -32,7 +32,7 @@ public class Payment_Method extends javax.swing.JFrame {
      * Creates new form Payment_Method
      */
     Main_Staff ms = new Main_Staff();
-    Temp_Data td = new Temp_Data();
+    //Temp_Data td = new Temp_Data();
     public Payment_Method() throws SQLException, ParseException {
         initComponents();
         setLocationRelativeTo(null);
@@ -43,13 +43,10 @@ public class Payment_Method extends javax.swing.JFrame {
         left_panel_bg();
         right_panel_bg();
         
-        //if(td.stopper == 0){
-            receipt_scrollpane();
-            get_last_ticketid();
-            get_last_paymentid();
-            get_ticklist_info();
-        //}
-        //td.stopper++;
+        receipt_scrollpane();
+        get_last_ticketid();
+        get_last_paymentid();
+        get_ticklist_info();
         //insert_whole_payment();
         
         total_prc.setText(Double.toString(totalp));
@@ -188,7 +185,7 @@ public class Payment_Method extends javax.swing.JFrame {
     static String newticketid;
     static String newpaymentid,payment_m;
     static int lnum,lnumpm;
-    public static double totalp = 0;
+    public double totalp = 0;
     
     void get_last_ticketid() throws SQLException {
         
@@ -668,9 +665,10 @@ public class Payment_Method extends javax.swing.JFrame {
     private void BDOMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BDOMouseClicked
         try {
             BDO bd=new BDO();
-            //bd.setVisible(true);
+            bd.setVisible(true);
             payment_m="Credit Card";
-            dispose();
+            new Temp_Data().total_amount = totalp;
+            //dispose();
         } catch (SQLException ex) {
             Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
@@ -699,7 +697,7 @@ public class Payment_Method extends javax.swing.JFrame {
     private void pay_cashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pay_cashActionPerformed
         Payment_Cash pc = new Payment_Cash();
         pc.setVisible(true);
-        double price = Payment_Method.totalp;
+        //double price = Payment_Method.totalp;
         payment_m = "Cash";
     }//GEN-LAST:event_pay_cashActionPerformed
    

@@ -155,7 +155,7 @@ public class GCash extends javax.swing.JFrame {
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
         this.dispose();
     }//GEN-LAST:event_backMouseClicked
-    double price = Payment_Method.totalp;
+    double price = new Temp_Data().total_amount;
     String payment_m = "E-Wallet";
     private void paynowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paynowMouseClicked
         String pera = amount.getText();
