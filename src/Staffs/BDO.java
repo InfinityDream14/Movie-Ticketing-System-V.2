@@ -4,6 +4,11 @@
  */
 package Staffs;
 
+//import static Staffs.Payment_Method.totalp;
+import java.sql.SQLException;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -138,16 +143,33 @@ public class BDO extends javax.swing.JFrame {
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
         this.dispose();
     }//GEN-LAST:event_backMouseClicked
-
+    double price = Payment_Method.totalp;
+    String payment_m = "Credit Card";
     private void paynowActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paynowActionPerformed
-        Payment_Method pm = new Payment_Method();
-        if(!acc_num.getText().equals("") && !amount.getText().equals("")){
+        String pera = amount.getText();
+        int money = Integer.parseInt(pera);
+        if(!acc_num.getText().equals("") && !amount.getText().equals("") && price <= money){
             amount.getText();
+            double sukli = money - price;
+            JOptionPane.showMessageDialog(null, "Successfull, your change is " + sukli, "Payment Success", JOptionPane.INFORMATION_MESSAGE);
+            setVisible(false);
+            try {
+                Payment_Method pm = new Payment_Method();
+                pm.update_seat_list();
+                pm.insert_whole_payment(payment_m);
+                //pm.update_ticket_on_database();
+            } catch (SQLException ex) {
+                Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            System.out.println(Payment_Method.payment_m);
+            System.out.println(price);
+            System.out.println(Payment_Method.emp_log);
         }
-        JOptionPane.showMessageDialog(null, "Confirm");
-        System.out.println(pm.payment);
-        System.out.println(amount.getText());
-        System.out.println(pm.emp_log);
+        else if(price> money){
+            JOptionPane.showMessageDialog(null, "Insufficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_paynowActionPerformed
 
     /**

@@ -10,12 +10,14 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.geom.RoundRectangle2D;
-import java.sql.Connection;
+import java.sql.*;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +31,9 @@ public class Payment_Method extends javax.swing.JFrame {
     /**
      * Creates new form Payment_Method
      */
-    public Payment_Method() {
+    Main_Staff ms = new Main_Staff();
+    Temp_Data td = new Temp_Data();
+    public Payment_Method() throws SQLException, ParseException {
         initComponents();
         setLocationRelativeTo(null);
         
@@ -39,9 +43,16 @@ public class Payment_Method extends javax.swing.JFrame {
         left_panel_bg();
         right_panel_bg();
         
-        receipt_scrollpane();
-        //create_receipt_panel();
-        get_ticklist_info();
+        if(td.stopper == 0){
+            receipt_scrollpane();
+            get_last_ticketid();
+            get_last_paymentid();
+            get_ticklist_info();
+        }
+        td.stopper++;
+        //insert_whole_payment();
+        
+        total_prc.setText(Double.toString(totalp));
     }
     
     void left_panel_bg(){
@@ -61,7 +72,9 @@ public class Payment_Method extends javax.swing.JFrame {
                 
     }
     
-    public void create_receipt_panel() {
+    ArrayList<String> ticket_insert = new ArrayList();
+    ArrayList<String> seat_update = new ArrayList();
+    public void create_receipt_panel() throws SQLException, ParseException {
         JPanel receipt_panel1 = new JPanel();
         receipt_panel1.setPreferredSize(new Dimension(228, 268));
         receipt_panel1.setLayout(null);
@@ -116,10 +129,39 @@ public class Payment_Method extends javax.swing.JFrame {
         JLabel price = new JLabel(prc);
         square.add(price);
         price.setBounds(5, 10, 105, 30);
+        totalp = totalp + Double.parseDouble(prc.substring(8));
+        System.out.println("THIS IS TOTAL PRICE: " + totalp);
 
-        JLabel t_id = new JLabel("TICKET ID: ");
+        JLabel t_id = new JLabel("TICKET ID: " + newticketid);
         square.add(t_id);
         t_id.setBounds(5, 30, 105, 30);
+        
+        String mid="m1";
+        Statement stmt_mid = ms.mc.createStatement();
+        String qry_mid = "select m.title, m.movieid, st.showtimemovieid, st.showtimeid,st.starttime\n" +
+                            "from movie m left join showtime st\n" +
+                            "on m.movieid = st.showtimemovieid";
+        
+        ResultSet rsmid = stmt_mid.executeQuery(qry_mid);
+        String ttime = convert_12hr_to_24hr(time);
+        
+        while(rsmid.next()){
+            if(rsmid.getString(1).equalsIgnoreCase(mt)
+                    && rsmid.getString(5).equals(ttime)){
+                mid = rsmid.getString(2);
+            }
+        }
+        
+        String seatn = stno.substring(9);
+        String cid = cnm.substring(8);
+        String insertticket = "INSERT INTO ticket\n" +"VALUES \n" 
+                    + "('"+newticketid+"','"+str+"','"+seatn+"','"+cid+"','"+
+                    newpaymentid+"','"+mid+"')";
+        
+        
+        System.out.println(insertticket);
+        
+        ticket_insert.add(insertticket);
         
 //        JLabel total = new JLabel("Total: ");
 //        total.setBounds(70, 330, 150, 30);
@@ -142,37 +184,201 @@ public class Payment_Method extends javax.swing.JFrame {
         
     }
     
+    static String lsttid, lstpaymentid,emplog;
+    static String newticketid;
+    static String newpaymentid,payment_m;
+    static int lnum,lnumpm;
+    public static double totalp = 0;
+    
+    void get_last_ticketid() throws SQLException {
+        
+        Statement stmt = ms.mc.createStatement();
+        lsttid = "";
+        
+        String qry = "select * from ticket order by len(ticketID), ticketID";
+        ResultSet rs = stmt.executeQuery(qry);
+        while (rs.next()) {
+            lsttid = rs.getString(1);
+            System.out.println(rs.getString(1));
+
+        }
+        lnum = Integer.parseInt(lsttid.substring(1));
+        String nmpd = "";
+        newticketid = "T" + String.valueOf(lnum);
+        System.out.println(newticketid);
+    }
+    void get_last_paymentid() throws SQLException{
+        Statement stmt = ms.mc.createStatement();
+        lstpaymentid = "";
+        
+        String qry = "select * from payment order by len(paymentid), paymentid";
+        ResultSet rs = stmt.executeQuery(qry);
+        while (rs.next()) {
+            lstpaymentid = rs.getString(1);
+            System.out.println(rs.getString(1));
+
+        }
+        lnumpm = Integer.parseInt(lstpaymentid.substring(1))+1;
+        String nmpd = "";
+        newpaymentid = "P" + String.valueOf(lnumpm);
+        System.out.println("THIS IS THE NEW PMID: "+newpaymentid);
+    }
+    
+    
     String mt, cnm, stno, time, prc;
-    void get_ticklist_info(){
+    void get_ticklist_info() throws SQLException, ParseException{
+        
         Component[] c = new Temp_Data().jp_mlist.getComponents();
+        
         for(Component cp : c){
             
             JPanel jpl = (JPanel) cp;
-            System.out.println(jpl.getComponent(0));
             JLabel title = (JLabel) jpl.getComponent(0);
             mt = title.getText();
             
-            System.out.println(jpl.getComponent(1));
             JLabel amount = (JLabel) jpl.getComponent(1);
             prc = amount.getText();
             
-            System.out.println(jpl.getComponent(2));
             JLabel seat = (JLabel) jpl.getComponent(2);
             stno = seat.getText();
             
-            System.out.println(jpl.getComponent(3));
             JLabel cinema = (JLabel) jpl.getComponent(3);
             cnm = cinema.getText();
             
-            System.out.println(jpl.getComponent(4));
             JLabel tm = (JLabel) jpl.getComponent(4);
             time = tm.getText();
             
+            newticketid = "T" + Integer.toString(lnum+1);
+            
             create_receipt_panel();
+            
+            lnum++;
 
         }
     }
+    
+    void insert_whole_payment(String pm) throws SQLException, ParseException{
+        Statement stmtp = ms.mc.createStatement();
+        
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
+        System.out.println(newpaymentid);
+        System.out.println(payment_m);
+        System.out.println(totalp);
+        System.out.println(timeStamp);
+        System.out.println(emp_log);
+        String in_payment ="INSERT INTO payment ([PaymentID],[PaymentMethod],[Amount],[PaymentDate],[EmployeeID])\n" +
+                        "VALUES \n" +"('"+newpaymentid+"','"+pm+"',"
+                        +totalp+",'"+ timeStamp+"','"+emp_log+"')";
+        System.out.println(in_payment);
+        int in = stmtp.executeUpdate(in_payment);
+        if(in>0){
+            System.out.println("Payment added to database");
+        }
+        stmtp.close();
+        update_ticket_on_database();
+    }
+    
+    String convert_12hr_to_24hr(String tm) throws ParseException{
+        SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
+        SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mm a");
+        java.util.Date date = parseFormat.parse(tm);
+        String real_time = displayFormat.format(date);
+        real_time = real_time +":00.0000000";
+        return real_time;
+    }
+    //this method get the info in the receipt and change the seat_status in database
+    public  void update_seat_list() throws ParseException, SQLException{
+        Component[] c = receipt_panel.getComponents();
+        
+        for(Component cp : c){
+            
+            JPanel jpl = (JPanel) cp;
+            
+            JPanel jpu = (JPanel) cp;
+            JLabel title = (JLabel) jpu.getComponent(3);
+            String stitle = title.getText();
+            stitle = stitle.substring(7);
+            System.out.println("The Title: " + stitle);
 
+            JLabel time = (JLabel) jpu.getComponent(4);
+            String stime = time.getText();
+            System.out.println(stime);
+            stime = stime.substring(11);
+            stime = convert_12hr_to_24hr(stime);
+            System.out.println("The time: " + stime);
+
+            JLabel stnu = (JLabel) jpu.getComponent(6);
+            String sstnu = stnu.getText();
+            sstnu = sstnu.substring(9);
+            System.out.println("The Seat Num: " + sstnu);
+
+            Statement stmt = ms.mc.createStatement();
+            
+            String qry = "select m.Title, m.MovieID, st.ShowtimeMovieID ,st.startTime, st.ShowtimeCinemaID,\n" +
+                    "        c.CinemaID, c.NumofSteats, m.price, st.showtimeID, m.Movie_pic_loc\n" +
+                    "from cinema c inner join(movie m inner join showtime st\n" +
+                    "              on m.MovieID = st.ShowtimeMovieID)\n" +
+                    "     on c.CinemaID = st.ShowtimeCinemaID";
+            
+            ResultSet rs2 = stmt.executeQuery(qry);
+            String st1="S1";
+            while(rs2.next()){
+                if(rs2.getString(4).equals(stime) ){
+                    System.out.println("Nakuhang time: " + stime);
+                    System.out.println("nakuhang showtimeid: " + rs2.getString(9));
+                    st1 = rs2.getString(9);
+                }
+            }
+            
+            Statement stm = ms.mc.createStatement();
+            String qry2 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
+                "from showtime st inner join seat_list sl\n" +
+                "	on st.showtimeid = sl.showtimeid";
+            
+            ResultSet rs = stm.executeQuery(qry2);
+            
+            String scode = sstnu;
+            String sloc="";
+            sloc = sloc + scode.charAt(0);
+            String snum = scode.substring(1,scode.length());
+            System.out.println(sloc);
+            System.out.println(snum);
+            System.out.println(scode);
+            
+            while(rs.next()){
+
+                if(rs.getString(2).equals(st1) && rs.getString(3).equals(sloc)
+                        && rs.getString(4).equals(snum)){
+                    
+                    String rsin = "UPDATE seat_list\n" +
+                                "set seat_status = 'U'\n" +
+                                "Where seat_number="+ snum +"and seat_location = '"+ sloc
+                            +"' and showtimeid = '" +st1 +"'";
+                    
+                    int ups = stmt.executeUpdate(rsin);
+                    if(ups>0){
+                        System.out.println("seat Updated on database");
+                    }
+
+                }
+
+            }
+        }
+    }
+    public void update_ticket_on_database() throws SQLException{
+        
+        
+        
+        for(int i=0; i<ticket_insert.size(); i++){
+            Statement tstmt = ms.mc.createStatement();
+            int tins = 0;
+            tins = tstmt.executeUpdate(ticket_insert.get(i));
+            if(tins>0){
+                System.out.println("ticket inserted in database");
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -190,6 +396,8 @@ public class Payment_Method extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         main_receipt_panel = new javax.swing.JPanel();
         receipt_panel = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        total_prc = new javax.swing.JLabel();
         lp_bg = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
@@ -201,9 +409,8 @@ public class Payment_Method extends javax.swing.JFrame {
         BDO = new javax.swing.JLabel();
         BPI = new javax.swing.JLabel();
         UnionBank = new javax.swing.JLabel();
-        amount_field = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        pay_cash = new javax.swing.JButton();
         cancel_payment = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         rp_bg = new javax.swing.JLabel();
@@ -264,6 +471,10 @@ public class Payment_Method extends javax.swing.JFrame {
                 .addGap(40, 40, 40))
         );
 
+        jLabel2.setText("Total Amount:");
+
+        total_prc.setText("0.00");
+
         javax.swing.GroupLayout cart_panelLayout = new javax.swing.GroupLayout(cart_panel);
         cart_panel.setLayout(cart_panelLayout);
         cart_panelLayout.setHorizontalGroup(
@@ -272,6 +483,11 @@ public class Payment_Method extends javax.swing.JFrame {
                 .addGap(112, 112, 112)
                 .addComponent(jLabel9))
             .addComponent(main_receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(cart_panelLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(total_prc))
         );
         cart_panelLayout.setVerticalGroup(
             cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -279,7 +495,12 @@ public class Payment_Method extends javax.swing.JFrame {
                 .addGap(5, 5, 5)
                 .addComponent(jLabel9)
                 .addGap(5, 5, 5)
-                .addComponent(main_receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(main_receipt_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(cart_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(total_prc))
+                .addGap(28, 28, 28))
         );
 
         jPanel1.add(cart_panel, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 88, 260, 380));
@@ -346,15 +567,19 @@ public class Payment_Method extends javax.swing.JFrame {
             }
         });
         jPanel8.add(UnionBank, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, -1, -1));
-        jPanel8.add(amount_field, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 270, 139, 30));
-
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel13.setText("AMOUNT");
-        jPanel8.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 270, -1, 30));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel6.setText("Cards");
         jPanel8.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 130, -1, -1));
+
+        pay_cash.setBackground(new java.awt.Color(255, 204, 102));
+        pay_cash.setText("Cash");
+        pay_cash.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pay_cashActionPerformed(evt);
+            }
+        });
+        jPanel8.add(pay_cash, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 280, 100, 30));
 
         jPanel2.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(79, 69, 412, 352));
 
@@ -399,16 +624,16 @@ public class Payment_Method extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_cancel_paymentActionPerformed
     
-    static String payment = "";
+    static String payment = "Cash";
     static String emp_log = "E1";
     private void GCashMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GCashMouseClicked
-       payment="E-Wallet";
+       payment_m="E-Wallet";
        GCash gc = new GCash();
        gc.setVisible(true);
     }//GEN-LAST:event_GCashMouseClicked
 
     private void MayaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MayaMouseClicked
-        payment="E-Wallet";
+        payment_m="E-Wallet";
         PayMaya py= new PayMaya();
         py.setVisible(true);
     }//GEN-LAST:event_MayaMouseClicked
@@ -416,26 +641,29 @@ public class Payment_Method extends javax.swing.JFrame {
     private void BPIMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BPIMouseClicked
         BPI bp =new BPI();
         bp.setVisible(true);
-        payment="Card";
+        payment_m="Credit Card";
     }//GEN-LAST:event_BPIMouseClicked
 
     private void BDOMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BDOMouseClicked
         BDO bd=new BDO();
         bd.setVisible(true);
-        payment="Card";
+        payment_m="Credit Card";
     }//GEN-LAST:event_BDOMouseClicked
 
     private void UnionBankMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UnionBankMouseClicked
         UnionBank ub= new UnionBank();
         ub.setVisible(true);
-        payment="Card";
+        payment_m="Credit Card";
     }//GEN-LAST:event_UnionBankMouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+        td.stopper =0;
         try {
+            update_seat_list();
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
+            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.dispose();
@@ -452,6 +680,13 @@ public class Payment_Method extends javax.swing.JFrame {
         spm.setVisible(true);
          this.dispose();
     }//GEN-LAST:event_staff_nameMouseClicked
+        
+    private void pay_cashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pay_cashActionPerformed
+        Payment_Cash pc = new Payment_Cash();
+        pc.setVisible(true);
+        double price = Payment_Method.totalp;
+        payment_m = "Cash";
+    }//GEN-LAST:event_pay_cashActionPerformed
    
     // Add an action listener to the GCash label/icon
 
@@ -465,14 +700,13 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JLabel GCash;
     private javax.swing.JLabel Maya;
     private javax.swing.JLabel UnionBank;
-    private javax.swing.JTextField amount_field;
     private javax.swing.JButton cancel_payment;
     private javax.swing.JPanel cart_panel;
     private javax.swing.JLabel icon;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel8;
@@ -482,8 +716,10 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JLabel lp_bg;
     private javax.swing.JPanel main_receipt_panel;
+    private javax.swing.JButton pay_cash;
     private javax.swing.JPanel receipt_panel;
     private javax.swing.JLabel rp_bg;
     private javax.swing.JLabel staff_name;
+    private javax.swing.JLabel total_prc;
     // End of variables declaration//GEN-END:variables
 }
