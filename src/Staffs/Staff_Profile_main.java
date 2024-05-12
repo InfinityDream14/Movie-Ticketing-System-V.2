@@ -16,7 +16,7 @@ import javax.swing.*;
  * @author John Paul
  */
 public class Staff_Profile_main extends javax.swing.JFrame {
-
+       
     /**
      * Creates new form Staffs_Profile
      */
@@ -108,13 +108,14 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         p_no = new javax.swing.JLabel();
         Edit_prof = new javax.swing.JButton();
-        edit_name = new javax.swing.JLabel();
         Password = new javax.swing.JPasswordField();
         F_Name = new javax.swing.JLabel();
-        F_Name1 = new javax.swing.JLabel();
+        L_Name = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        phone_no = new javax.swing.JTextField();
+        edit_name = new javax.swing.JButton();
         rp_bg = new javax.swing.JLabel();
+        change_pass = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -159,28 +160,21 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         profile.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         profile.setText("Profile");
-        jPanel2.add(profile, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, -1, 50));
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel3.setText("Password:");
-        jPanel2.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 300, 70, -1));
 
-        f_n.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        f_n.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         f_n.setText("Frist Name:");
-        jPanel2.add(f_n, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 120, -1, -1));
-        jPanel2.add(email, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 220, 294, -1));
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setText("Last Name:");
-        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 160, -1, -1));
 
-        p_no.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        p_no.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         p_no.setText("Phone num:");
-        jPanel2.add(p_no, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, -1, -1));
 
         Edit_prof.setBackground(new java.awt.Color(255, 204, 102));
         Edit_prof.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -191,35 +185,129 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 Edit_profActionPerformed(evt);
             }
         });
-        jPanel2.add(Edit_prof, new org.netbeans.lib.awtextra.AbsoluteConstraints(278, 406, -1, -1));
 
+        Password.setText("admin");
+
+        F_Name.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        F_Name.setText("First Name");
+
+        L_Name.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        L_Name.setText("Last Name");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel2.setText("Email:");
+
+        phone_no.setText("jTextField1");
+
+        edit_name.setBackground(new java.awt.Color(255, 204, 102));
         edit_name.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
-        edit_name.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                edit_nameMouseDragged(evt);
+        edit_name.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                edit_nameActionPerformed(evt);
             }
         });
-        jPanel2.add(edit_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 120, -1, -1));
-
-        Password.setText("jPasswordField1");
-        jPanel2.add(Password, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 300, 294, -1));
-
-        F_Name.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        F_Name.setText("First Name");
-        jPanel2.add(F_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 110, -1, -1));
-
-        F_Name1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        F_Name1.setText("Last Name");
-        jPanel2.add(F_Name1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 150, -1, -1));
-
-        jLabel2.setText("Email:");
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 220, -1, 30));
-
-        jTextField1.setText("jTextField1");
-        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 260, 131, -1));
 
         rp_bg.setPreferredSize(new java.awt.Dimension(570, 480));
-        jPanel2.add(rp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
+        change_pass.setBackground(new java.awt.Color(255, 204, 102));
+        change_pass.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        change_pass.setForeground(new java.awt.Color(255, 255, 255));
+        change_pass.setText("Change Password");
+        change_pass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                change_passActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(230, 230, 230)
+                        .addComponent(profile))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(90, 90, 90)
+                        .addComponent(jLabel2)
+                        .addGap(50, 50, 50)
+                        .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(90, 90, 90)
+                        .addComponent(p_no)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(phone_no, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(92, 92, 92)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(Password, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(change_pass, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(90, 90, 90)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(f_n)
+                        .addGap(104, 104, 104)
+                        .addComponent(F_Name))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(106, 106, 106)
+                        .addComponent(L_Name)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
+                .addComponent(edit_name, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Edit_prof)
+                .addGap(204, 204, 204))
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(rp_bg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(f_n)
+                            .addComponent(F_Name))
+                        .addGap(5, 5, 5)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel5))
+                            .addComponent(L_Name)))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addComponent(edit_name)))
+                .addGap(20, 20, 20)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(p_no)
+                    .addComponent(phone_no, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(change_pass))
+                .addGap(50, 50, 50)
+                .addComponent(Edit_prof)
+                .addContainerGap())
+            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addComponent(rp_bg, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+                    .addContainerGap()))
+        );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 570, 480));
 
@@ -228,7 +316,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void Edit_profActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_profActionPerformed
-
+       
     }//GEN-LAST:event_Edit_profActionPerformed
 
     private void Log_outMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Log_outMouseClicked
@@ -252,12 +340,80 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         }   
     }//GEN-LAST:event_icon_profMouseClicked
 
-    private void edit_nameMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_edit_nameMouseDragged
-       Staff_Name sb= new Staff_Name();
-        sb.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_edit_nameMouseDragged
+    private void edit_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_nameActionPerformed
+        F_Name.setVisible(false);
+        L_Name.setVisible(false);
 
+        JTextField fNameTextField = new JTextField(F_Name.getText());
+        fNameTextField.setFont(new java.awt.Font("Segoe UI", 1, 14));
+        fNameTextField.setBounds(184, 115, 240, 22);
+        jPanel2.add(fNameTextField);
+
+        JTextField lNameTextField = new JTextField(L_Name.getText());
+        lNameTextField.setFont(new java.awt.Font("Segoe UI", 1, 14));
+        lNameTextField.setBounds(184, 154, 240, 22);
+        jPanel2.add(lNameTextField);
+
+        jPanel2.revalidate();
+        jPanel2.repaint();
+
+      
+    }//GEN-LAST:event_edit_nameActionPerformed
+
+    private void change_passActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_change_passActionPerformed
+       JPanel panel = new JPanel();
+panel.setLayout(new GridLayout(0, 1));
+
+JPasswordField oldPasswordField = new JPasswordField();
+JPasswordField newPasswordField = new JPasswordField();
+JPasswordField confirmPasswordField = new JPasswordField();
+
+panel.add(new JLabel("Enter your old password:"));
+panel.add(oldPasswordField);
+
+int result = JOptionPane.showConfirmDialog(null, panel, "Change Password", JOptionPane.OK_CANCEL_OPTION);
+
+if (result == JOptionPane.OK_OPTION) {
+    
+    char[] oldPasswordChars = oldPasswordField.getPassword();
+    String oldPassword = new String(oldPasswordChars);
+
+   
+    if (oldPassword.equals("admin")) { 
+        
+        panel = new JPanel();
+        panel.setLayout(new GridLayout(0, 1));
+        
+        panel.add(new JLabel("Enter your new password:"));
+        panel.add(newPasswordField);
+        panel.add(new JLabel("Confirm your new password:"));
+        panel.add(confirmPasswordField);
+
+        result = JOptionPane.showConfirmDialog(null, panel, "Change Password", JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+            
+            char[] newPasswordChars = newPasswordField.getPassword();
+            char[] confirmedPasswordChars = confirmPasswordField.getPassword();
+            String newPassword = new String(newPasswordChars);
+            String confirmedPassword = new String(confirmedPasswordChars);
+
+            
+            if (newPassword.equals(confirmedPassword)) {
+               
+                System.out.println("New password: " + newPassword);
+                JOptionPane.showMessageDialog(null, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Incorrect old password!", "Error", JOptionPane.ERROR_MESSAGE);
+    }
+}
+
+    }//GEN-LAST:event_change_passActionPerformed
+      
     /**
      * @param args the command line arguments
      */
@@ -265,11 +421,12 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Edit_prof;
     private javax.swing.JLabel F_Name;
-    private javax.swing.JLabel F_Name1;
+    private javax.swing.JLabel L_Name;
     private javax.swing.JButton Log_out;
     private javax.swing.JPasswordField Password;
     private javax.swing.JButton back;
-    private javax.swing.JLabel edit_name;
+    private javax.swing.JButton change_pass;
+    private javax.swing.JButton edit_name;
     private javax.swing.JTextField email;
     private javax.swing.JLabel f_n;
     private javax.swing.JLabel icon_prof;
@@ -278,9 +435,9 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lp_bg;
     private javax.swing.JLabel p_no;
+    private javax.swing.JTextField phone_no;
     private javax.swing.JLabel profile;
     private javax.swing.JLabel rp_bg;
     private javax.swing.JLabel staff_name;
