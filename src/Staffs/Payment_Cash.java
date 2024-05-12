@@ -68,7 +68,7 @@ public class Payment_Cash extends javax.swing.JFrame {
         main_panel.add(cancelBtn);
         cancelBtn.setBounds(60,110, 80, 25);
         
-        double price = new Payment_Method().totalp;
+        double price = pm.totalp;
         String payment_m = "Cash";
         okBtn.addActionListener(new ActionListener() {
             @Override
@@ -95,6 +95,7 @@ public class Payment_Cash extends javax.swing.JFrame {
                             td.jp_mlist.removeAll();
                             td.jp_mlist.revalidate();
                             td.jp_mlist.repaint();
+                            td.stopper =0;
                             //Payment_Method pm = new Payment_Method();
                             pm.update_seat_list();
                             pm.insert_whole_payment(payment_m);

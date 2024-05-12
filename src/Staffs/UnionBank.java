@@ -146,7 +146,7 @@ public class UnionBank extends javax.swing.JFrame {
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
         this.dispose();
     }//GEN-LAST:event_backMouseClicked
-    double price = new Payment_Method().totalp;
+    double price = pm.totalp;
     String payment_m = "Credit Card";
     private void paynowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paynowMouseClicked
         String pera = amount.getText();
@@ -161,6 +161,7 @@ public class UnionBank extends javax.swing.JFrame {
                 td.jp_mlist.removeAll();
                 td.jp_mlist.revalidate();
                 td.jp_mlist.repaint();
+                td.stopper =0;
                 //Payment_Method pm = new Payment_Method();
                 pm.update_seat_list();
                 pm.insert_whole_payment(payment_m);

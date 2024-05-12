@@ -85,6 +85,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         sm_mtitle.setText(mvt);
         sm_mgenre.setText(mvg);
         ResultSet rs = stmt.executeQuery(qry);
+
         while(rs.next()){
             if(rs.getString(1).trim().equals(mvt)){
                 
@@ -159,7 +160,8 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         ResultSet rs2 = stmt.executeQuery(qry);
        
         while(rs2.next()){
-            if(rs2.getString(4).equals(rt) ){
+            if(rs2.getString(4).equals(rt) &&
+                    rs2.getString(1).equals(mvt)){
                 System.out.println("Nakuhang time: " + rt);
                 System.out.println("nakuhang showtimeid: " + rs2.getString(9));
                 st1 = rs2.getString(9);
@@ -177,9 +179,13 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         ResultSet rs = stmt.executeQuery(qry3);
         ResultSet rs1 = stmt1.executeQuery(qry);
         while(rs1.next()){
+            
             if(rs1.getString(1).equals(mvt)){
+                
                 while(rs.next()){
-                    if(rs.getString(1).equals(st1)){
+                    
+                    if(rs.getString(1).equals(st1)
+                            && rs1.getString(1).equals(mvt)){
 
                         String cn="";
                         ImageIcon seat_icon = new ImageIcon("seat.png");
