@@ -262,7 +262,7 @@ public class Payment_Method extends javax.swing.JFrame {
         
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         System.out.println(newpaymentid);
-        System.out.println(payment);
+        System.out.println(payment_m);
         System.out.println(totalp);
         System.out.println(timeStamp);
         System.out.println(emp_log);
@@ -627,13 +627,13 @@ public class Payment_Method extends javax.swing.JFrame {
     static String payment = "Cash";
     static String emp_log = "E1";
     private void GCashMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GCashMouseClicked
-       payment="E-Wallet";
+       payment_m="E-Wallet";
        GCash gc = new GCash();
        gc.setVisible(true);
     }//GEN-LAST:event_GCashMouseClicked
 
     private void MayaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MayaMouseClicked
-        payment="E-Wallet";
+        payment_m="E-Wallet";
         PayMaya py= new PayMaya();
         py.setVisible(true);
     }//GEN-LAST:event_MayaMouseClicked
@@ -641,19 +641,19 @@ public class Payment_Method extends javax.swing.JFrame {
     private void BPIMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BPIMouseClicked
         BPI bp =new BPI();
         bp.setVisible(true);
-        payment="Card";
+        payment_m="Credit Card";
     }//GEN-LAST:event_BPIMouseClicked
 
     private void BDOMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BDOMouseClicked
         BDO bd=new BDO();
         bd.setVisible(true);
-        payment="Card";
+        payment_m="Credit Card";
     }//GEN-LAST:event_BDOMouseClicked
 
     private void UnionBankMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_UnionBankMouseClicked
         UnionBank ub= new UnionBank();
         ub.setVisible(true);
-        payment="Card";
+        payment_m="Credit Card";
     }//GEN-LAST:event_UnionBankMouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -680,11 +680,12 @@ public class Payment_Method extends javax.swing.JFrame {
         sp.setVisible(true);
          this.dispose();
     }//GEN-LAST:event_staff_nameMouseClicked
-
+        
     private void pay_cashActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pay_cashActionPerformed
         Payment_Cash pc = new Payment_Cash();
         pc.setVisible(true);
-        payment="Cash";
+        double price = Payment_Method.totalp;
+        payment_m = "Cash";
     }//GEN-LAST:event_pay_cashActionPerformed
    
     // Add an action listener to the GCash label/icon
