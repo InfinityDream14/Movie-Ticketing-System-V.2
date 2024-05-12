@@ -523,7 +523,6 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         Left_yellow_Panel = new javax.swing.JPanel();
         profile_icon = new javax.swing.JLabel();
         staff_name = new javax.swing.JLabel();
-        log_out = new javax.swing.JLabel();
         cart_panel = new javax.swing.JPanel();
         Cart_label = new javax.swing.JLabel();
         main_receipt_panel = new javax.swing.JPanel();
@@ -578,11 +577,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                 staff_nameMouseClicked(evt);
             }
         });
-        Left_yellow_Panel.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 24, -1, -1));
-
-        log_out.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-        log_out.setText("LOG OUT");
-        Left_yellow_Panel.add(log_out, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 44, -1, -1));
+        Left_yellow_Panel.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, -1, 30));
 
         Cart_label.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Cart_label.setText("CART");
@@ -818,19 +813,6 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     }//GEN-LAST:event_cancel_seat_choicesActionPerformed
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
-       
-        Component[] c = receipt_panel.getComponents();
-        for(Component cp : c){
-            
-            JPanel jpl = (JPanel) cp;
-            System.out.println(jpl.getComponent(0));
-            System.out.println(jpl.getComponent(1));
-            System.out.println(jpl.getComponent(2));
-            System.out.println(jpl.getComponent(3));
-            System.out.println(jpl.getComponent(4));
-            System.out.println(jpl.getComponent(5));
-            System.out.println(jpl.getComponent(6));
-        }
 
     }//GEN-LAST:event_jRadioButton2ActionPerformed
 
@@ -881,7 +863,6 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JPanel left_seat_panel;
-    private javax.swing.JLabel log_out;
     private javax.swing.JLabel lp_bg;
     private javax.swing.JPanel main_receipt_panel;
     private javax.swing.JPanel mid_seat_panel;

@@ -32,7 +32,7 @@ public class Payment_Method extends javax.swing.JFrame {
      * Creates new form Payment_Method
      */
     Main_Staff ms = new Main_Staff();
-    //Temp_Data td = new Temp_Data();
+    Temp_Data td = new Temp_Data();
     public Payment_Method() throws SQLException, ParseException {
         initComponents();
         setLocationRelativeTo(null);
@@ -42,13 +42,14 @@ public class Payment_Method extends javax.swing.JFrame {
         
         left_panel_bg();
         right_panel_bg();
-        
-        receipt_scrollpane();
-        get_last_ticketid();
-        get_last_paymentid();
-        get_ticklist_info();
+            if(td.stopper == 0){
+            receipt_scrollpane();
+            get_last_ticketid();
+            get_last_paymentid();
+            get_ticklist_info();
         //insert_whole_payment();
-        
+        }
+        td.stopper++;
         total_prc.setText(Double.toString(totalp));
     }
     
@@ -185,7 +186,7 @@ public class Payment_Method extends javax.swing.JFrame {
     static String newticketid;
     static String newpaymentid,payment_m;
     static int lnum,lnumpm;
-    public double totalp = 0;
+    public static double totalp;
     
     void get_last_ticketid() throws SQLException {
         
@@ -415,7 +416,6 @@ public class Payment_Method extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         icon = new javax.swing.JLabel();
         staff_name = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         cart_panel = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         main_receipt_panel = new javax.swing.JPanel();
@@ -463,11 +463,7 @@ public class Payment_Method extends javax.swing.JFrame {
                 staff_nameMouseClicked(evt);
             }
         });
-        jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 24, -1, -1));
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
-        jLabel8.setText("LOG OUT");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 44, -1, -1));
+        jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 24, -1, 40));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel9.setText("CART");
@@ -667,7 +663,6 @@ public class Payment_Method extends javax.swing.JFrame {
             BDO bd=new BDO();
             bd.setVisible(true);
             payment_m="Credit Card";
-            new Temp_Data().total_amount = totalp;
             //dispose();
         } catch (SQLException ex) {
             Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
@@ -721,7 +716,6 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

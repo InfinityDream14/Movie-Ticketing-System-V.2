@@ -95,27 +95,27 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        Log_out = new javax.swing.JButton();
         icon_prof = new javax.swing.JLabel();
         staff_name = new javax.swing.JLabel();
         lp_bg = new javax.swing.JLabel();
-        back = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         profile = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        f_n = new javax.swing.JLabel();
-        email = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        p_no = new javax.swing.JLabel();
         Edit_prof = new javax.swing.JButton();
-        Password = new javax.swing.JPasswordField();
-        F_Name = new javax.swing.JLabel();
-        L_Name = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        phone_no = new javax.swing.JTextField();
-        edit_name = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        Password_textfield = new javax.swing.JPasswordField();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        f_n = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jTextField2 = new javax.swing.JTextField();
+        jPanel5 = new javax.swing.JPanel();
+        p_no1 = new javax.swing.JLabel();
+        email_textfield = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        phone_textfield = new javax.swing.JTextField();
+        back = new javax.swing.JButton();
         rp_bg = new javax.swing.JLabel();
-        change_pass = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -124,17 +124,6 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 204, 102));
         jPanel1.setPreferredSize(new java.awt.Dimension(280, 480));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        Log_out.setBackground(new java.awt.Color(255, 204, 102));
-        Log_out.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        Log_out.setForeground(new java.awt.Color(255, 255, 255));
-        Log_out.setText("Log out");
-        Log_out.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                Log_outMouseClicked(evt);
-            }
-        });
-        jPanel1.add(Log_out, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 400, -1, -1));
 
         icon_prof.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
         icon_prof.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -149,188 +138,176 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, -1, -1));
         jPanel1.add(lp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
+
+        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        profile.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        profile.setText("Profile");
+        jPanel2.add(profile, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 20, -1, 50));
+
+        Edit_prof.setBackground(new java.awt.Color(255, 204, 102));
+        Edit_prof.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        Edit_prof.setText("Save Details");
+        Edit_prof.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Edit_profActionPerformed(evt);
+            }
+        });
+        jPanel2.add(Edit_prof, new org.netbeans.lib.awtextra.AbsoluteConstraints(236, 421, -1, -1));
+
+        jPanel3.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)), "Security", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(102, 102, 102))); // NOI18N
+
+        Password_textfield.setText("Password");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("Password:");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Password_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(124, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Password_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 320, 400, -1));
+
+        jPanel4.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)), "Personal Details", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(102, 102, 102))); // NOI18N
+
+        f_n.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        f_n.setText("Frist Name:");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setText("Last Name:");
+
+        jTextField1.setBackground(new java.awt.Color(204, 204, 204));
+        jTextField1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jTextField1.setText("John Luther");
+
+        jTextField2.setBackground(new java.awt.Color(204, 204, 204));
+        jTextField2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jTextField2.setText("Dela Cruz");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField2))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(f_n)
+                        .addGap(18, 18, 18)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(f_n)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 88, 400, -1));
+
+        jPanel5.setBackground(new java.awt.Color(204, 204, 204));
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)), "Contact", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(102, 102, 102))); // NOI18N
+
+        p_no1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        p_no1.setText("Phone num:");
+
+        email_textfield.setBackground(new java.awt.Color(204, 204, 204));
+        email_textfield.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        email_textfield.setText("sample@gmail.com");
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setText("Email:");
+
+        phone_textfield.setBackground(new java.awt.Color(204, 204, 204));
+        phone_textfield.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        phone_textfield.setText("09466885295");
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
+                        .addComponent(p_no1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel4)))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(phone_textfield)
+                    .addComponent(email_textfield, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(p_no1)
+                    .addComponent(phone_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(email_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        jPanel2.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 209, 400, -1));
+
+        back.setBackground(new java.awt.Color(204, 204, 204));
         back.setText("BACK");
         back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backActionPerformed(evt);
             }
         });
-        jPanel1.add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, -1));
-
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
-
-        jPanel2.setBackground(new java.awt.Color(204, 204, 204));
-
-        profile.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
-        profile.setText("Profile");
-
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel3.setText("Password:");
-
-        f_n.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        f_n.setText("Frist Name:");
-
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel5.setText("Last Name:");
-
-        p_no.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        p_no.setText("Phone num:");
-
-        Edit_prof.setBackground(new java.awt.Color(255, 204, 102));
-        Edit_prof.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        Edit_prof.setForeground(new java.awt.Color(255, 255, 255));
-        Edit_prof.setText("Edit Profile");
-        Edit_prof.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Edit_profActionPerformed(evt);
-            }
-        });
-
-        Password.setText("admin");
-
-        F_Name.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        F_Name.setText("First Name");
-
-        L_Name.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        L_Name.setText("Last Name");
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel2.setText("Email:");
-
-        phone_no.setText("jTextField1");
-
-        edit_name.setBackground(new java.awt.Color(255, 204, 102));
-        edit_name.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/seat.png"))); // NOI18N
-        edit_name.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                edit_nameActionPerformed(evt);
-            }
-        });
-
-        rp_bg.setPreferredSize(new java.awt.Dimension(570, 480));
-
-        change_pass.setBackground(new java.awt.Color(255, 204, 102));
-        change_pass.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
-        change_pass.setForeground(new java.awt.Color(255, 255, 255));
-        change_pass.setText("Change Password");
-        change_pass.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                change_passActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(230, 230, 230)
-                        .addComponent(profile))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addComponent(jLabel2)
-                        .addGap(50, 50, 50)
-                        .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(90, 90, 90)
-                        .addComponent(p_no)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(phone_no, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(92, 92, 92)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(Password, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(change_pass, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(90, 90, 90)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(f_n)
-                        .addGap(104, 104, 104)
-                        .addComponent(F_Name))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(106, 106, 106)
-                        .addComponent(L_Name)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
-                .addComponent(edit_name, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(60, 60, 60))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Edit_prof)
-                .addGap(204, 204, 204))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(rp_bg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(f_n)
-                            .addComponent(F_Name))
-                        .addGap(5, 5, 5)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(jLabel5))
-                            .addComponent(L_Name)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(65, 65, 65)
-                        .addComponent(edit_name)))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(p_no)
-                    .addComponent(phone_no, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(change_pass))
-                .addGap(50, 50, 50)
-                .addComponent(Edit_prof)
-                .addContainerGap())
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addComponent(rp_bg, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
-                    .addContainerGap()))
-        );
+        jPanel2.add(back, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 0, -1, -1));
+        jPanel2.add(rp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 570, 480));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 570, 480));
 
-        setSize(new java.awt.Dimension(850, 487));
+        setSize(new java.awt.Dimension(850, 480));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void Edit_profActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_profActionPerformed
        
     }//GEN-LAST:event_Edit_profActionPerformed
-
-    private void Log_outMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Log_outMouseClicked
-       this.dispose();
-    }//GEN-LAST:event_Log_outMouseClicked
-
-    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
-        try {
-            new Movie_List().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        dispose();
-    }//GEN-LAST:event_backActionPerformed
 
     private void icon_profMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_icon_profMouseClicked
         try {      
@@ -340,79 +317,14 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         }   
     }//GEN-LAST:event_icon_profMouseClicked
 
-    private void edit_nameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_edit_nameActionPerformed
-        F_Name.setVisible(false);
-        L_Name.setVisible(false);
-
-        JTextField fNameTextField = new JTextField(F_Name.getText());
-        fNameTextField.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        fNameTextField.setBounds(184, 115, 240, 22);
-        jPanel2.add(fNameTextField);
-
-        JTextField lNameTextField = new JTextField(L_Name.getText());
-        lNameTextField.setFont(new java.awt.Font("Segoe UI", 1, 14));
-        lNameTextField.setBounds(184, 154, 240, 22);
-        jPanel2.add(lNameTextField);
-
-        jPanel2.revalidate();
-        jPanel2.repaint();
-
-      
-    }//GEN-LAST:event_edit_nameActionPerformed
-
-    private void change_passActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_change_passActionPerformed
-       JPanel panel = new JPanel();
-panel.setLayout(new GridLayout(0, 1));
-
-JPasswordField oldPasswordField = new JPasswordField();
-JPasswordField newPasswordField = new JPasswordField();
-JPasswordField confirmPasswordField = new JPasswordField();
-
-panel.add(new JLabel("Enter your old password:"));
-panel.add(oldPasswordField);
-
-int result = JOptionPane.showConfirmDialog(null, panel, "Change Password", JOptionPane.OK_CANCEL_OPTION);
-
-if (result == JOptionPane.OK_OPTION) {
-    
-    char[] oldPasswordChars = oldPasswordField.getPassword();
-    String oldPassword = new String(oldPasswordChars);
-
-   
-    if (oldPassword.equals("admin")) { 
-        
-        panel = new JPanel();
-        panel.setLayout(new GridLayout(0, 1));
-        
-        panel.add(new JLabel("Enter your new password:"));
-        panel.add(newPasswordField);
-        panel.add(new JLabel("Confirm your new password:"));
-        panel.add(confirmPasswordField);
-
-        result = JOptionPane.showConfirmDialog(null, panel, "Change Password", JOptionPane.OK_CANCEL_OPTION);
-
-        if (result == JOptionPane.OK_OPTION) {
-            
-            char[] newPasswordChars = newPasswordField.getPassword();
-            char[] confirmedPasswordChars = confirmPasswordField.getPassword();
-            String newPassword = new String(newPasswordChars);
-            String confirmedPassword = new String(confirmedPasswordChars);
-
-            
-            if (newPassword.equals(confirmedPassword)) {
-               
-                System.out.println("New password: " + newPassword);
-                JOptionPane.showMessageDialog(null, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(null, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
-            }
+    private void backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backActionPerformed
+        try {
+            new Movie_List().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "Incorrect old password!", "Error", JOptionPane.ERROR_MESSAGE);
-    }
-}
-
-    }//GEN-LAST:event_change_passActionPerformed
+        dispose();
+    }//GEN-LAST:event_backActionPerformed
       
     /**
      * @param args the command line arguments
@@ -420,24 +332,24 @@ if (result == JOptionPane.OK_OPTION) {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Edit_prof;
-    private javax.swing.JLabel F_Name;
-    private javax.swing.JLabel L_Name;
-    private javax.swing.JButton Log_out;
-    private javax.swing.JPasswordField Password;
+    private javax.swing.JPasswordField Password_textfield;
     private javax.swing.JButton back;
-    private javax.swing.JButton change_pass;
-    private javax.swing.JButton edit_name;
-    private javax.swing.JTextField email;
+    private javax.swing.JTextField email_textfield;
     private javax.swing.JLabel f_n;
     private javax.swing.JLabel icon_prof;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel lp_bg;
-    private javax.swing.JLabel p_no;
-    private javax.swing.JTextField phone_no;
+    private javax.swing.JLabel p_no1;
+    private javax.swing.JTextField phone_textfield;
     private javax.swing.JLabel profile;
     private javax.swing.JLabel rp_bg;
     private javax.swing.JLabel staff_name;

@@ -218,6 +218,7 @@ public class Movie_List extends javax.swing.JFrame {
         movie_panel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         p_to_payment = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         rp_bg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -317,7 +318,13 @@ public class Movie_List extends javax.swing.JFrame {
                 p_to_paymentActionPerformed(evt);
             }
         });
-        jPanel2.add(p_to_payment, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 440, -1, -1));
+        jPanel2.add(p_to_payment, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 440, -1, -1));
+
+        jButton1.setBackground(new java.awt.Color(204, 204, 204));
+        jButton1.setText("Reset");
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, -1, -1));
+
+        rp_bg.setBackground(new java.awt.Color(204, 204, 204));
         jPanel2.add(rp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 570, 480));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 570, 480));
@@ -421,6 +428,7 @@ public class Movie_List extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel cart_panel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
