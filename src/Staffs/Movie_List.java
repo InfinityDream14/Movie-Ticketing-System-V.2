@@ -385,8 +385,8 @@ public class Movie_List extends javax.swing.JFrame {
     }//GEN-LAST:event_prof_iconMouseClicked
 
     private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
-         Staffs_Profile sp =new Staffs_Profile();
-        sp.setVisible(true);
+        Staff_Profile_main spm =new Staff_Profile_main();
+        spm.setVisible(true);
          this.dispose();
     }//GEN-LAST:event_staff_nameMouseClicked
 

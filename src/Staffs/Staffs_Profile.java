@@ -291,18 +291,8 @@ public class Staffs_Profile extends javax.swing.JFrame {
     }//GEN-LAST:event_lnameActionPerformed
 
     private void Edit_profActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_profActionPerformed
-           if(!fname.getText().equals("") && !lname.getText().equals("")&& !email.getText().equals("")&& !pass.getText().equals("")){
-            fname.getText();
-            lname.getText();
-            email.getText();
-            pass.getText();
-            
-        }
-        JOptionPane.showMessageDialog(null, "Confirm");
-        System.out.println("First Name:"+ fname.getText());
-        System.out.println("Last Name:"+ lname.getText());
-        System.out.println("Email:"+email.getText());
-        System.out.println("Password:"+ pass.getText());
+           
+        
       
     }//GEN-LAST:event_Edit_profActionPerformed
 
