@@ -663,7 +663,7 @@ public class Payment_Method extends javax.swing.JFrame {
             BDO bd=new BDO();
             bd.setVisible(true);
             payment_m="Credit Card";
-            //dispose();
+            dispose();
         } catch (SQLException ex) {
             Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ParseException ex) {
