@@ -322,6 +322,11 @@ public class Movie_List extends javax.swing.JFrame {
 
         jButton1.setBackground(new java.awt.Color(204, 204, 204));
         jButton1.setText("Reset");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reset_selected(evt);
+            }
+        });
         jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, -1, -1));
 
         rp_bg.setBackground(new java.awt.Color(204, 204, 204));
@@ -332,20 +337,16 @@ public class Movie_List extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            new Movie_List().setVisible(false);
-        } catch (SQLException ex) {
-            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+    private void reset_selected(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_selected
+        if(receipt_panel.getComponents().length !=0){
+            JOptionPane.showMessageDialog(null,
+                    "The cart will cleared", "System Notice", JOptionPane.INFORMATION_MESSAGE);
         }
-        try {
-            new Payment_Method().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        else{
+            JOptionPane.showMessageDialog(null,
+                    "There's no item in cart", "System Notice", JOptionPane.INFORMATION_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_reset_selected
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         try {
@@ -421,7 +422,7 @@ public class Movie_List extends javax.swing.JFrame {
         }
         else{
             JOptionPane.showMessageDialog(null,
-                    "Please add to cart firs", "System Notice", JOptionPane.INFORMATION_MESSAGE);
+                    "Please add to cart first", "System Notice", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_p_to_paymentActionPerformed
 

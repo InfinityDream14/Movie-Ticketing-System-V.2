@@ -6,7 +6,7 @@ package Staffs;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.io.*;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
@@ -20,7 +20,8 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     /**
      * Creates new form Staffs_Profile
      */
-    public Staff_Profile_main(){
+    Main_Staff ms = new Main_Staff();
+    public Staff_Profile_main() throws SQLException{
         initComponents();
          setLocationRelativeTo(null);
         
@@ -29,6 +30,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         
         left_panel_bg();
         right_panel_bg();
+        get_details_fromdb();
       
     }
      void left_panel_bg(){
@@ -83,6 +85,37 @@ public class Staff_Profile_main extends javax.swing.JFrame {
             }
         }
     }
+    static String empid = "E5";
+    static String fname,lname,phone,email,passw,pf_loc;
+    void get_details_fromdb() throws SQLException{
+        
+        Statement stmt = ms.mc.createStatement();
+        
+        String qry = "select * from staff";
+        
+        ResultSet rs = stmt.executeQuery(qry);
+        
+        while(rs.next()){
+            if(rs.getString(1).equals(empid)){
+                fname = rs.getString(2);
+                lname = rs.getString(3);
+                email = rs.getString(4);
+                phone = rs.getString(5);
+                passw = rs.getString(7);
+                pf_loc = rs.getString(8);
+            }
+        }
+        fnamejtx.setText(fname);
+        staff_name.setText(fname);
+        lnamejtx.setText(lname);
+        emailjtx.setText(email);
+        phonejtx.setText(phone);
+        passwordpf.setText(passw);
+        
+        ImageIcon im = new ImageIcon(pf_loc);
+        icon_prof.setIcon(im);
+           
+    }
     
 
     /**
@@ -97,24 +130,25 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         icon_prof = new javax.swing.JLabel();
         staff_name = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         lp_bg = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         profile = new javax.swing.JLabel();
         Edit_prof = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        Password_textfield = new javax.swing.JPasswordField();
+        passwordpf = new javax.swing.JPasswordField();
         jLabel3 = new javax.swing.JLabel();
         change_password_button = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         f_n = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        fnamejtx = new javax.swing.JTextField();
+        lnamejtx = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         p_no1 = new javax.swing.JLabel();
-        email_textfield = new javax.swing.JTextField();
+        emailjtx = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        phone_textfield = new javax.swing.JTextField();
+        phonejtx = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         rp_bg = new javax.swing.JLabel();
 
@@ -126,17 +160,22 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(280, 480));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        icon_prof.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
+        icon_prof.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        icon_prof.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         icon_prof.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 icon_profMouseClicked(evt);
             }
         });
-        jPanel1.add(icon_prof, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 140, 80, 80));
+        jPanel1.add(icon_prof, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 110, 90, 90));
 
         staff_name.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        staff_name.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         staff_name.setText("Staff name");
         jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, -1, -1));
+
+        jLabel2.setText("Log out");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 390, -1, -1));
         jPanel1.add(lp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 480));
@@ -161,8 +200,8 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         jPanel3.setBackground(new java.awt.Color(204, 204, 204));
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)), "Security", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 12), new java.awt.Color(102, 102, 102))); // NOI18N
 
-        Password_textfield.setEditable(false);
-        Password_textfield.setText("Password");
+        passwordpf.setEditable(false);
+        passwordpf.setText("Password");
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel3.setText("Password:");
@@ -183,7 +222,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 .addGap(30, 30, 30)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(Password_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(passwordpf, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(change_password_button)
                 .addContainerGap(41, Short.MAX_VALUE))
@@ -193,7 +232,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Password_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(passwordpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(change_password_button))
                 .addContainerGap(16, Short.MAX_VALUE))
@@ -210,13 +249,18 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel5.setText("Last Name:");
 
-        jTextField1.setBackground(new java.awt.Color(204, 204, 204));
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jTextField1.setText("John Luther");
+        fnamejtx.setBackground(new java.awt.Color(204, 204, 204));
+        fnamejtx.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        fnamejtx.setText("Staff Fname");
 
-        jTextField2.setBackground(new java.awt.Color(204, 204, 204));
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jTextField2.setText("Dela Cruz");
+        lnamejtx.setBackground(new java.awt.Color(204, 204, 204));
+        lnamejtx.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        lnamejtx.setText("Staff Lname");
+        lnamejtx.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lnamejtxActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -228,11 +272,11 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField2))
+                        .addComponent(lnamejtx))
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(f_n)
                         .addGap(18, 18, 18)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(fnamejtx, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -241,11 +285,11 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(f_n)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(fnamejtx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lnamejtx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -257,16 +301,16 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         p_no1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         p_no1.setText("Phone num:");
 
-        email_textfield.setBackground(new java.awt.Color(204, 204, 204));
-        email_textfield.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
-        email_textfield.setText("sample@gmail.com");
+        emailjtx.setBackground(new java.awt.Color(204, 204, 204));
+        emailjtx.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        emailjtx.setText("sample@gmail.com");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Email:");
 
-        phone_textfield.setBackground(new java.awt.Color(204, 204, 204));
-        phone_textfield.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        phone_textfield.setText("09466885295");
+        phonejtx.setBackground(new java.awt.Color(204, 204, 204));
+        phonejtx.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        phonejtx.setText("09466885295");
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -282,8 +326,8 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                         .addComponent(jLabel4)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(phone_textfield)
-                    .addComponent(email_textfield, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
+                    .addComponent(phonejtx)
+                    .addComponent(emailjtx, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -292,11 +336,11 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 .addGap(8, 8, 8)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(p_no1)
-                    .addComponent(phone_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(phonejtx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(email_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(emailjtx, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(12, Short.MAX_VALUE))
         );
 
@@ -342,6 +386,10 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     private void change_password_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_change_password_buttonMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_change_password_buttonMouseClicked
+
+    private void lnamejtxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnamejtxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lnamejtxActionPerformed
       
     /**
      * @param args the command line arguments
@@ -349,12 +397,13 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Edit_prof;
-    private javax.swing.JPasswordField Password_textfield;
     private javax.swing.JLabel change_password_button;
-    private javax.swing.JTextField email_textfield;
+    private javax.swing.JTextField emailjtx;
     private javax.swing.JLabel f_n;
+    private javax.swing.JTextField fnamejtx;
     private javax.swing.JLabel icon_prof;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -363,11 +412,11 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField lnamejtx;
     private javax.swing.JLabel lp_bg;
     private javax.swing.JLabel p_no1;
-    private javax.swing.JTextField phone_textfield;
+    private javax.swing.JPasswordField passwordpf;
+    private javax.swing.JTextField phonejtx;
     private javax.swing.JLabel profile;
     private javax.swing.JLabel rp_bg;
     private javax.swing.JLabel staff_name;
