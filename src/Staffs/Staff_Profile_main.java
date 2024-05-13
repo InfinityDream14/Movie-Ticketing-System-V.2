@@ -405,7 +405,75 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabel1MouseClicked
 
     private void change_password_buttonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_change_password_buttonMouseClicked
-        // TODO add your handling code here:
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(0, 1));
+
+        JPasswordField oldPasswordField = new JPasswordField();
+        JPasswordField newPasswordField = new JPasswordField();
+        JPasswordField confirmPasswordField = new JPasswordField();
+
+        panel.add(new JLabel("Enter your old password:"));
+        panel.add(oldPasswordField);
+
+        int result = JOptionPane.showConfirmDialog(null, panel, "Change Password", JOptionPane.OK_CANCEL_OPTION);
+
+        if (result == JOptionPane.OK_OPTION) {
+
+            char[] oldPasswordChars = oldPasswordField.getPassword();
+            String oldPassword = new String(oldPasswordChars);
+
+
+            if (oldPassword.equals(passw)) { 
+
+                panel = new JPanel();
+                panel.setLayout(new GridLayout(0, 1));
+
+                panel.add(new JLabel("Enter your new password:"));
+                panel.add(newPasswordField);
+                panel.add(new JLabel("Confirm your new password:"));
+                panel.add(confirmPasswordField);
+
+                result = JOptionPane.showConfirmDialog(null, panel, "Change Password", JOptionPane.OK_CANCEL_OPTION);
+
+                if (result == JOptionPane.OK_OPTION) {
+
+                    char[] newPasswordChars = newPasswordField.getPassword();
+                    char[] confirmedPasswordChars = confirmPasswordField.getPassword();
+                    String newPassword = new String(newPasswordChars);
+                    String confirmedPassword = new String(confirmedPasswordChars);
+
+
+                    if (newPassword.equals(confirmedPassword)) {
+
+                        System.out.println("New password: " + newPassword);
+                        JOptionPane.showMessageDialog(null, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        passw = newPassword;
+                        
+                        try {
+                            Statement stmt = ms.mc.createStatement();
+                            String updpass = "UPDATE staff\n" +
+                                        "set passw = '"+passw+"'\n" +
+                                        "where employeeid = '"+empid+"'";
+                        
+                            int up = stmt.executeUpdate(updpass);
+
+                            if(up>0)
+                                System.out.println("Password Updated");
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        
+                        
+                        
+                        
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Incorrect old password!", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_change_password_buttonMouseClicked
 
     private void lnamejtxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnamejtxActionPerformed
