@@ -32,6 +32,9 @@ public class Movie_List extends javax.swing.JFrame {
         create_movie_list_panel();
         //create_ticket_list();
         ticklist_scrollpane();
+        get_staff_profile();
+        
+        mlist_prof_icon.setIcon(stf_img_pf);
         
         components = tempd.jp_mlist.getComponents();
         try{
@@ -47,11 +50,13 @@ public class Movie_List extends javax.swing.JFrame {
             e.getStackTrace();
         }
     }
-    static String title_to_sm;
+    static String title_to_sm,staff_pf,staff_names;
     static String genre_to_sm;
     static Component[] components = {};
     String st1, cid, mprc, mimgloc;
     String tixid = "T1";
+    static String empid = tempd.empid;
+    public static ImageIcon stf_img_pf;
     
     String ticket_title = "The Avengers";
     public void create_movie_list_panel() throws SQLException {
@@ -195,6 +200,30 @@ public class Movie_List extends javax.swing.JFrame {
         receipt_panel.revalidate();
         receipt_panel.repaint();
     }
+    
+    void get_staff_profile() throws SQLException{
+        Main_Staff ms = new Main_Staff();
+        Statement stmt1 = ms.mc.createStatement();
+        
+        String qry = "select * from staff";
+        
+        ResultSet rs = stmt1.executeQuery(qry);
+        
+        while(rs.next()){
+            
+            if(rs.getString(1).equals(empid)){
+                staff_pf =rs.getString(8);
+                staff_name.setText(rs.getString(2));
+                staff_names = staff_name.getText();
+            }
+        }
+        
+        ImageIcon mi = new ImageIcon(staff_pf);
+        Image image = mi.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(57, 57,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+        stf_img_pf = new ImageIcon(newimg); 
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -205,7 +234,7 @@ public class Movie_List extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        prof_icon = new javax.swing.JLabel();
+        mlist_prof_icon = new javax.swing.JLabel();
         staff_name = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         cart_panel = new javax.swing.JPanel();
@@ -234,13 +263,13 @@ public class Movie_List extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 204, 102));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        prof_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
-        prof_icon.addMouseListener(new java.awt.event.MouseAdapter() {
+        mlist_prof_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
+        mlist_prof_icon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                prof_iconMouseClicked(evt);
+                mlist_prof_iconMouseClicked(evt);
             }
         });
-        jPanel1.add(prof_icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 15, -1, -1));
+        jPanel1.add(mlist_prof_icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
 
         staff_name.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staff_name.setText("STAFF NAME");
@@ -249,7 +278,7 @@ public class Movie_List extends javax.swing.JFrame {
                 staff_nameMouseClicked(evt);
             }
         });
-        jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 24, -1, -1));
+        jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
         jLabel3.setText("LOG OUT");
@@ -392,7 +421,7 @@ public class Movie_List extends javax.swing.JFrame {
          }
     }//GEN-LAST:event_exit_staff
 
-    private void prof_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prof_iconMouseClicked
+    private void mlist_prof_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mlist_prof_iconMouseClicked
         try {
             Staff_Profile_main spm =new Staff_Profile_main();
             spm.setVisible(true);
@@ -400,7 +429,7 @@ public class Movie_List extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_prof_iconMouseClicked
+    }//GEN-LAST:event_mlist_prof_iconMouseClicked
 
     private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
         try {
@@ -446,9 +475,9 @@ public class Movie_List extends javax.swing.JFrame {
     private javax.swing.JLabel lp_bg;
     private javax.swing.JPanel main_panel;
     private javax.swing.JPanel main_receipt_panel;
+    private javax.swing.JLabel mlist_prof_icon;
     private javax.swing.JPanel movie_panel;
     private javax.swing.JButton p_to_payment;
-    private javax.swing.JLabel prof_icon;
     private javax.swing.JPanel receipt_panel;
     private javax.swing.JLabel rp_bg;
     private javax.swing.JLabel staff_name;

@@ -40,6 +40,9 @@ public class Payment_Method extends javax.swing.JFrame {
         this.setShape(new RoundRectangle2D.Double(0, 0, (850), 
         (480), 25, 25));
         
+        pm_pf_icon.setIcon(new Movie_List().stf_img_pf);
+        staff_name.setText(new Movie_List().staff_names);
+        
         left_panel_bg();
         right_panel_bg();
         System.out.println("ITo yung Stopper "+ td.stopper);
@@ -449,7 +452,7 @@ public class Payment_Method extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        icon = new javax.swing.JLabel();
+        pm_pf_icon = new javax.swing.JLabel();
         staff_name = new javax.swing.JLabel();
         cart_panel = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -483,13 +486,13 @@ public class Payment_Method extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(280, 480));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
-        icon.addMouseListener(new java.awt.event.MouseAdapter() {
+        pm_pf_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
+        pm_pf_icon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                iconMouseClicked(evt);
+                pm_pf_iconMouseClicked(evt);
             }
         });
-        jPanel1.add(icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 15, -1, -1));
+        jPanel1.add(pm_pf_icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 7, -1, 70));
 
         staff_name.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staff_name.setText("STAFF NAME");
@@ -741,9 +744,9 @@ public class Payment_Method extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_UnionBankMouseClicked
 
-    private void iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_iconMouseClicked
+    private void pm_pf_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pm_pf_iconMouseClicked
 
-    }//GEN-LAST:event_iconMouseClicked
+    }//GEN-LAST:event_pm_pf_iconMouseClicked
 
     private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
 
@@ -776,7 +779,6 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JLabel UnionBank;
     private javax.swing.JButton cancel_payment;
     private javax.swing.JPanel cart_panel;
-    private javax.swing.JLabel icon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -789,6 +791,7 @@ public class Payment_Method extends javax.swing.JFrame {
     private javax.swing.JLabel lp_bg;
     private javax.swing.JPanel main_receipt_panel;
     private javax.swing.JButton pay_cash;
+    private javax.swing.JLabel pm_pf_icon;
     private javax.swing.JPanel receipt_panel;
     private javax.swing.JLabel rp_bg;
     private javax.swing.JLabel staff_name;

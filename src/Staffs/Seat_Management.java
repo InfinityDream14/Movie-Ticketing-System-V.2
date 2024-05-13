@@ -31,9 +31,11 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         initComponents();
         setLocationRelativeTo(null);
         
-        this.setShape(new RoundRectangle2D.Double(0, 0, (850), 
-        (480), 25, 25));
+        this.setShape(new RoundRectangle2D.Double(0, 0, this.getWidth(), 
+        this.getHeight(), 25, 25));
         
+        sm_profile_icon.setIcon(mlst.stf_img_pf);
+        staff_name.setText(mlst.staff_names);
         right_panel_bg(); // putting image background to right panel
         left_panel_bg(); // putting image background to left panel
         get_info_in_database();
@@ -527,7 +529,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     private void initComponents() {
 
         Left_yellow_Panel = new javax.swing.JPanel();
-        profile_icon = new javax.swing.JLabel();
+        sm_profile_icon = new javax.swing.JLabel();
         staff_name = new javax.swing.JLabel();
         cart_panel = new javax.swing.JPanel();
         Cart_label = new javax.swing.JLabel();
@@ -568,13 +570,13 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         Left_yellow_Panel.setBackground(new java.awt.Color(255, 204, 102));
         Left_yellow_Panel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        profile_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
-        profile_icon.addMouseListener(new java.awt.event.MouseAdapter() {
+        sm_profile_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
+        sm_profile_icon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                profile_iconMouseClicked(evt);
+                sm_profile_iconMouseClicked(evt);
             }
         });
-        Left_yellow_Panel.add(profile_icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 15, -1, -1));
+        Left_yellow_Panel.add(sm_profile_icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, -1, 60));
 
         staff_name.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staff_name.setText("STAFF NAME");
@@ -583,7 +585,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                 staff_nameMouseClicked(evt);
             }
         });
-        Left_yellow_Panel.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, -1, 30));
+        Left_yellow_Panel.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 20, -1, 40));
 
         Cart_label.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         Cart_label.setText("CART");
@@ -838,9 +840,9 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         // TODO add your handling code here:
     }//GEN-LAST:event_time_jcbActionPerformed
 
-    private void profile_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profile_iconMouseClicked
+    private void sm_profile_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sm_profile_iconMouseClicked
 
-    }//GEN-LAST:event_profile_iconMouseClicked
+    }//GEN-LAST:event_sm_profile_iconMouseClicked
 
     private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
 
@@ -869,7 +871,6 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     private javax.swing.JPanel main_receipt_panel;
     private javax.swing.JPanel mid_seat_panel;
     private javax.swing.JPanel panel_for_seats;
-    private javax.swing.JLabel profile_icon;
     private javax.swing.JPanel receipt_panel;
     private javax.swing.JPanel right_main_panel;
     private javax.swing.JPanel right_seat_panel;
@@ -879,6 +880,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     private javax.swing.JLabel sm_mgenre;
     private javax.swing.JLabel sm_mprice;
     private javax.swing.JLabel sm_mtitle;
+    private javax.swing.JLabel sm_profile_icon;
     private javax.swing.JLabel staff_name;
     private javax.swing.JComboBox<String> time_jcb;
     // End of variables declaration//GEN-END:variables

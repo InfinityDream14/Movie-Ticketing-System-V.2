@@ -50,17 +50,18 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 
     }
     
-    void move_pf_file() throws FileNotFoundException{
+    void move_pf_file() throws FileNotFoundException, SQLException{
         
         JFileChooser jfc = new JFileChooser();
         jfc.setCurrentDirectory(new File("D:\\Users\\Backup\\Desktop"));
         int response = jfc.showOpenDialog(null);
         String fildest = System.getProperty("user.dir");
-        
+        String newpf = "pf_null.png";
         if(response == JFileChooser.APPROVE_OPTION){
             File file = new File(jfc.getSelectedFile().getAbsolutePath());
             System.out.println(file);
-            
+            newpf = file.toString().substring(file.toString().lastIndexOf("\\")+1);
+            System.out.println(newpf);
             if(file.exists()){
                 File destfile = new File(fildest + File.separator + file.getName());
                 
@@ -84,6 +85,27 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 }
             }
         }
+        Statement stmpf = ms.mc.createStatement();
+        
+        String qry = "select * from staff";
+        
+        ResultSet rs = stmpf.executeQuery(qry);
+        
+        while(rs.next()){
+            Statement stmpf1 = ms.mc.createStatement();
+            
+            if(rs.getString(1).equals(empid)){
+                
+                String pfin = "UPDATE staff set pf_loc = '"+newpf+"' where employeeid = '"+empid+"'";
+                
+                int row = stmpf1.executeUpdate(pfin);
+                
+                if(row>0){
+                    System.out.println("Profile picture changed");
+                }
+            }
+        }
+        
     }
     static String empid = "E5";
     static String fname,lname,phone,email,passw,pf_loc,usern;
@@ -176,6 +198,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         staff_name.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         staff_name.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         staff_name.setText("Staff name");
+        staff_name.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, -1, -1));
 
         jLabel2.setText("Log out");
@@ -420,6 +443,8 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         try {      
             move_pf_file();
         } catch (FileNotFoundException ex) {
+            Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
             Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
         }   
     }//GEN-LAST:event_icon_profMouseClicked
