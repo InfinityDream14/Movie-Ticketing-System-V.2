@@ -382,9 +382,38 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(850, 480));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
+    static String newfname,newlname,newphone,newemail,newusern;
     private void Edit_profActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_profActionPerformed
-       
+        try {
+            Statement stmt = ms.mc.createStatement();
+            String qry = "select * from staff";
+            ResultSet rs = stmt.executeQuery(qry);
+            
+            newfname = fnamejtx.getText();
+            newlname = lnamejtx.getText();
+            newemail = emailjtx.getText();
+            newphone = phonejtx.getText();
+            newusern = usernjtx.getText();
+            staff_name.setText(fnamejtx.getText());
+            
+            while(rs.next()){
+                Statement stmt1 = ms.mc.createStatement();
+                if(rs.getString(1).equals(empid)){
+            String rsin = "UPDATE staff \n" +
+                    "set Fname = '"+newfname+"', Lname = '"+newlname+"', email = '"+newemail+"',"
+                    + " phone = '"+newphone+"', username = '"+newusern+"' where EmployeeID = '"+empid+"'";
+            
+            int up = stmt1.executeUpdate(rsin);
+            if(up>0){
+                System.out.println("Staff details updated");
+                JOptionPane.showMessageDialog(null, "Success");
+            }
+                }
+        }    
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_Edit_profActionPerformed
 
     private void icon_profMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_icon_profMouseClicked
