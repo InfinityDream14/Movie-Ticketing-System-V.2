@@ -393,15 +393,23 @@ public class Movie_List extends javax.swing.JFrame {
     }//GEN-LAST:event_exit_staff
 
     private void prof_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prof_iconMouseClicked
-        Staff_Profile_main spm =new Staff_Profile_main();
-        spm.setVisible(true);
-         this.dispose();
+        try {
+            Staff_Profile_main spm =new Staff_Profile_main();
+            spm.setVisible(true);
+            this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_prof_iconMouseClicked
 
     private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
-        Staff_Profile_main spm =new Staff_Profile_main();
-        spm.setVisible(true);
-         this.dispose();
+        try {
+            Staff_Profile_main spm =new Staff_Profile_main();
+            spm.setVisible(true);
+            this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_staff_nameMouseClicked
 
     private void p_to_paymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_p_to_paymentActionPerformed

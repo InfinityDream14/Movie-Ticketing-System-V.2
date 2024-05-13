@@ -839,15 +839,11 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     }//GEN-LAST:event_time_jcbActionPerformed
 
     private void profile_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_profile_iconMouseClicked
-        Staff_Profile_main spm =new Staff_Profile_main();
-        spm.setVisible(true);
-         this.dispose();
+
     }//GEN-LAST:event_profile_iconMouseClicked
 
     private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
-        Staff_Profile_main spm =new Staff_Profile_main();
-        spm.setVisible(true);
-         this.dispose();
+
     }//GEN-LAST:event_staff_nameMouseClicked
 
 
