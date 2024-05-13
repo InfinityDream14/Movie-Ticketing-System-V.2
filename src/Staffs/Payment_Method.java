@@ -40,8 +40,8 @@ public class Payment_Method extends javax.swing.JFrame {
         this.setShape(new RoundRectangle2D.Double(0, 0, (850), 
         (480), 25, 25));
         
-        pm_pf_icon.setIcon(new Movie_List().stf_img_pf);
-        staff_name.setText(new Movie_List().staff_names);
+        pm_pf_icon.setIcon(td.tdstf_img_pf);
+        staff_name.setText(td.tdstaff_name);
         
         left_panel_bg();
         right_panel_bg();

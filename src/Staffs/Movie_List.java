@@ -35,6 +35,8 @@ public class Movie_List extends javax.swing.JFrame {
         get_staff_profile();
         
         mlist_prof_icon.setIcon(stf_img_pf);
+        tempd.tdstf_img_pf = stf_img_pf;
+        tempd.tdstaff_name = staff_names;
         
         components = tempd.jp_mlist.getComponents();
         try{

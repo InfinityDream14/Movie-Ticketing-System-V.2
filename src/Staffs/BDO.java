@@ -167,9 +167,11 @@ public class BDO extends javax.swing.JFrame {
                 td.jp_rlist.removeAll();
                 td.jp_rlist.revalidate();
                 td.stopper =0;
+                td.total_amount =0;
                 //Payment_Method pm = new Payment_Method();
                 pm.update_seat_list();
                 pm.insert_whole_payment(payment_m);
+                pm.totalp=0;
                 new Movie_List().setVisible(true);
                 pm.dispose();
                 this.dispose();
