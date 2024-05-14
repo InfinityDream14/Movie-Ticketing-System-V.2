@@ -19,7 +19,7 @@ public class Movie_List extends javax.swing.JFrame {
     //Seat_Management sm = new Seat_Management();
     //Payment_Method pm= new Payment_Method();
     static Temp_Data tempd = new Temp_Data();
-    
+    Main_Staff ms = new Main_Staff();
     public Movie_List() throws SQLException{
         initComponents();
         setLocationRelativeTo(null);
@@ -226,6 +226,37 @@ public class Movie_List extends javax.swing.JFrame {
         stf_img_pf = new ImageIcon(newimg); 
         
     }
+    void update_seat_list_to_unselected() throws SQLException{
+        
+        Statement stmt = ms.mc.createStatement();
+        
+        String qry = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
+                "from showtime st inner join seat_list sl\n" +
+                "	on st.showtimeid = sl.showtimeid";
+        
+        ResultSet rs  = stmt.executeQuery(qry);
+        while(rs.next()){
+            
+            Statement stm = ms.mc.createStatement();
+            
+                
+                    
+                String rsin = "UPDATE seat_list\n" +
+                            "set seat_status = 'A'\n" +
+                            "Where seat_status = 'S'";
+
+                int ups = stm.executeUpdate(rsin);
+                if(ups>0){
+                    System.out.println("seat Updated on database");
+                }
+
+
+            }
+        
+        receipt_panel.removeAll();
+        receipt_panel.revalidate();
+        receipt_panel.repaint();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -349,7 +380,7 @@ public class Movie_List extends javax.swing.JFrame {
                 p_to_paymentActionPerformed(evt);
             }
         });
-        jPanel2.add(p_to_payment, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 440, -1, -1));
+        jPanel2.add(p_to_payment, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 440, 160, -1));
 
         jButton1.setBackground(new java.awt.Color(204, 204, 204));
         jButton1.setText("Reset");
@@ -370,8 +401,13 @@ public class Movie_List extends javax.swing.JFrame {
 
     private void reset_selected(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_selected
         if(receipt_panel.getComponents().length !=0){
-            JOptionPane.showMessageDialog(null,
-                    "The cart will cleared", "System Notice", JOptionPane.INFORMATION_MESSAGE);
+            try {
+                JOptionPane.showMessageDialog(null,
+                        "The cart will cleared", "System Notice", JOptionPane.INFORMATION_MESSAGE);
+                update_seat_list_to_unselected();
+            } catch (SQLException ex) {
+                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         else{
             JOptionPane.showMessageDialog(null,

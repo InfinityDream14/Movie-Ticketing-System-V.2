@@ -137,7 +137,10 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         passwordpf.setText(passw);
         
         ImageIcon im = new ImageIcon(pf_loc);
-        icon_prof.setIcon(im);
+        Image image = im.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(90, 90,  java.awt.Image.SCALE_SMOOTH);
+        ImageIcon nim =new ImageIcon(newimg);
+        icon_prof.setIcon(nim);
            
     }
     

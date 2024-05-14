@@ -295,6 +295,7 @@ public class Payment_Method extends javax.swing.JFrame {
         return real_time;
     }
     //this method get the info in the receipt and change the seat_status in database
+    static String stime,stitle,st1;
     public  void update_seat_list() throws ParseException, SQLException{
         Component[] c = receipt_panel.getComponents();
         
@@ -304,12 +305,12 @@ public class Payment_Method extends javax.swing.JFrame {
             
             JPanel jpu = (JPanel) cp;
             JLabel title = (JLabel) jpu.getComponent(3);
-            String stitle = title.getText();
+            stitle = title.getText();
             stitle = stitle.substring(7);
             System.out.println("The Title: " + stitle);
 
             JLabel time = (JLabel) jpu.getComponent(4);
-            String stime = time.getText();
+            stime = time.getText();
             System.out.println(stime);
             stime = stime.substring(11);
             stime = convert_12hr_to_24hr(stime);
@@ -329,9 +330,9 @@ public class Payment_Method extends javax.swing.JFrame {
                     "     on c.CinemaID = st.ShowtimeCinemaID";
             
             ResultSet rs2 = stmt.executeQuery(qry);
-            String st1="S1";
+            //st1="S1";
             while(rs2.next()){
-                if(rs2.getString(4).equals(stime) ){
+                if(rs2.getString(4).equals(stime)&& rs2.getString(1).equalsIgnoreCase(stitle) ){
                     System.out.println("Nakuhang time: " + stime);
                     System.out.println("nakuhang showtimeid: " + rs2.getString(9));
                     st1 = rs2.getString(9);

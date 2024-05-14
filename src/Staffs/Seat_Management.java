@@ -36,6 +36,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         
         sm_profile_icon.setIcon(mlst.stf_img_pf);
         staff_name.setText(mlst.staff_names);
+        //stopct=0;
         right_panel_bg(); // putting image background to right panel
         left_panel_bg(); // putting image background to left panel
         get_info_in_database();
@@ -151,6 +152,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     }
     
     ArrayList<String> seat_choices = new ArrayList();
+    //static String ctime;
     void change_seat_list(String rt) throws SQLException, ParseException{
         left_seat_panel.removeAll();
         mid_seat_panel.removeAll();
@@ -171,6 +173,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                 mprc = rs2.getString(8);
                 mimgloc = rs2.getString(10);
                 ticket_time = convert_24hr_to_12hr(rs2.getString(4));
+                
             }
         }
         
@@ -706,6 +709,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         jLabel5.setText("SEATS");
         right_main_panel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 10, -1, -1));
 
+        confirm_seat_choice_button.setBackground(new java.awt.Color(255, 255, 204));
         confirm_seat_choice_button.setText("Confirm");
         confirm_seat_choice_button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -714,6 +718,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         });
         right_main_panel.add(confirm_seat_choice_button, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 440, -1, -1));
 
+        cancel_seat_choices.setBackground(new java.awt.Color(204, 204, 204));
         cancel_seat_choices.setText("Cancel");
         cancel_seat_choices.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -823,21 +828,28 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
 
     }//GEN-LAST:event_jRadioButton2ActionPerformed
-
+   
     private void change_time(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_change_time
-        String ntime = evt.getItem().toString();
-        try {
-            ntime = convert_12hr_to_24hr(ntime);
-            change_seat_list(ntime);
-        } catch (ParseException ex) {
-            java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+        if(seat_choices.isEmpty()){
+            String ntime = evt.getItem().toString();
+            try {
+                ntime = convert_12hr_to_24hr(ntime);
+                change_seat_list(ntime);
+            } catch (ParseException ex) {
+                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                java.util.logging.Logger.getLogger(Seat_Management.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        else {
+            JOptionPane.showMessageDialog(null,"Please confirm first before changing time",
+                    "System Notice", JOptionPane.INFORMATION_MESSAGE);
+           // stopct++;
         }
     }//GEN-LAST:event_change_time
 
     private void time_jcbActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_time_jcbActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_time_jcbActionPerformed
 
     private void sm_profile_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sm_profile_iconMouseClicked

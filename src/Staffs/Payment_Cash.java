@@ -38,7 +38,7 @@ public class Payment_Cash extends javax.swing.JFrame {
         this.setShape(new RoundRectangle2D.Double(0, 0, (300), 
         (200), 25, 25));
         
-        right_panel_bg();
+        //right_panel_bg();
         pay_cash();
     }
 
@@ -82,20 +82,12 @@ public class Payment_Cash extends javax.swing.JFrame {
                     setVisible(false);
                     if (!cash_amount.getText().equals("") && price <= money) {
                         try {
-                            Payment_Method pm = new Payment_Method();
-                            pm.update_seat_list();
-                            pm.insert_whole_payment(payment_m);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Payment_Cash.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ParseException ex) {
-                            Logger.getLogger(Payment_Cash.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        try {
                             Temp_Data td = new Temp_Data();
                             td.jp_mlist.removeAll();
                             td.jp_mlist.revalidate();
                             td.jp_mlist.repaint();
                             td.stopper =0;
+                            td.total_amount =0;
                             //Payment_Method pm = new Payment_Method();
                             pm.update_seat_list();
                             pm.insert_whole_payment(payment_m);
