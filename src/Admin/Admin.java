@@ -5,11 +5,16 @@
 package Admin;
 
 import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -49,10 +54,12 @@ public final class Admin extends javax.swing.JFrame {
 
     Statement stmt;
     Connection conn;
-    
+
     DefaultTableModel tmodel = new DefaultTableModel();
     DefaultTableModel tmodel1 = new DefaultTableModel();
-    
+
+    File file = null;
+
     public Admin() throws SQLException, ClassNotFoundException {
         connectToDatabase();
         initComponents();
@@ -62,10 +69,13 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
-                
+        setTitle("Admin");
+
         createTableSales();
         getIDs();
         createTableMovies();
+        
+        
     }
 
     public void connectToDatabase() throws ClassNotFoundException {
@@ -91,13 +101,6 @@ public final class Admin extends javax.swing.JFrame {
         }
     }
 
-    // for creating and reseting sales table
-    
-
-    // for getting the sales datas from database to the jtable
-    
-
-    // for creating and reseting employee table
     public void createTableEmployee() {
         tmodel = new DefaultTableModel();
 
@@ -146,16 +149,14 @@ public final class Admin extends javax.swing.JFrame {
         } catch (Exception e) {
             System.out.println(e);
         }
-    }  // ikaw nalang bahala par ds, di ko alam mga nabaho m //sige sige pre oks na to? ito na yung updated? ou, pero yung mga nabago mo after nung huli mong successfull merge or push is ito yun.
-    // So ito yung mga nagawa mo localy, wala pa dito, pano gagawin ko dito. lalagay ko lang yung code na nagawa ko? ou, yung kinopya mo 
-    // g pre, tas pano gagawin ko after na kopyahin yung codes? commit then push, ggg thank you pre
-    // next time siguro wag mo na kopyahin lahat, ikaw din mahihirapan, ggg pards salamat ulit
+    }
+    // Commit and Push
 
     @Override
     public int getX() {
         return super.getX(); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/OverriddenMethodBody
     }
-   //G, kapag ayaw padin, chat mo l;ang ako, sige sige
+    //G, kapag ayaw padin, chat mo l;ang ako, sige sige
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -203,6 +204,7 @@ public final class Admin extends javax.swing.JFrame {
         AddStaff_PhoneNumber_TextField1 = new javax.swing.JTextField();
         Add_Staff = new javax.swing.JButton();
         Back = new javax.swing.JButton();
+        jLabel12 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         addMovies = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -224,6 +226,8 @@ public final class Admin extends javax.swing.JFrame {
         AddMovie_Back_Button = new javax.swing.JButton();
         MoviePoster = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
+        PosterName = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -459,6 +463,7 @@ public final class Admin extends javax.swing.JFrame {
         employee.setBounds(162, 0, 939, 652);
 
         addEmplyee.setBackground(new java.awt.Color(255, 255, 255));
+        addEmplyee.setLayout(null);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), new java.awt.Color(0, 0, 0)));
@@ -548,101 +553,88 @@ public final class Admin extends javax.swing.JFrame {
             }
         });
 
+        jLabel12.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/bg_addmovie.png"))); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(AddStaff_StaffDetailsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(AddStaff_EmployeeIDLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(94, 94, 94)
+                .addComponent(AddStaff_EmployeeID_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(AddStaff_FirstNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(111, 111, 111)
+                .addComponent(AddStaff_FirstName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(AddStaff_LastNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(108, 108, 108)
+                .addComponent(AddStaff_LastName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(AddStaff_EmailLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(149, 149, 149)
+                .addComponent(AddStaff_Email_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addComponent(AddStaff_PhoneNumberLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(70, 70, 70)
+                .addComponent(AddStaff_PhoneNumber_TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(359, 359, 359)
                 .addComponent(Back, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(Add_Staff, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(AddStaff_EmployeeIDLabel)
-                            .addComponent(AddStaff_EmailLabel)
-                            .addComponent(AddStaff_LastNameLabel)
-                            .addComponent(AddStaff_PhoneNumberLabel)
-                            .addComponent(AddStaff_FirstNameLabel))
-                        .addGap(86, 86, 86)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(AddStaff_LastName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddStaff_FirstName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddStaff_EmployeeID_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddStaff_Email_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddStaff_PhoneNumber_TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(AddStaff_StaffDetailsLabel)))
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addComponent(Add_Staff, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 670, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(24, 24, 24)
                 .addComponent(AddStaff_StaffDetailsLabel)
-                .addGap(52, 52, 52)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(AddStaff_EmployeeIDLabel)
-                    .addComponent(AddStaff_EmployeeID_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(56, 56, 56)
+                .addComponent(AddStaff_EmployeeID_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(AddStaff_FirstName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddStaff_FirstNameLabel))
+                    .addComponent(AddStaff_FirstNameLabel)
+                    .addComponent(AddStaff_FirstName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(7, 7, 7)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(AddStaff_LastName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AddStaff_Email_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AddStaff_PhoneNumber_TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(AddStaff_LastNameLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AddStaff_EmailLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(AddStaff_PhoneNumberLabel)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Add_Staff)
-                    .addComponent(Back))
-                .addGap(48, 48, 48))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(AddStaff_LastNameLabel)
+                    .addComponent(AddStaff_LastName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(AddStaff_EmailLabel)
+                    .addComponent(AddStaff_Email_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(AddStaff_PhoneNumberLabel)
+                    .addComponent(AddStaff_PhoneNumber_TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(71, 71, 71)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(Back)
+                    .addComponent(Add_Staff)))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(107, 107, 107)
+                .addComponent(AddStaff_EmployeeIDLabel))
+            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
+
+        addEmplyee.add(jPanel2);
+        jPanel2.setBounds(140, 120, 674, 424);
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
         jLabel6.setText("Add Staffs");
-
-        javax.swing.GroupLayout addEmplyeeLayout = new javax.swing.GroupLayout(addEmplyee);
-        addEmplyee.setLayout(addEmplyeeLayout);
-        addEmplyeeLayout.setHorizontalGroup(
-            addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 939, Short.MAX_VALUE)
-            .addGroup(addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(addEmplyeeLayout.createSequentialGroup()
-                    .addGap(0, 79, Short.MAX_VALUE)
-                    .addGroup(addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(addEmplyeeLayout.createSequentialGroup()
-                            .addGap(100, 100, 100)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGap(0, 80, Short.MAX_VALUE)))
-        );
-        addEmplyeeLayout.setVerticalGroup(
-            addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 652, Short.MAX_VALUE)
-            .addGroup(addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(addEmplyeeLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel6)
-                    .addGap(42, 42, 42)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+        addEmplyee.add(jLabel6);
+        jLabel6.setBounds(50, 30, 190, 48);
 
         jPanel3.add(addEmplyee);
         addEmplyee.setBounds(162, 0, 939, 652);
@@ -783,28 +775,39 @@ public final class Admin extends javax.swing.JFrame {
         jPanel4.add(jButton5);
         jButton5.setBounds(50, 290, 100, 30);
 
+        PosterName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PosterNameActionPerformed(evt);
+            }
+        });
+        jPanel4.add(PosterName);
+        PosterName.setBounds(20, 340, 200, 30);
+
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/bg_addmovie.png"))); // NOI18N
+        jPanel4.add(jLabel11);
+        jLabel11.setBounds(0, 0, 670, 420);
+
         javax.swing.GroupLayout addMoviesLayout = new javax.swing.GroupLayout(addMovies);
         addMovies.setLayout(addMoviesLayout);
         addMoviesLayout.setHorizontalGroup(
             addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addMoviesLayout.createSequentialGroup()
-                .addGroup(addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(addMoviesLayout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(addMoviesLayout.createSequentialGroup()
-                        .addGap(178, 178, 178)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(103, Short.MAX_VALUE))
+                .addGap(27, 27, 27)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addMoviesLayout.createSequentialGroup()
+                .addContainerGap(144, Short.MAX_VALUE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(137, 137, 137))
         );
         addMoviesLayout.setVerticalGroup(
             addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addMoviesLayout.createSequentialGroup()
-                .addGap(78, 78, 78)
+                .addGap(44, 44, 44)
                 .addComponent(jLabel8)
-                .addGap(34, 34, 34)
+                .addGap(53, 53, 53)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap(83, Short.MAX_VALUE))
         );
 
         jPanel3.add(addMovies);
@@ -1033,15 +1036,13 @@ public final class Admin extends javax.swing.JFrame {
     private void Add_StaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Add_StaffMouseClicked
 
         //String EmpId, FName, LName, Email ,PNum;
-       
 
     }//GEN-LAST:event_Add_StaffMouseClicked
 
     private void Add_StaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_StaffActionPerformed
-        
-        
+
         pass = "E00" + lnum;
-        
+
         for (int i = 0; i < 3; i++) {
             EmpId = AddStaff_EmployeeID_TextField.getText();
             FName = AddStaff_FirstName_TextField.getText();
@@ -1049,7 +1050,7 @@ public final class Admin extends javax.swing.JFrame {
             PNum = AddStaff_PhoneNumber_TextField1.getText();
             Email = AddStaff_Email_TextField.getText();
             Mpass = "Admin";
-            
+
             if (AddStaff_EmployeeID_TextField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please Fill In Data");
                 i--;
@@ -1068,39 +1069,39 @@ public final class Admin extends javax.swing.JFrame {
                 i--;
                 break;
             } else {
-        UserPass = JOptionPane.showInputDialog("Enter Admin Password: ");
-        if (UserPass != null && UserPass.matches(Mpass)) {
-            System.out.println("Data Added: ");
-            System.out.println(EmpId);
-            System.out.println(FName);
-            System.out.println(LName);
-            System.out.println(AddStaff_Email_TextField.getText());
-            System.out.println(PNum);
-            System.out.println(UserPass = pass);
-            System.out.println(lnum);
+                UserPass = JOptionPane.showInputDialog("Enter Admin Password: ");
+                if (UserPass != null && UserPass.matches(Mpass)) {
+                    System.out.println("Data Added: ");
+                    System.out.println(EmpId);
+                    System.out.println(FName);
+                    System.out.println(LName);
+                    System.out.println(AddStaff_Email_TextField.getText());
+                    System.out.println(PNum);
+                    System.out.println(UserPass = pass);
+                    System.out.println(lnum);
 
-            try {  // INSERTING VALUES FOR ADDSTAFF
-                Statement stmt1 = conn.createStatement();
-                stmt1 = conn.createStatement();
-                String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
-                        + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
-                        + EmpId + "','" + UserPass + "')";
-                int rows = stmt.executeUpdate(qry);
-                if (rows > 0) {
-                    System.out.println("Insert Successful");
+                    try {  // INSERTING VALUES FOR ADDSTAFF
+                        Statement stmt1 = conn.createStatement();
+                        stmt1 = conn.createStatement();
+                        String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
+                                + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
+                                + EmpId + "','" + UserPass + "')";
+                        int rows = stmt.executeUpdate(qry);
+                        if (rows > 0) {
+                            System.out.println("Insert Successful");
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Wrong Input");
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Wrong Input");
-        }
-           ClearFieldStaff();
-           break;
+                ClearFieldStaff();
+                break;
             }
 
-        }   
-       
+        }
+
     }//GEN-LAST:event_Add_StaffActionPerformed
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
@@ -1119,16 +1120,16 @@ public final class Admin extends javax.swing.JFrame {
         // Ang kulang nalang dito is yung pic_poster_location
         // Tapos may error na lumalabas kapag mali yung input sa price (Ex kapag string yung nailagay mag eerror)
 
-         for (int i = 0; i < 4; i++) {
-             MovieID = AddMovie_MovieID_TextField.getText();
-             Title = AddMovie_Title_TextField1.getText();
-             Genre = AddMovie_Genre_TextField.getText();
-             Director = AddMovie_Director_TextField.getText();
-             Duration = AddMovie_Duration_TextField.getText();
-             price = Integer.parseInt(AddMovie_Price_TextField.getText());
-             Movie_Pic_Location = "null";
-             Mpass = "Admin";
-             
+        for (int i = 0; i < 4; i++) {
+            MovieID = AddMovie_MovieID_TextField.getText();
+            Title = AddMovie_Title_TextField1.getText();
+            Genre = AddMovie_Genre_TextField.getText();
+            Director = AddMovie_Director_TextField.getText();
+            Duration = AddMovie_Duration_TextField.getText();
+            price = Integer.parseInt(AddMovie_Price_TextField.getText());
+            Movie_Pic_Location = file.toString().substring(file.toString().lastIndexOf("\\") + 1);
+            Mpass = "Admin";
+
             if (AddMovie_MovieID_TextField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please Fill In Data");
                 i--;
@@ -1151,38 +1152,38 @@ public final class Admin extends javax.swing.JFrame {
                 break;
             } else {
                 adminpass = JOptionPane.showInputDialog("Enter Admin PassWord: ");
-        if (adminpass != null && adminpass.matches(Mpass)) {
-            System.out.println("Data Added: ");
-            System.out.println(MovieID);
-            System.out.println(Title);
-            System.out.println(Genre);
-            System.out.println(Director);
-            System.out.println(AddMovie_Duration_TextField.getText());
-            System.out.println(price);
-            System.out.println(Movie_Pic_Location);
-            System.out.println(PNum);
+                if (adminpass != null && adminpass.matches(Mpass)) {
+                    System.out.println("Data Added: ");
+                    System.out.println(MovieID);
+                    System.out.println(Title);
+                    System.out.println(Genre);
+                    System.out.println(Director);
+                    System.out.println(AddMovie_Duration_TextField.getText());
+                    System.out.println(price);
+                    System.out.println(Movie_Pic_Location);
+                    System.out.println(PNum);
 
-            try {  // INSERTING VALUES FOR ADDMOVIE
-                Statement stmt2 = conn.createStatement();
-                stmt2 = conn.createStatement();
-                String qry = "insert into Movie (MovieID, Title, Genre, Director, Duration, Price, Movie_pic_loc)"
-                        + "values('" + MovieID + "','" + Title + "','" + Genre + "','" + Director + "','" + Duration + "','"
-                        + price + "','" + Movie_Pic_Location + "')";
-                int rows = stmt.executeUpdate(qry);
-                if (rows > 0) {
-                    DefaultTableModel model = (DefaultTableModel) MovieTable.getModel();
-                    model.setRowCount(0);
-                    getMovieData();
-                    System.out.println("Insert Successful");
+                    try {  // INSERTING VALUES FOR ADDMOVIE
+                        Statement stmt2 = conn.createStatement();
+                        stmt2 = conn.createStatement();
+                        String qry = "insert into Movie (MovieID, Title, Genre, Director, Duration, Price, Movie_pic_loc)"
+                                + "values('" + MovieID + "','" + Title + "','" + Genre + "','" + Director + "','" + Duration + "','"
+                                + price + "','" + Movie_Pic_Location + "')";
+                        int rows = stmt.executeUpdate(qry);
+                        if (rows > 0) {
+                            DefaultTableModel model = (DefaultTableModel) MovieTable.getModel();
+                            model.setRowCount(0);
+                            getMovieData();
+                            System.out.println("Insert Successful");
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Confirmation Cancelled");
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Confirmation Cancelled");
-        }
-               ClearFieldMovies();
-               break;
+                ClearFieldMovies();
+                break;
             }
         }
     }//GEN-LAST:event_AddMovie_AddMovie_ButtonActionPerformed
@@ -1216,8 +1217,8 @@ public final class Admin extends javax.swing.JFrame {
         // TODO add your handling code here:
         // for number input only in phonenumber textfield
         char c = evt.getKeyChar();
-        if(!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)){
-          evt.consume();
+        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)) {
+            evt.consume();
         }
     }//GEN-LAST:event_AddStaff_PhoneNumber_TextField1KeyTyped
 
@@ -1225,8 +1226,8 @@ public final class Admin extends javax.swing.JFrame {
         // TODO add your handling code here:
         // for number input only in price textfield
         char c = evt.getKeyChar();
-        if(!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)){
-          evt.consume();
+        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)) {
+            evt.consume();
         }
     }//GEN-LAST:event_AddMovie_Price_TextFieldKeyTyped
 
@@ -1239,24 +1240,53 @@ public final class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_MovieSearchFieldKeyReleased
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-        JFileChooser JFC = new JFileChooser();
-        JFC.showOpenDialog(null);
-        File fl = JFC.getSelectedFile();
-        String path = fl.getAbsolutePath();
-        
-        try {
-            BufferedImage buffI = ImageIO.read(new File(path));
-            Image image = buffI.getScaledInstance(MoviePoster.getWidth(),MoviePoster.getHeight(), Image.SCALE_SMOOTH);
-            ImageIcon icon = new ImageIcon(image);
-            MoviePoster.setIcon(icon);
-        } catch (IOException ex) {
-            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        String fildest = System.getProperty("user.dir");
+
+        int res = chooser.showOpenDialog(Admin.this);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            file = chooser.getSelectedFile();
+            String path = file.getAbsolutePath();
+            ImageIcon imgIcon = new ImageIcon(file.getAbsolutePath());
+            Rectangle rec = MoviePoster.getBounds();
+            Image scaledimg = imgIcon.getImage().getScaledInstance(rec.width, rec.height, Image.SCALE_SMOOTH);
+            imgIcon = new ImageIcon(scaledimg);
+            MoviePoster.setIcon(imgIcon);
+            PosterName.setText(file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf("\\") + 1));
+             
+            if(file.exists()){
+                File destfile = new File(fildest + File.separator + file.getName());
+
+                try(InputStream is = new FileInputStream(file);
+                        OutputStream os = new FileOutputStream(destfile)){
+
+                    int len;
+                    float srcfsize = is.available() / 1000.0f;
+                    float totalcopied = 0.0f;
+                    byte[] byt = new byte[1024];
+                    while( (len = is.read(byt)) > 0){
+                        os.write(byt, 0, len);
+                        totalcopied += len;
+                        System.out.println("\rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
+                        Thread.sleep(5);
+                    }
+
+
+                }catch(IOException | InterruptedException e){
+                    e.printStackTrace();
+                }
+            }
+            
+        } else {
+            JOptionPane.showMessageDialog(null, "No Image has been Selected");
         }
-        
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    
+    private void PosterNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PosterNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PosterNameActionPerformed
+
     /**
      * @param args
      * @throws ClassNotFoundException
@@ -1323,7 +1353,7 @@ public final class Admin extends javax.swing.JFrame {
         newmovieid = "M" + String.valueOf(lmovidnum);
         System.out.println(newmovieid);
     }
-    
+
     //For Creating Table Sales
     public void createTableSales() {
         tmodel = new DefaultTableModel();
@@ -1351,7 +1381,7 @@ public final class Admin extends javax.swing.JFrame {
         });
         getSalesData();
     }
-    
+
     //For Getting data for table
     public void getSalesData() {
         String sql = """
@@ -1373,26 +1403,26 @@ public final class Admin extends javax.swing.JFrame {
             System.out.println(e);
         }
     }
-    
-    public void getMovieData(){
-     String sql1 = """
+
+    public void getMovieData() {
+        String sql1 = """
                    select MovieID, Title
                    from movie 
                    order by len (MovieID), MovieID""";
-    try{
-      stmt = conn.createStatement();
-      ResultSet rs = stmt.executeQuery(sql1);
-      while(rs != null && rs.next()){
-       Vector vec = new Vector();
-       vec.add(rs.getString("MovieID"));
-       vec.add(rs.getString("Title"));
-       tmodel1.addRow(vec);
-      }
-       }catch(Exception e){
-           System.out.println(e);
-       }
+        try {
+            stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(sql1);
+            while (rs != null && rs.next()) {
+                Vector vec = new Vector();
+                vec.add(rs.getString("MovieID"));
+                vec.add(rs.getString("Title"));
+                tmodel1.addRow(vec);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
-    
+
     public void createTableMovies() {
         MovieTable.setModel(tmodel1);
         tmodel1.addColumn("Movie ID");
@@ -1417,27 +1447,29 @@ public final class Admin extends javax.swing.JFrame {
         });
         getMovieData();
     }
-    
-    public void ClearFieldStaff(){ // for clearing fields sa staff
-     AddStaff_EmployeeID_TextField.setText(newempid = "E" + (lnum + 1));
-     AddStaff_FirstName_TextField.setText(null);
-     AddStaff_LastName_TextField.setText(null);
-     AddStaff_Email_TextField.setText(null);
-     AddStaff_PhoneNumber_TextField1.setText(null);
-     lnum += 1;
+
+    public void ClearFieldStaff() { // for clearing fields sa staff
+        AddStaff_EmployeeID_TextField.setText(newempid = "E" + (lnum + 1));
+        AddStaff_FirstName_TextField.setText(null);
+        AddStaff_LastName_TextField.setText(null);
+        AddStaff_Email_TextField.setText(null);
+        AddStaff_PhoneNumber_TextField1.setText(null);
+        lnum += 1;
+    }
+
+    public void ClearFieldMovies() {
+        AddMovie_MovieID_TextField.setText(newmovieid = "M" + (lmovidnum + 1));
+        AddMovie_Title_TextField1.setText(null);
+        AddMovie_Genre_TextField.setText(null);
+        AddMovie_Director_TextField.setText(null);
+        AddMovie_Duration_TextField.setText(null);
+        AddMovie_Price_TextField.setText(null);
+        MoviePoster.setIcon(null);
+        PosterName.setText(null);        
+        lmovidnum += 1;
     }
     
-    public void ClearFieldMovies(){
-     AddMovie_MovieID_TextField.setText(newmovieid = "M" + (lmovidnum + 1));
-     AddMovie_Title_TextField1.setText(null);
-     AddMovie_Genre_TextField.setText(null);
-     AddMovie_Director_TextField.setText(null);
-     AddMovie_Duration_TextField.setText(null);
-     AddMovie_Price_TextField.setText(null);
-     lmovidnum += 1;
-    }
-    
-    
+   
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1472,6 +1504,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel MoviePoster;
     private javax.swing.JTextField MovieSearchField;
     private javax.swing.JTable MovieTable;
+    private javax.swing.JTextField PosterName;
     private javax.swing.JPanel addEmplyee;
     private javax.swing.JPanel addMovies;
     private javax.swing.JButton addMoviesB;
@@ -1485,6 +1518,8 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
