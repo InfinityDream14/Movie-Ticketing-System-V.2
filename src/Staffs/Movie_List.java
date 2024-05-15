@@ -1,3 +1,4 @@
+
 package Staffs;
 
 import java.awt.*;
@@ -9,34 +10,33 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import java.sql.*;
 import java.text.ParseException;
-import java.time.LocalTime;
-import main.Main;
-
 /**
  *
  * @author Administrator
  */
-public final class Movie_List extends javax.swing.JFrame {
+public class Movie_List extends javax.swing.JFrame {
 
     //Seat_Management sm = new Seat_Management();
     //Payment_Method pm= new Payment_Method();
-
     static Temp_Data tempd = new Temp_Data();
-    
+    Main_Staff ms = new Main_Staff();
     public Movie_List() throws SQLException{
-
         initComponents();
         setLocationRelativeTo(null);
-
-        this.setShape(new RoundRectangle2D.Double(0, 0, (850),
-                (480), 25, 25));
-
+        
+        this.setShape(new RoundRectangle2D.Double(0, 0, (850), 
+        (480), 25, 25));
+        
         left_panel_bg();
         right_panel_bg();
-
         create_movie_list_panel();
         //create_ticket_list();
         ticklist_scrollpane();
+        get_staff_profile();
+        
+        mlist_prof_icon.setIcon(stf_img_pf);
+        tempd.tdstf_img_pf = stf_img_pf;
+        tempd.tdstaff_name = staff_names;
         
         components = tempd.jp_mlist.getComponents();
         try{
@@ -52,11 +52,13 @@ public final class Movie_List extends javax.swing.JFrame {
             e.getStackTrace();
         }
     }
-    static String title_to_sm;
+    static String title_to_sm,staff_pf,staff_names;
     static String genre_to_sm;
     static Component[] components = {};
     String st1, cid, mprc, mimgloc;
     String tixid = "T1";
+    static String empid = tempd.empid;
+    public static ImageIcon stf_img_pf;
     
     String ticket_title = "The Avengers";
     public void create_movie_list_panel() throws SQLException {
@@ -103,8 +105,6 @@ public final class Movie_List extends javax.swing.JFrame {
                         } catch (SQLException ex) {
                             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    } catch (SQLException | ClassNotFoundException ex) {
-                        Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
             }
@@ -136,19 +136,18 @@ public final class Movie_List extends javax.swing.JFrame {
     void left_panel_bg(){
         ImageIcon rpbg = new ImageIcon("lpbg.png");
         Image image = rpbg.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(570, 480, java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        Image newimg = image.getScaledInstance(570, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
         rpbg = new ImageIcon(newimg);
         lp_bg.setIcon(rpbg);
     }
-
-    void right_panel_bg() {
+    void right_panel_bg(){
 
         ImageIcon rpbg = new ImageIcon("rpbg.png");
         Image image = rpbg.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(570, 480, java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        Image newimg = image.getScaledInstance(570, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
         rpbg = new ImageIcon(newimg);
         rp_bg.setIcon(rpbg);
-
+                
     }
     
     public void ticklist_scrollpane() {
@@ -203,7 +202,61 @@ public final class Movie_List extends javax.swing.JFrame {
         receipt_panel.revalidate();
         receipt_panel.repaint();
     }
+    
+    void get_staff_profile() throws SQLException{
+        Main_Staff ms = new Main_Staff();
+        Statement stmt1 = ms.mc.createStatement();
+        
+        String qry = "select * from staff";
+        
+        ResultSet rs = stmt1.executeQuery(qry);
+        
+        while(rs.next()){
+            
+            if(rs.getString(1).equals(empid)){
+                staff_pf =rs.getString(8);
+                staff_name.setText(rs.getString(2));
+                staff_names = staff_name.getText();
+            }
+        }
+        
+        ImageIcon mi = new ImageIcon(staff_pf);
+        Image image = mi.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(57, 57,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+        stf_img_pf = new ImageIcon(newimg); 
+        
+    }
+    void update_seat_list_to_unselected() throws SQLException{
+        
+        Statement stmt = ms.mc.createStatement();
+        
+        String qry = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
+                "from showtime st inner join seat_list sl\n" +
+                "	on st.showtimeid = sl.showtimeid";
+        
+        ResultSet rs  = stmt.executeQuery(qry);
+        while(rs.next()){
+            
+            Statement stm = ms.mc.createStatement();
+            
+                
+                    
+                String rsin = "UPDATE seat_list\n" +
+                            "set seat_status = 'A'\n" +
+                            "Where seat_status = 'S'";
 
+                int ups = stm.executeUpdate(rsin);
+                if(ups>0){
+                    System.out.println("seat Updated on database");
+                }
+
+
+            }
+        
+        receipt_panel.removeAll();
+        receipt_panel.revalidate();
+        receipt_panel.repaint();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -214,7 +267,7 @@ public final class Movie_List extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        prof_icon = new javax.swing.JLabel();
+        mlist_prof_icon = new javax.swing.JLabel();
         staff_name = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         cart_panel = new javax.swing.JPanel();
@@ -227,6 +280,8 @@ public final class Movie_List extends javax.swing.JFrame {
         movie_panel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         p_to_payment = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        Close1 = new javax.swing.JLabel();
         rp_bg = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -242,13 +297,13 @@ public final class Movie_List extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 204, 102));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        prof_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
-        prof_icon.addMouseListener(new java.awt.event.MouseAdapter() {
+        mlist_prof_icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/profile icon.png"))); // NOI18N
+        mlist_prof_icon.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                prof_iconMouseClicked(evt);
+                mlist_prof_iconMouseClicked(evt);
             }
         });
-        jPanel1.add(prof_icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(73, 15, -1, -1));
+        jPanel1.add(mlist_prof_icon, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, -1, -1));
 
         staff_name.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staff_name.setText("STAFF NAME");
@@ -257,7 +312,7 @@ public final class Movie_List extends javax.swing.JFrame {
                 staff_nameMouseClicked(evt);
             }
         });
-        jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 24, -1, -1));
+        jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 20, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
         jLabel3.setText("LOG OUT");
@@ -326,7 +381,26 @@ public final class Movie_List extends javax.swing.JFrame {
                 p_to_paymentActionPerformed(evt);
             }
         });
-        jPanel2.add(p_to_payment, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 440, -1, -1));
+        jPanel2.add(p_to_payment, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 440, 160, -1));
+
+        jButton1.setBackground(new java.awt.Color(204, 204, 204));
+        jButton1.setText("Reset");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reset_selected(evt);
+            }
+        });
+        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, -1, -1));
+
+        Close1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8-x-20.png"))); // NOI18N
+        Close1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                Close1MouseClicked(evt);
+            }
+        });
+        jPanel2.add(Close1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 10, -1, -1));
+
+        rp_bg.setBackground(new java.awt.Color(204, 204, 204));
         jPanel2.add(rp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 570, 480));
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 0, 570, 480));
@@ -334,31 +408,32 @@ public final class Movie_List extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-            new Movie_List().setVisible(false);
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+    private void reset_selected(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_selected
+        if(receipt_panel.getComponents().length !=0){
+            try {
+                JOptionPane.showMessageDialog(null,
+                        "The cart will cleared", "System Notice", JOptionPane.INFORMATION_MESSAGE);
+                update_seat_list_to_unselected();
+            } catch (SQLException ex) {
+                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        try {
-            new Payment_Method().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        else{
+            JOptionPane.showMessageDialog(null,
+                    "There's no item in cart", "System Notice", JOptionPane.INFORMATION_MESSAGE);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_reset_selected
 
     private void jLabel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel5MouseClicked
         try {
             new Movie_List().setVisible(false);
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             try {
                 new Seat_Management().setVisible(true);
-            } catch (ParseException | ClassNotFoundException ex) {
+            } catch (ParseException ex) {
                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (SQLException ex) {
@@ -369,13 +444,13 @@ public final class Movie_List extends javax.swing.JFrame {
     private void jPanel5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel5MouseClicked
         try {
             new Movie_List().setVisible(false);
-        } catch (SQLException | ClassNotFoundException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
         try {
             try {
                 new Seat_Management().setVisible(true);
-            } catch (ParseException | ClassNotFoundException ex) {
+            } catch (ParseException ex) {
                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (SQLException ex) {
@@ -384,56 +459,33 @@ public final class Movie_List extends javax.swing.JFrame {
     }//GEN-LAST:event_jPanel5MouseClicked
  
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-
-        LocalTime lTime = LocalTime.now();
-        Time cTime = Time.valueOf(lTime);
-
-        String empID = "", dateLog = "", logIn = "";
-
-        System.out.println(cTime);
-
-        String q1 = """
-                    select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
-                    \tfrom LOGS l left join staff s on l.Employee_ID = s.EmployeeID""";
-
-        try {
-
-            rs = stmt.executeQuery(q1);
-
-            while (rs.next()) {
-//                System.out.println(rs.getString(1)+", "+rs.getString(3)+ ", "+rs.getString(4));
-                if (rs.getString("Employee_ID").charAt(0) != 'a') {
-                    empID = rs.getString("Employee_ID");
-                    dateLog = rs.getString("DateLog");
-                    logIn = rs.getString("Log_In");
-                }
-            }
-
-            String q2 = "UPDATE logs SET Log_Out = '" + cTime + "' where Employee_ID = '" + empID + "' AND DateLog = '" + dateLog + "' AND Log_In = '" + logIn + "';";
-            System.out.println(empID + ", " + dateLog + ", " + logIn);
-            stmt.executeQuery(q2);
-
-        } catch (SQLException ex) {
-        }
         System.exit(0);
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void exit_staff(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_exit_staff
-        if (evt.getKeyCode() == KeyEvent.VK_END) {
-            System.exit(0);
-        }
+        if(evt.getKeyCode() == KeyEvent.VK_END){
+             System.exit(0);
+         }
     }//GEN-LAST:event_exit_staff
 
-    private void prof_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_prof_iconMouseClicked
-        Staff_Profile_main spm =new Staff_Profile_main();
-        spm.setVisible(true);
-         this.dispose();
-    }//GEN-LAST:event_prof_iconMouseClicked
+    private void mlist_prof_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mlist_prof_iconMouseClicked
+        try {
+            Staff_Profile_main spm =new Staff_Profile_main();
+            spm.setVisible(true);
+            this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_mlist_prof_iconMouseClicked
 
     private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
-         Staffs_Profile sp =new Staffs_Profile();
-        sp.setVisible(true);
-         this.dispose();
+        try {
+            Staff_Profile_main spm =new Staff_Profile_main();
+            spm.setVisible(true);
+            this.dispose();
+        } catch (SQLException ex) {
+            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_staff_nameMouseClicked
 
     private void p_to_paymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_p_to_paymentActionPerformed
@@ -450,17 +502,23 @@ public final class Movie_List extends javax.swing.JFrame {
                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-            this.setVisible(false);
+            this.dispose();
         }
         else{
             JOptionPane.showMessageDialog(null,
-                    "Please add to cart firs", "System Notice", JOptionPane.INFORMATION_MESSAGE);
+                    "Please add to cart first", "System Notice", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_p_to_paymentActionPerformed
 
+    private void Close1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Close1MouseClicked
+        System.exit(0);
+    }//GEN-LAST:event_Close1MouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel Close1;
     private javax.swing.JPanel cart_panel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -469,9 +527,9 @@ public final class Movie_List extends javax.swing.JFrame {
     private javax.swing.JLabel lp_bg;
     private javax.swing.JPanel main_panel;
     private javax.swing.JPanel main_receipt_panel;
+    private javax.swing.JLabel mlist_prof_icon;
     private javax.swing.JPanel movie_panel;
     private javax.swing.JButton p_to_payment;
-    private javax.swing.JLabel prof_icon;
     private javax.swing.JPanel receipt_panel;
     private javax.swing.JLabel rp_bg;
     private javax.swing.JLabel staff_name;

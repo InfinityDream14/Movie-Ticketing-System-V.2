@@ -20,8 +20,11 @@ public class GCash extends javax.swing.JFrame {
     /**
      * Creates new form GCash
      */
-    public GCash() {
+    Payment_Method pm = new Payment_Method();
+    public GCash() throws SQLException, ParseException{
         initComponents();
+        pm.setVisible(true);
+        this.setVisible(true);
     }
 
     /**
@@ -155,20 +158,37 @@ public class GCash extends javax.swing.JFrame {
     private void backMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_backMouseClicked
         this.dispose();
     }//GEN-LAST:event_backMouseClicked
-
+    double price = pm.totalp;
+    String payment_m = "E-Wallet";
     private void paynowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_paynowMouseClicked
         String pera = amount.getText();
-        int money = Integer.parseInt(pera);
-        if(!acc_num.getText().equals("") && !amount.getText().equals("") && totalp <= money){
+        double money = Double.parseDouble(pera);
+        if(!acc_num.getText().equals("") && !amount.getText().equals("") && price <= money){
             amount.getText();
-            double sukli = money - totalp;
+            double sukli = money - price;
             JOptionPane.showMessageDialog(null, "Successfull, your change is " + sukli, "Payment Success", JOptionPane.INFORMATION_MESSAGE);
             setVisible(false);
-            System.out.println(Payment_Method.payment);
-            System.out.println(totalp);
-            System.out.println(Payment_Method.emp_log);
+            try {
+                Temp_Data td = new Temp_Data();
+                td.jp_mlist.removeAll();
+                td.jp_mlist.revalidate();
+                td.jp_mlist.repaint();
+                td.stopper =0;
+                td.total_amount =0;
+                //Payment_Method pm = new Payment_Method();
+                pm.update_seat_list();
+                pm.insert_whole_payment(payment_m);
+                new Movie_List().setVisible(true);
+                pm.dispose();
+                this.dispose();
+                //pm.update_ticket_on_database();
+            } catch (SQLException ex) {
+                Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (ParseException ex) {
+                Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        else if(totalp > money){
+        else if(price> money){
             JOptionPane.showMessageDialog(null, "Insufficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_paynowMouseClicked

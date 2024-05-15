@@ -20,13 +20,27 @@ public class Main {
      * @throws java.lang.ClassNotFoundException
      * @throws java.sql.SQLException
      */
-    public Connection mc;
+    public static Connection mc;
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
         Main m = new Main();
         m.connectToDatabase();
 //        new Movie_List().setVisible(true);
-        new LogIn.LogIn().setVisible(true);
+        LogIn.LogInProcess inProcess = new LogIn.LogInProcess();
+
+        switch (inProcess.checkIfLoged()) {
+            case 1 -> {
+                System.out.println("1");
+                new Admin().setVisible(true);
+            }
+            case 2 -> {
+                System.out.println("2");
+                new Movie_List().setVisible(true);
+            }
+            case 0 -> {
+                new LogIn.LogIn().setVisible(true);
+            } 
+        }
     }
     
     public void connectToDatabase() throws SQLException, ClassNotFoundException {
@@ -45,7 +59,7 @@ public class Main {
                     + ";encrypt=true;trustServerCertificate=true";
 
             Connection conn = DriverManager.getConnection(connectURL, sqlUser, sqlPassword);
-            System.out.println("Connect to database successful!!");
+            System.out.println("Main Connect to database successful!!");
             mc = conn;
 
         } catch (SQLException e) {
