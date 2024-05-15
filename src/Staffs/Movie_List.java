@@ -280,7 +280,7 @@ public class Movie_List extends javax.swing.JFrame {
         movie_panel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         p_to_payment = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        reset_ml = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         rp_bg = new javax.swing.JLabel();
 
@@ -376,6 +376,14 @@ public class Movie_List extends javax.swing.JFrame {
 
         p_to_payment.setBackground(new java.awt.Color(255, 204, 102));
         p_to_payment.setText("Proceed to Payment");
+        p_to_payment.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                encg(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                p_to_paymentMouseExited(evt);
+            }
+        });
         p_to_payment.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 p_to_paymentActionPerformed(evt);
@@ -383,14 +391,22 @@ public class Movie_List extends javax.swing.JFrame {
         });
         jPanel2.add(p_to_payment, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 440, 160, -1));
 
-        jButton1.setBackground(new java.awt.Color(204, 204, 204));
-        jButton1.setText("Reset");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        reset_ml.setBackground(new java.awt.Color(204, 204, 204));
+        reset_ml.setText("Reset");
+        reset_ml.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                reset_mlMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                reset_mlMouseExited(evt);
+            }
+        });
+        reset_ml.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 reset_selected(evt);
             }
         });
-        jPanel2.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, -1, -1));
+        jPanel2.add(reset_ml, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 440, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/icons8-x-20.png"))); // NOI18N
         jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -514,10 +530,25 @@ public class Movie_List extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_jLabel1MouseClicked
 
+    private void reset_mlMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reset_mlMouseEntered
+        reset_ml.setBackground(Color.pink);
+    }//GEN-LAST:event_reset_mlMouseEntered
+
+    private void reset_mlMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_reset_mlMouseExited
+        reset_ml.setBackground(new Color(204,204,204));
+    }//GEN-LAST:event_reset_mlMouseExited
+
+    private void encg(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_encg
+        p_to_payment.setBackground(new Color(173,255,47));
+    }//GEN-LAST:event_encg
+
+    private void p_to_paymentMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_p_to_paymentMouseExited
+        p_to_payment.setBackground(new Color(255,204,102));
+    }//GEN-LAST:event_p_to_paymentMouseExited
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel cart_panel;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -531,6 +562,7 @@ public class Movie_List extends javax.swing.JFrame {
     private javax.swing.JPanel movie_panel;
     private javax.swing.JButton p_to_payment;
     private javax.swing.JPanel receipt_panel;
+    private javax.swing.JButton reset_ml;
     private javax.swing.JLabel rp_bg;
     private javax.swing.JLabel staff_name;
     // End of variables declaration//GEN-END:variables
