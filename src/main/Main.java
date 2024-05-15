@@ -8,10 +8,12 @@ package main;
  *
  * @author cdgan
  */
+import Staffs.Main_Staff;
 import admin.Admin;
 import Staffs.Movie_List;
 import java.awt.Toolkit;
 import java.sql.*;
+import java.text.ParseException;
 
 public class Main {
 
@@ -22,25 +24,13 @@ public class Main {
      */
     public static Connection mc;
 
-    public static void main(String[] args) throws ClassNotFoundException, SQLException {
+    public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
         Main m = new Main();
         m.connectToDatabase();
-//        new Movie_List().setVisible(true);
-        LogIn.LogInProcess inProcess = new LogIn.LogInProcess();
-
-        switch (inProcess.checkIfLoged()) {
-            case 1 -> {
-                System.out.println("1");
-                new Admin().setVisible(true);
-            }
-            case 2 -> {
-                System.out.println("2");
-                new Movie_List().setVisible(true);
-            }
-            case 0 -> {
-                new LogIn.LogIn().setVisible(true);
-            } 
-        }
+//      
+        Main_Staff.main(null);
+        
+        
     }
     
     public void connectToDatabase() throws SQLException, ClassNotFoundException {
