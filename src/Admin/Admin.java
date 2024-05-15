@@ -20,6 +20,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,8 +54,14 @@ public final class Admin extends javax.swing.JFrame {
     int price; // for creating new Movie
     String Duration = "null"; // for creating new Movie;
 
-    Statement stmt;
-    Connection conn;
+    int showtimeTime;
+
+    public Statement stmt;
+    public static Connection conn;
+    ResultSet rs;
+    ArrayList<Object[]> vec = new ArrayList<>();
+
+    public static String ShowtimeMovieID;
 
     DefaultTableModel tmodel = new DefaultTableModel();
     DefaultTableModel tmodel1 = new DefaultTableModel();
@@ -73,9 +81,8 @@ public final class Admin extends javax.swing.JFrame {
 
         createTableSales();
         getIDs();
-        createTableMovies();
-        
-        
+        //createTableMovies();
+
     }
 
     public void connectToDatabase() throws ClassNotFoundException {
@@ -243,13 +250,13 @@ public final class Admin extends javax.swing.JFrame {
         MovieTable = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
         MovieSearchField = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
+        Select_Button_Movies = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         jPanel3.setBackground(new java.awt.Color(211, 191, 114));
-        jPanel3.setLayout(null);
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         sales.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -318,8 +325,7 @@ public final class Admin extends javax.swing.JFrame {
                 .addContainerGap(80, Short.MAX_VALUE))
         );
 
-        jPanel3.add(sales);
-        sales.setBounds(162, 0, 939, 652);
+        jPanel3.add(sales, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 0, 939, -1));
 
         logs.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -388,8 +394,7 @@ public final class Admin extends javax.swing.JFrame {
                 .addContainerGap(76, Short.MAX_VALUE))
         );
 
-        jPanel3.add(logs);
-        logs.setBounds(162, 0, 939, 652);
+        jPanel3.add(logs, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 0, 939, 652));
 
         employee.setBackground(new java.awt.Color(255, 255, 255));
         employee.setPreferredSize(new java.awt.Dimension(939, 652));
@@ -459,10 +464,10 @@ public final class Admin extends javax.swing.JFrame {
                 .addContainerGap(80, Short.MAX_VALUE))
         );
 
-        jPanel3.add(employee);
-        employee.setBounds(162, 0, 939, 652);
+        jPanel3.add(employee, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 0, -1, -1));
 
         addEmplyee.setBackground(new java.awt.Color(255, 255, 255));
+        addEmplyee.setPreferredSize(new java.awt.Dimension(957, 652));
         addEmplyee.setLayout(null);
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -636,8 +641,7 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.add(jLabel6);
         jLabel6.setBounds(50, 30, 190, 48);
 
-        jPanel3.add(addEmplyee);
-        addEmplyee.setBounds(162, 0, 939, 652);
+        jPanel3.add(addEmplyee, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 0, 957, 652));
 
         addMovies.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -810,17 +814,14 @@ public final class Admin extends javax.swing.JFrame {
                 .addContainerGap(83, Short.MAX_VALUE))
         );
 
-        jPanel3.add(addMovies);
-        addMovies.setBounds(162, 0, 957, 652);
+        jPanel3.add(addMovies, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 0, -1, -1));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/AAG Movie Ticketing System Logo .png"))); // NOI18N
-        jPanel3.add(jLabel1);
-        jLabel1.setBounds(6, 0, 150, 150);
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 0, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Bookman Old Style", 0, 24)); // NOI18N
         jLabel2.setText("Admin");
-        jPanel3.add(jLabel2);
-        jLabel2.setBounds(39, 156, 77, 29);
+        jPanel3.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 156, -1, -1));
 
         jPanel1.setBackground(new java.awt.Color(221, 211, 171));
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED, null, new java.awt.Color(192, 156, 117), null, null));
@@ -892,8 +893,7 @@ public final class Admin extends javax.swing.JFrame {
         jPanel1.add(salesB1);
         salesB1.setBounds(10, 10, 130, 27);
 
-        jPanel3.add(jPanel1);
-        jPanel1.setBounds(6, 224, 150, 310);
+        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 224, 150, 300));
 
         movies.setBackground(new java.awt.Color(255, 255, 255));
         movies.setMinimumSize(new java.awt.Dimension(932, 652));
@@ -936,24 +936,23 @@ public final class Admin extends javax.swing.JFrame {
         movies.add(MovieSearchField);
         MovieSearchField.setBounds(297, 506, 365, 30);
 
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton3.setText("Search");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        Select_Button_Movies.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        Select_Button_Movies.setText("Select");
+        Select_Button_Movies.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                Select_Button_MoviesActionPerformed(evt);
             }
         });
-        movies.add(jButton3);
-        jButton3.setBounds(391, 542, 150, 41);
+        movies.add(Select_Button_Movies);
+        Select_Button_Movies.setBounds(391, 542, 150, 41);
 
-        jPanel3.add(movies);
-        movies.setBounds(162, 0, 939, 652);
+        jPanel3.add(movies, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 0, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 1104, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -981,7 +980,6 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
-
         createTableEmployee();
     }//GEN-LAST:event_staffsBActionPerformed
 
@@ -1002,6 +1000,7 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.setVisible(false);
         movies.setVisible(true);
         addMovies.setVisible(false);
+        createTableMovie();
     }//GEN-LAST:event_moviesBActionPerformed
 
     private void logsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logsBActionPerformed
@@ -1112,9 +1111,14 @@ public final class Admin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_MovieSearchFieldActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void Select_Button_MoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Select_Button_MoviesActionPerformed
+        try {
+            selectMovie();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_Select_Button_MoviesActionPerformed
 
     private void AddMovie_AddMovie_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_AddMovie_ButtonActionPerformed
         // Ang kulang nalang dito is yung pic_poster_location
@@ -1175,13 +1179,34 @@ public final class Admin extends javax.swing.JFrame {
                             model.setRowCount(0);
                             getMovieData();
                             System.out.println("Insert Successful");
+                            stmt2.close(); // note lang
+
                         }
                     } catch (SQLException ex) {
                         Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                    showtimeTime = JOptionPane.showConfirmDialog(this, "Add Show Time? ", "Showtime", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (showtimeTime == JOptionPane.YES_OPTION) {
+                        try {
+                            new Showtime().setVisible(true);
+
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ParseException ex) {
+                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    } else if (showtimeTime == JOptionPane.NO_OPTION || showtimeTime == JOptionPane.CLOSED_OPTION) {
+
+                        System.out.println("No");
+                    }
+
                 } else {
                     JOptionPane.showMessageDialog(null, "Confirmation Cancelled");
                 }
+
                 ClearFieldMovies();
                 break;
             }
@@ -1254,30 +1279,28 @@ public final class Admin extends javax.swing.JFrame {
             imgIcon = new ImageIcon(scaledimg);
             MoviePoster.setIcon(imgIcon);
             PosterName.setText(file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf("\\") + 1));
-             
-            if(file.exists()){
+
+            if (file.exists()) {
                 File destfile = new File(fildest + File.separator + file.getName());
 
-                try(InputStream is = new FileInputStream(file);
-                        OutputStream os = new FileOutputStream(destfile)){
+                try (InputStream is = new FileInputStream(file); OutputStream os = new FileOutputStream(destfile)) {
 
                     int len;
                     float srcfsize = is.available() / 1000.0f;
                     float totalcopied = 0.0f;
                     byte[] byt = new byte[1024];
-                    while( (len = is.read(byt)) > 0){
+                    while ((len = is.read(byt)) > 0) {
                         os.write(byt, 0, len);
                         totalcopied += len;
                         System.out.println("\rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
                         Thread.sleep(5);
                     }
 
-
-                }catch(IOException | InterruptedException e){
+                } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            
+
         } else {
             JOptionPane.showMessageDialog(null, "No Image has been Selected");
         }
@@ -1310,6 +1333,7 @@ public final class Admin extends javax.swing.JFrame {
     void getIDs() throws SQLException {
         get_last_empid();
         get_last_movieid();
+        get_last_showtimeid();
     }
 
     //Last EmpID
@@ -1352,6 +1376,25 @@ public final class Admin extends javax.swing.JFrame {
         lmovidnum = Integer.parseInt(lmovieid.substring(1, lmovieid.length())) + 1;
         newmovieid = "M" + String.valueOf(lmovidnum);
         System.out.println(newmovieid);
+        ShowtimeMovieID = newmovieid;
+    }
+
+    static String lshowtimeid; // for creating new showtimeid
+    int lshowtimeidnum;
+    static String newshowtimeid;
+
+    void get_last_showtimeid() throws SQLException {
+        lshowtimeid = "";
+        Statement stmt = conn.createStatement();
+
+        String qry = "select * from showtime order by len(showtimeID), showtimeID";
+        ResultSet rs = stmt.executeQuery(qry);
+        while (rs.next()) {
+            lshowtimeid = rs.getString(2);
+        }
+        lshowtimeidnum = Integer.parseInt(lshowtimeid.substring(1)) + 1;
+        newshowtimeid = "S" + String.valueOf(lshowtimeidnum);
+        System.out.println(newshowtimeid);
     }
 
     //For Creating Table Sales
@@ -1406,44 +1449,53 @@ public final class Admin extends javax.swing.JFrame {
 
     public void getMovieData() {
         String sql1 = """
-                   select MovieID, Title
+                  select MovieID, Title
                    from movie 
                    order by len (MovieID), MovieID""";
+
         try {
+
             stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql1);
+            this.rs = stmt.executeQuery(sql1);
+            this.vec = new ArrayList<>();
+
             while (rs != null && rs.next()) {
-                Vector vec = new Vector();
-                vec.add(rs.getString("MovieID"));
-                vec.add(rs.getString("Title"));
-                tmodel1.addRow(vec);
+
+                this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title")});
+                System.out.println(rs.getString("MovieID"));
+                System.out.println(rs.getString("Title"));
             }
-        } catch (Exception e) {
+
+            for (Object[] row : vec) {
+                tmodel1.addRow(row);
+            }
+
+        } catch (SQLException e) {
             System.out.println(e);
+
         }
     }
 
-    public void createTableMovies() {
+    public void createTableMovie() {
+        tmodel1 = new DefaultTableModel();
         MovieTable.setModel(tmodel1);
         tmodel1.addColumn("Movie ID");
         tmodel1.addColumn("Movie Title");
         ListSelectionModel cellSelectionModel = MovieTable.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                String selectedData = null;
+        cellSelectionModel.addListSelectionListener((e) -> {
+            String SelectedMovieData = null;
 
-                int[] selectedRow = MovieTable.getSelectedRows();
-                int[] selectedColumn = MovieTable.getSelectedColumns();
+            int[] selectedRow = MovieTable.getSelectedRows();
+            int[] selectedColumn = MovieTable.getSelectedColumns();
 
-                for (int a = 0; a < selectedRow.length; a++) {
-                    for (int b = 0; b < selectedColumn.length; b++) {
-                        selectedData = (String) MovieTable.getValueAt(selectedRow[a], selectedColumn[b]);
-                    }
+            for (int i = 0; i < selectedRow.length; i++) {
+                for (int j = 0; j < selectedColumn.length; j++) {
+                    SelectedMovieData = (String) MovieTable.getValueAt(selectedRow[i], selectedColumn[j]);
                 }
-                System.out.println("Selected: " + selectedData);
-            }
+                System.out.println("Selected: " + SelectedMovieData);
+            }            
         });
         getMovieData();
     }
@@ -1458,18 +1510,29 @@ public final class Admin extends javax.swing.JFrame {
     }
 
     public void ClearFieldMovies() {
-        AddMovie_MovieID_TextField.setText(newmovieid = "M" + (lmovidnum + 1));
+        AddMovie_MovieID_TextField.setText(ShowtimeMovieID);
         AddMovie_Title_TextField1.setText(null);
         AddMovie_Genre_TextField.setText(null);
         AddMovie_Director_TextField.setText(null);
         AddMovie_Duration_TextField.setText(null);
         AddMovie_Price_TextField.setText(null);
         MoviePoster.setIcon(null);
-        PosterName.setText(null);        
+        PosterName.setText(null);
         lmovidnum += 1;
     }
-    
-   
+
+    public void selectMovie() throws SQLException {
+        int i = MovieTable.getSelectedRow();
+        String movieID = tmodel1.getValueAt(i, 0).toString();
+//        System.out.println(movieID);
+
+        String query = "select * from movie where MovieID = '" + movieID + "' order by len(MovieID), MovieID";
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs.next()) {
+            System.out.println(rs.getString("Title"));
+            System.out.println(rs.getString("Genre"));
+        }
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1505,6 +1568,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JTextField MovieSearchField;
     private javax.swing.JTable MovieTable;
     private javax.swing.JTextField PosterName;
+    private javax.swing.JButton Select_Button_Movies;
     private javax.swing.JPanel addEmplyee;
     private javax.swing.JPanel addMovies;
     private javax.swing.JButton addMoviesB;
@@ -1513,7 +1577,6 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JPanel employee;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
