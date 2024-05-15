@@ -18,7 +18,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -41,8 +45,8 @@ public final class Admin extends javax.swing.JFrame {
     Statement stmt;
     Connection conn;
     ResultSet rs;
-    Vector vec;
-    DefaultTableModel tmodel = new DefaultTableModel();
+    ArrayList <Object[]> vec = new ArrayList<>();
+    DefaultTableModel tmodel = new DefaultTableModel(); 
     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
 
     public Admin() throws SQLException, ClassNotFoundException {
@@ -88,6 +92,7 @@ public final class Admin extends javax.swing.JFrame {
         salesTable.setModel(tmodel);
         tmodel.addColumn("Ticket ID");
         tmodel.addColumn("Date Purchased");
+        tmodel.addColumn("Time Purchased");
         ListSelectionModel cellSelectionModel = salesTable.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -112,16 +117,23 @@ public final class Admin extends javax.swing.JFrame {
         String sql = """
                      select t.TicketID, p.PaymentDate
                      from ticket t join payment p on t.TicketPaymentID = p.PaymentID""";
-
+        String newTimeSell, dateSell;
+        
         try {
             stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
-
+            SimpleDateFormat dateFormat  = new SimpleDateFormat("MMMMM dd, yyyy");
+            this.vec = new ArrayList<>();
+            
             while (rs != null && rs.next()) {
-                this.vec = new Vector();
-                this.vec.add(rs.getString("TicketID"));
-                this.vec.add(rs.getString("PaymentDate"));
-                tmodel.addRow(this.vec);
+                
+                newTimeSell = this.dateFormat.format(rs.getTime("PaymentDate"));
+                dateSell = dateFormat.format(rs.getDate("PaymentDate"));
+                
+                this.vec.add(new Object[]{rs.getString("TicketID"), dateSell, newTimeSell});
+            }
+            for(Object[] row : vec){
+                tmodel.addRow(row);
             }
 
         } catch (SQLException e) {
@@ -165,12 +177,13 @@ public final class Admin extends javax.swing.JFrame {
         try {
             stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
+            vec = new ArrayList<>();
 
             while (this.rs != null && rs.next()) {
-                this.vec = new Vector();
-                this.vec.add(rs.getString("EmployeeID"));
-                this.vec.add(rs.getString("FullName"));
-                tmodel.addRow(this.vec);
+                vec.add(new Object[] {rs.getString("EmployeeID"), rs.getString("FullName")});
+            }
+            for(Object[] row : vec){
+                tmodel.addRow(row);
             }
 
         } catch (SQLException e) {
@@ -214,30 +227,27 @@ public final class Admin extends javax.swing.JFrame {
         String sql = """
              select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
              	from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
-             	order by l.Log_In, l.DateLog""";
+             	order by l.DateLog, l.Log_In""";
 
         try {
             this.stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
-
+            vec = new ArrayList<>();
             while (rs.next()) {
                 logInT = rs.getTime("Log_In");
                 newLogIn = (logInT != null) ? dateFormat.format(logInT) : "";
 
                 logOutT = rs.getTime("Log_Out");
                 newLogOut = (logOutT != null) ? dateFormat.format(logOutT) : "";
-
-                this.vec = new Vector();
-                this.vec.add(rs.getString("Employee_ID"));
-                this.vec.add(rs.getString("Full Name"));
-                this.vec.add(rs.getString("DateLog"));
-                this.vec.add(newLogIn);
-                this.vec.add(newLogOut);
-                System.out.println(newLogOut);
-                tmodel.addRow(this.vec);
+                
+                vec.add(new Object[] {rs.getString("Employee_ID"), rs.getString("Full Name"), rs.getString("DateLog"), newLogIn, newLogOut});
+            }
+            
+            for(Object[] row : vec){
+                tmodel.addRow(row);
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e);
         }
 
@@ -260,6 +270,7 @@ public final class Admin extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        salesDate = new com.toedter.calendar.JDateChooser();
         logs = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -355,13 +366,14 @@ public final class Admin extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel9.setText("Receipt No.");
 
-        jTextField1.setText("jTextField1");
-
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton1.setText("Search");
         jButton1.setFocusPainted(false);
         jButton1.setMargin(new java.awt.Insets(2, 30, 3, 30));
         jButton1.setOpaque(true);
+
+        salesDate.setFocusable(false);
+        salesDate.setOpaque(false);
 
         javax.swing.GroupLayout salesLayout = new javax.swing.GroupLayout(sales);
         sales.setLayout(salesLayout);
@@ -370,10 +382,15 @@ public final class Admin extends javax.swing.JFrame {
             .addGroup(salesLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
                 .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, salesLayout.createSequentialGroup()
+                    .addGroup(salesLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(salesLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(salesDate, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(44, 44, 44))))
+            .addGroup(salesLayout.createSequentialGroup()
                 .addGap(277, 277, 277)
                 .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, salesLayout.createSequentialGroup()
@@ -383,13 +400,15 @@ public final class Admin extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, salesLayout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addGap(138, 138, 138)))
-                .addGap(270, 270, 270))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         salesLayout.setVerticalGroup(
             salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(salesLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jLabel3)
+                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(salesDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(47, 47, 47)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
@@ -402,7 +421,7 @@ public final class Admin extends javax.swing.JFrame {
         );
 
         jPanel3.add(sales);
-        sales.setBounds(162, 0, 939, 652);
+        sales.setBounds(162, 0, 940, 652);
 
         logs.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -472,7 +491,7 @@ public final class Admin extends javax.swing.JFrame {
         );
 
         jPanel3.add(logs);
-        logs.setBounds(162, 0, 939, 652);
+        logs.setBounds(162, 0, 940, 652);
 
         employee.setBackground(new java.awt.Color(255, 255, 255));
         employee.setPreferredSize(new java.awt.Dimension(939, 652));
@@ -1132,8 +1151,8 @@ public final class Admin extends javax.swing.JFrame {
 
         String q1 = """
                     select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
-                    	from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
-                    	order by l.Log_In, l.DateLog""";
+                    from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    order by l.DateLog, l.Log_In""";
 
         try {
 
@@ -1445,6 +1464,9 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
+        
+//        Date date = Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant());
+//        salesDate.setDate(date);
     }//GEN-LAST:event_salesB1ActionPerformed
 
     private void addMoviesB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMoviesB1ActionPerformed
@@ -1587,6 +1609,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JButton moviesB;
     private javax.swing.JPanel sales;
     private javax.swing.JButton salesB1;
+    private com.toedter.calendar.JDateChooser salesDate;
     private javax.swing.JTable salesTable;
     private javax.swing.JButton staffsB;
     // End of variables declaration//GEN-END:variables

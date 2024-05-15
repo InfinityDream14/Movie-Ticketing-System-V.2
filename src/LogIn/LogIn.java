@@ -41,11 +41,12 @@ public class LogIn extends javax.swing.JFrame {
             case 0 -> {
                 initComponents();
                 SignUp.setVisible(false);
-            }
-            
+            } 
         }
         dispose();
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -68,7 +69,7 @@ public class LogIn extends javax.swing.JFrame {
         showPass = new javax.swing.JCheckBox();
         createAcc = new javax.swing.JLabel();
         SignUp = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        signUp = new javax.swing.JButton();
         Close1 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
@@ -120,6 +121,16 @@ public class LogIn extends javax.swing.JFrame {
         });
 
         lPassIn.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
+        lPassIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lPassInActionPerformed(evt);
+            }
+        });
+        lPassIn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                lPassInKeyPressed(evt);
+            }
+        });
 
         showPass.setText("Show Password");
         showPass.addActionListener(new java.awt.event.ActionListener() {
@@ -202,11 +213,11 @@ public class LogIn extends javax.swing.JFrame {
         SignUp.setEnabled(false);
         SignUp.setPreferredSize(new java.awt.Dimension(502, 392));
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton2.setText("Sign Up");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        signUp.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        signUp.setText("Sign Up");
+        signUp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                signUpActionPerformed(evt);
             }
         });
 
@@ -236,6 +247,16 @@ public class LogIn extends javax.swing.JFrame {
         });
 
         sRPassIn.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
+        sRPassIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sRPassInActionPerformed(evt);
+            }
+        });
+        sRPassIn.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                sRPassInKeyPressed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         jLabel7.setText("Re-type pass:");
@@ -279,7 +300,7 @@ public class LogIn extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addGap(174, 174, 174))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SignUpLayout.createSequentialGroup()
-                        .addComponent(jButton2)
+                        .addComponent(signUp)
                         .addGap(197, 197, 197))))
         );
         SignUpLayout.setVerticalGroup(
@@ -304,7 +325,7 @@ public class LogIn extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(showPass2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
-                .addComponent(jButton2)
+                .addComponent(signUp)
                 .addGap(35, 35, 35))
         );
 
@@ -339,7 +360,7 @@ public class LogIn extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(BackGround, javax.swing.GroupLayout.PREFERRED_SIZE, 662, Short.MAX_VALUE)
+            .addComponent(BackGround, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -351,32 +372,31 @@ public class LogIn extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void logInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInActionPerformed
-
         try {
             int flag = process.checkAcc(lUserIn.getText(), lPassIn.getText());
             switch (flag) {
-                case 1:
+                case 1 -> {
                     Admin.main(null);
                     dispose();
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     new Movie_List().setVisible(true);
                     dispose();
-                    break;
-                default:
+                }
+                default -> {
                     lUserIn.setText("");
                     lPassIn.setText("");
-                    break;
+                }
             }
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_logInActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void signUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signUpActionPerformed
         SignUp.setVisible(false);
         LogIn.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_signUpActionPerformed
 
     private void Close1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Close1MouseClicked
         System.exit(0);
@@ -416,17 +436,14 @@ public class LogIn extends javax.swing.JFrame {
     }//GEN-LAST:event_sUserInActionPerformed
 
     private void showPass2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPass2ActionPerformed
-        int ctr;
         if (showPass2.isSelected()) {
             char c = 0;
             sPassIn.setEchoChar(c);
             sRPassIn.setEchoChar(c);
-            ctr = 1;
         } else {
             char c = '*';
             sPassIn.setEchoChar(c);
             sRPassIn.setEchoChar(c);
-            ctr = 0;
         }
     }//GEN-LAST:event_showPass2ActionPerformed
 
@@ -434,6 +451,23 @@ public class LogIn extends javax.swing.JFrame {
         LogIn.setVisible(false);
         SignUp.setVisible(true);
     }//GEN-LAST:event_createAccMouseClicked
+
+    private void sRPassInKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sRPassInKeyPressed
+        
+        
+    }//GEN-LAST:event_sRPassInKeyPressed
+
+    private void lPassInKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_lPassInKeyPressed
+        
+    }//GEN-LAST:event_lPassInKeyPressed
+
+    private void sRPassInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sRPassInActionPerformed
+        signUp.doClick();
+    }//GEN-LAST:event_sRPassInActionPerformed
+
+    private void lPassInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lPassInActionPerformed
+        logIn.doClick();
+    }//GEN-LAST:event_lPassInActionPerformed
 
     /**
      * @param args the command line arguments
@@ -483,7 +517,6 @@ public class LogIn extends javax.swing.JFrame {
     private javax.swing.JPanel LogIn;
     private javax.swing.JPanel SignUp;
     private javax.swing.JLabel createAcc;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -500,5 +533,6 @@ public class LogIn extends javax.swing.JFrame {
     private javax.swing.JTextField sUserIn;
     private javax.swing.JCheckBox showPass;
     private javax.swing.JCheckBox showPass2;
+    private javax.swing.JButton signUp;
     // End of variables declaration//GEN-END:variables
 }

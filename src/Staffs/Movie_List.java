@@ -289,8 +289,8 @@ public final class Movie_List extends javax.swing.JFrame {
 
         String q1 = """
                     select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
-                    	from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
-                    	order by l.Log_In, l.DateLog""";
+                    from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    order by l.DateLog, l.Log_In""";
 
         try {
 
