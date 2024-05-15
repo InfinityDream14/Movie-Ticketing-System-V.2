@@ -4,6 +4,7 @@ package Staffs;
 import java.awt.*;
 import javax.swing.*;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Temp_Data {
     
@@ -15,5 +16,6 @@ public class Temp_Data {
     public static ImageIcon tdstf_img_pf;
     public static int stopper =0;
     public static double total_amount;
+    public static ArrayList <String> ticklist;
 
 }

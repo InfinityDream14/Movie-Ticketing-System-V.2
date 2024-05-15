@@ -98,7 +98,7 @@ public class Payment_Method extends javax.swing.JFrame {
         loc.setBounds(30, 20, 200, 30);
 
         Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String str = formatter.format(date);
         System.out.print("Current date: " + str);
 
@@ -162,15 +162,14 @@ public class Payment_Method extends javax.swing.JFrame {
         
         String seatn = stno.substring(9);
         String cid = cnm.substring(8);
-        String insertticket = "INSERT INTO ticket\n" +"VALUES \n" 
-                    + "('"+newticketid+"','"+str+"','"+seatn+"','"+cid+"','"+
+        String insertticket ="('"+newticketid+"','"+str+"','"+seatn+"','"+cid+"','"+
                     newpaymentid+"','"+mid+"')";
         
         
         System.out.println(insertticket);
         
         ticket_insert.add(insertticket);
-        
+        td.ticklist = ticket_insert;
 //        JLabel total = new JLabel("Total: ");
 //        total.setBounds(70, 330, 150, 30);
 //        total.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -376,12 +375,14 @@ public class Payment_Method extends javax.swing.JFrame {
     }
     public void update_ticket_on_database() throws SQLException{
         
-        
-        
+        System.out.println("Entered update ticket on database");
+        System.out.println(td.ticklist.size());
+        ticket_insert =td.ticklist; 
         for(int i=0; i<ticket_insert.size(); i++){
             Statement tstmt = ms.mc.createStatement();
             int tins = 0;
-            tins = tstmt.executeUpdate(ticket_insert.get(i));
+            System.out.println(ticket_insert.get(i));
+            tins = tstmt.executeUpdate("Insert into ticket values" + ticket_insert.get(i));
             if(tins>0){
                 System.out.println("ticket inserted in database");
             }
