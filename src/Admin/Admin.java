@@ -79,7 +79,6 @@ public final class Admin extends javax.swing.JFrame {
         addMovies.setVisible(false);
         setTitle("Admin");
 
-        createTableSales();
         getIDs();
         //createTableMovies();
 
@@ -1112,9 +1111,11 @@ public final class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_MovieSearchFieldActionPerformed
 
     private void Select_Button_MoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Select_Button_MoviesActionPerformed
+        
         try {
             selectMovie();
-
+            
+            
         } catch (SQLException ex) {
             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1397,56 +1398,6 @@ public final class Admin extends javax.swing.JFrame {
         System.out.println(newshowtimeid);
     }
 
-    //For Creating Table Sales
-    public void createTableSales() {
-        tmodel = new DefaultTableModel();
-
-        salesTable.setModel(tmodel);
-        tmodel.addColumn("Ticket ID");
-        tmodel.addColumn("Date Purchased");
-        ListSelectionModel cellSelectionModel = salesTable.getSelectionModel();
-        cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                String selectedData = null;
-
-                int[] selectedRow = salesTable.getSelectedRows();
-                int[] selectedColumn = salesTable.getSelectedColumns();
-
-                for (int i = 0; i < selectedRow.length; i++) {
-                    for (int j = 0; j < selectedColumn.length; j++) {
-                        selectedData = (String) salesTable.getValueAt(selectedRow[i], selectedColumn[j]);
-                    }
-                }
-                System.out.println("Selected: " + selectedData);
-            }
-        });
-        getSalesData();
-    }
-
-    //For Getting data for table
-    public void getSalesData() {
-        String sql = """
-                     select t.TicketID, p.PaymentDate
-                     from ticket t join payment p on t.TicketPaymentID = p.PaymentID""";
-
-        try {
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
-            while (rs != null && rs.next()) {
-                Vector vec = new Vector();
-                vec.add(rs.getString("TicketID"));
-                vec.add(rs.getString("PaymentDate"));
-                tmodel.addRow(vec);
-            }
-
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
     public void getMovieData() {
         String sql1 = """
                   select MovieID, Title
@@ -1495,7 +1446,7 @@ public final class Admin extends javax.swing.JFrame {
                     SelectedMovieData = (String) MovieTable.getValueAt(selectedRow[i], selectedColumn[j]);
                 }
                 System.out.println("Selected: " + SelectedMovieData);
-            }            
+            }
         });
         getMovieData();
     }
@@ -1531,6 +1482,22 @@ public final class Admin extends javax.swing.JFrame {
         if (rs.next()) {
             System.out.println(rs.getString("Title"));
             System.out.println(rs.getString("Genre"));
+            
+           String MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice, MovDetsPLoc;
+           
+           MovDetsMovID = rs.getString(1);
+           MovDetsTitle = rs.getString(2);
+           MovDetsGenre = rs.getString(3);
+           MovDetsDir = rs.getString(4);
+           MovDetsDur = rs.getString(5);
+           MovDetPrice = rs.getString(6);
+           MovDetsPLoc = rs.getString(7); 
+      
+           MovieDetails mds = new MovieDetails();
+           new MovieDetails().setVisible(true);
+           
+           mds.getMoviedets(MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice, MovDetsPLoc);
+           
         }
     }
 
