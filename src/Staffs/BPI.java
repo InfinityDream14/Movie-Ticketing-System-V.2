@@ -189,6 +189,7 @@ public class BPI extends javax.swing.JFrame {
                 td.total_amount =0;
                 //Payment_Method pm = new Payment_Method();
                 pm.update_seat_list();
+                pm.print_receipt_to_pdf();
                 pm.insert_whole_payment(payment_m);
                 new Movie_List().setVisible(true);
                 pm.dispose();
