@@ -3,25 +3,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Staffs;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Image;
+import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.*;
+import com.itextpdf.text.Rectangle;
+import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
+import java.io.*;
 import java.sql.*;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.ImageIcon;
+import java.awt.Image;
+import java.awt.Font;
+import java.awt.image.BufferedImage;
+
+
+
+
+
 /**
  *
  * @author MIGUEL
@@ -179,13 +185,15 @@ public class Payment_Method extends javax.swing.JFrame {
     public void receipt_scrollpane(){
         main_receipt_panel.add(receipt_panel);
         receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
-        receipt_panel.setPreferredSize(new Dimension(235,900));
+        receipt_panel.setPreferredSize(new Dimension(235,1200));
+        
         JScrollPane scrollPane = new JScrollPane(receipt_panel);
         scrollPane.setMinimumSize(new Dimension(5, 5));
         scrollPane.setPreferredSize(new Dimension(230,270));
         scrollPane.setBounds(5, 5, 255, 280);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        
         scrollPane.setOpaque(false);
         main_receipt_panel.add(scrollPane);
         
@@ -416,6 +424,50 @@ public class Payment_Method extends javax.swing.JFrame {
         }
         
     }
+    
+    void print_receipt_to_pdf(){
+        
+
+        Dimension size = receipt_panel.getPreferredSize();
+        Rectangle ps = new Rectangle(size.width, size.height);
+        Document document = new Document(ps);
+
+        try {
+            String fildest = System.getProperty("user.dir");
+            String filePath = fildest +"\\Receipts\\" + newpaymentid + ".pdf";
+            System.out.println(filePath);
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+
+            PdfContentByte contentByte = writer.getDirectContent();
+            PdfTemplate template = contentByte.createTemplate(size.width, size.height);
+            Graphics2D g2 = template.createGraphics(size.width, size.height);
+
+            // Create an image of the entire panel
+            receipt_panel.setSize(size);
+            BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = image.createGraphics();
+            receipt_panel.printAll(g2d); // Use printAll to capture the entire panel content
+            g2d.dispose();
+
+            // Draw the BufferedImage onto the PdfTemplate's Graphics2D context
+            g2.drawImage(image, 0, 0, size.width,size.height, null);
+            g2.dispose();
+
+            // Add the template to the PDF content
+            contentByte.saveState();
+            contentByte.addTemplate(template, 0, 0); // Adjust the position as necessary
+            contentByte.restoreState();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (document.isOpen()) {
+                document.close();
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

@@ -70,7 +70,11 @@ public class Movie_List extends javax.swing.JFrame {
             ResultSet rs = stmt.executeQuery(qry);
             while(rs.next()){
                 String mposter = rs.getString(7);
-                ImageIcon m1 = new ImageIcon(mposter);
+                String fildest = System.getProperty("user.dir");
+                ImageIcon m1 = new ImageIcon(fildest + "\\Movie Posters\\" + mposter);
+                Image image = m1.getImage(); // transform it 
+                Image newimg = image.getScaledInstance(138, 175,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+                m1 = new ImageIcon(newimg);
                 JLabel mve1 = new JLabel(m1);
                 String mtitle = rs.getString(2);
                 JLabel mt = new JLabel(mtitle);
@@ -219,8 +223,8 @@ public class Movie_List extends javax.swing.JFrame {
                 staff_names = staff_name.getText();
             }
         }
-        
-        ImageIcon mi = new ImageIcon(staff_pf);
+        String fildest = System.getProperty("user.dir");
+        ImageIcon mi = new ImageIcon(fildest +"\\Staff Profile\\" + staff_pf);
         Image image = mi.getImage(); // transform it 
         Image newimg = image.getScaledInstance(57, 57,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
         stf_img_pf = new ImageIcon(newimg); 

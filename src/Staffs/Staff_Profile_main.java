@@ -55,7 +55,8 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         JFileChooser jfc = new JFileChooser();
         jfc.setCurrentDirectory(new File("D:\\Users\\Backup\\Desktop"));
         int response = jfc.showOpenDialog(null);
-        String fildest = System.getProperty("user.dir");
+        String fildest = System.getProperty("user.dir" );
+        fildest = fildest + "\\Staff Profile";
         String newpf = "pf_null.png";
         if(response == JFileChooser.APPROVE_OPTION){
             File file = new File(jfc.getSelectedFile().getAbsolutePath());
@@ -136,7 +137,8 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         usernjtx.setText(usern);
         passwordpf.setText(passw);
         
-        ImageIcon im = new ImageIcon(pf_loc);
+        String fildest = System.getProperty("user.dir");
+        ImageIcon im = new ImageIcon(fildest +"\\Staff Profile\\"+ pf_loc);
         Image image = im.getImage(); // transform it 
         Image newimg = image.getScaledInstance(90, 90,  java.awt.Image.SCALE_SMOOTH);
         ImageIcon nim =new ImageIcon(newimg);
