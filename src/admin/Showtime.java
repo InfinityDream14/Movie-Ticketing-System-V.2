@@ -4,8 +4,6 @@
  */
 package admin;
 
-
-
 import java.sql.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,32 +16,28 @@ import java.util.logging.Logger;
 import java.util.Date;
 import main.Main;
 
-
-
 /**
  *
  * @author Romel
  */
 public final class Showtime extends javax.swing.JFrame {
-  Admin ad = new Admin();
-  static String movieID = "";
-  static Connection connMD = Main.mc;
-  
+
+    Admin ad = new Admin();
+    static String movieID = "";
+    static Connection connMD = Main.mc;
+
     public Showtime() throws SQLException, ClassNotFoundException, ParseException {
         initComponents();
         get_last_showtimeid();
-        
+
         ShowtimeID_TX.setText(newshowtimeid);
         //MovieID_Tx.setText(ad.ShowtimeMovieID);
         MovieID_Tx.setText(movieID);
-        
-        
+
 //        String midnum = MovieID_Tx.getText().substring(1);
 //        midnum = "M" + Integer.toString(Integer.parseInt(midnum) - 1);
 //        System.out.println(midnum);
 //        MovieID_Tx.setText(midnum);
-        
-        
     }
 
     @SuppressWarnings("unchecked")
@@ -56,9 +50,9 @@ public final class Showtime extends javax.swing.JFrame {
         CinemaID_Label = new javax.swing.JLabel();
         Movie_Label = new javax.swing.JLabel();
         StartTime_Label = new javax.swing.JLabel();
+        StartTime_Tx = new com.github.lgooddatepicker.components.TimePicker();
         ShowtimeID_TX = new javax.swing.JTextField();
         MovieID_Tx = new javax.swing.JTextField();
-        StartTime_Tx = new javax.swing.JTextField();
         AddShowtime_Button = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         cinema_combo_box = new javax.swing.JComboBox<>();
@@ -96,6 +90,8 @@ public final class Showtime extends javax.swing.JFrame {
         StartTime_Label.setText("Start Time: ");
         jPanel1.add(StartTime_Label);
         StartTime_Label.setBounds(70, 220, 121, 25);
+        jPanel1.add(StartTime_Tx);
+        StartTime_Tx.setBounds(250, 220, 360, 30);
 
         ShowtimeID_TX.setEditable(false);
         ShowtimeID_TX.addActionListener(new java.awt.event.ActionListener() {
@@ -109,8 +105,6 @@ public final class Showtime extends javax.swing.JFrame {
         MovieID_Tx.setEditable(false);
         jPanel1.add(MovieID_Tx);
         MovieID_Tx.setBounds(250, 170, 360, 30);
-        jPanel1.add(StartTime_Tx);
-        StartTime_Tx.setBounds(250, 220, 360, 30);
 
         AddShowtime_Button.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         AddShowtime_Button.setText("Add Showtime");
@@ -152,15 +146,18 @@ public final class Showtime extends javax.swing.JFrame {
     }//GEN-LAST:event_ShowtimeID_TXActionPerformed
 
     private void AddShowtime_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddShowtime_ButtonActionPerformed
-          
+
         try {
-          insert_Showtime_to_DB();
-          get_Cinema_seat_count();
-          create_seatList();
-      } catch (ParseException | SQLException | ClassNotFoundException ex) {
-          Logger.getLogger(Showtime.class.getName()).log(Level.SEVERE, null, ex);
-      }
-      dispose();
+            ShowtimeList list = new ShowtimeList();
+
+            insert_Showtime_to_DB();
+            get_Cinema_seat_count();
+            create_seatList();
+            list.createShowtimeListTable();
+            dispose();
+        } catch (ParseException | SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(Showtime.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_AddShowtime_ButtonActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -168,10 +165,10 @@ public final class Showtime extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
-
     static String lshowtimeid; // for creating new showtimeid
     int lshowtimeidnum;
     static String newshowtimeid;
+
     void get_last_showtimeid() throws SQLException {
         lshowtimeid = "";
         Statement stmt = connMD.createStatement();
@@ -184,102 +181,100 @@ public final class Showtime extends javax.swing.JFrame {
         lshowtimeidnum = Integer.parseInt(lshowtimeid.substring(1)) + 1;
         newshowtimeid = "S" + String.valueOf(lshowtimeidnum);
         System.out.println(newshowtimeid);
-        
+
     }
-    
-    void insert_Showtime_to_DB() throws ParseException, SQLException, ClassNotFoundException{
-        
-        
-      String STCinemaID = cinema_combo_box.getSelectedItem().toString();
-      String STMovieID =  MovieID_Tx.getText().trim();
-      String STShowtimeID = ShowtimeID_TX.getText();
-      String STStartT = StartTime_Tx.getText();
-      STStartT = convert_12hr_to_24hr(STStartT);
-      
+
+    void insert_Showtime_to_DB() throws ParseException, SQLException, ClassNotFoundException {
+
+        String STCinemaID = cinema_combo_box.getSelectedItem().toString();
+        String STMovieID = MovieID_Tx.getText().trim();
+        String STShowtimeID = ShowtimeID_TX.getText();
+        String STStartT = StartTime_Tx.getText();
+        STStartT = convert_12hr_to_24hr(STStartT);
+
         System.out.println(STCinemaID);
         System.out.println(STMovieID);
         System.out.println(STShowtimeID);
         System.out.println(STStartT);
-        
-      try {  // INSERTING VALUES FOR ADDMOVIE
-                        
-                        
-                        Statement stmt2 = connMD.createStatement();
-                        String qry = "INSERT INTO showtime VALUES "
-                                + "('"+STStartT+"','"+STShowtimeID+"','"+STCinemaID+"','"+STMovieID+"', 'A')";
-                        int rows = stmt2.executeUpdate(qry);
-                        if (rows > 0) {
-                            System.out.println("Insert Successful");
-                        }
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-      new ShowtimeList().createShowtimeListTable();
+
+        try {  // INSERTING VALUES FOR ADDMOVIE
+
+            Statement stmt2 = connMD.createStatement();
+            String qry = "INSERT INTO showtime VALUES "
+                    + "('" + STStartT + "','" + STShowtimeID + "','" + STCinemaID + "','" + STMovieID + "', 'A')";
+            int rows = stmt2.executeUpdate(qry);
+            if (rows > 0) {
+                System.out.println("Insert Successful");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        new ShowtimeList().createShowtimeListTable();
     }
-    
-    String convert_12hr_to_24hr(String tm) throws ParseException{
+
+    String convert_12hr_to_24hr(String tm) throws ParseException {
         SimpleDateFormat displayFormat = new SimpleDateFormat("HH:mm");
-        SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mm a");
-        java.util.Date date = parseFormat.parse(tm);
+        SimpleDateFormat parseFormat = new SimpleDateFormat("hh:mma");
+        Date date = parseFormat.parse(tm);
         String real_time = displayFormat.format(date);
-        real_time = real_time +":00.0000000";
+        real_time = real_time + ":00.0000000";
         return real_time;
     }
-    
+
     ArrayList<String> Slist = new ArrayList<>();
-    
-    
-    void create_seatList () throws SQLException{
+
+    void create_seatList() throws SQLException {
         String stime = ShowtimeID_TX.getText();
         String cinemaid = cinema_combo_box.getSelectedItem().toString();
         String starttime = StartTime_Tx.getText();
         String movieid = MovieID_Tx.getText();
-        
+
         int left = 0, mid = 0, right = 0;
-        
+
         System.out.println(numofseats);
         left = (numofseats - 21) / 2;
         mid = 21;
         right = left;
-        
-        for(int i =1; i<=left;i++){
-           String SL = "('L',"+ i +",'A','"+stime+"','"+cinemaid+"','"+ starttime +"','"+movieid+"')";
-           Slist.add(SL);
+
+        for (int i = 1; i <= left; i++) {
+            String SL = "('L'," + i + ",'A','" + stime + "','" + cinemaid + "','" + starttime + "','" + movieid + "')";
+            Slist.add(SL);
         }
-        for(int i =1; i<=mid;i++){
-            String SM = "('M',"+ i +",'A','"+stime+"','"+cinemaid+"','"+ starttime +"','"+movieid+"')";
+        for (int i = 1; i <= mid; i++) {
+            String SM = "('M'," + i + ",'A','" + stime + "','" + cinemaid + "','" + starttime + "','" + movieid + "')";
             Slist.add(SM);
         }
-        for(int i =1; i<=right;i++){
-            String SR = "('R',"+ i +",'A','"+stime+"','"+cinemaid+"','"+ starttime +"','"+movieid+"')";
+        for (int i = 1; i <= right; i++) {
+            String SR = "('R'," + i + ",'A','" + stime + "','" + cinemaid + "','" + starttime + "','" + movieid + "')";
             Slist.add(SR);
         }
-        for(int i = 0; i < Slist.size(); i++){
-         String input = "";
-         Statement stmt4 = connMD.createStatement();
-         input = "INSERT INTO Seat_List(seat_location,seat_number,seat_status,ShowtimeID,CinemaID,starttime,stmovieid) "
-                 + "VALUES" + Slist.get(i);
-         int rows = stmt4.executeUpdate(input);
-        
+        for (int i = 0; i < Slist.size(); i++) {
+            String input = "";
+            Statement stmt4 = connMD.createStatement();
+            input = "INSERT INTO Seat_List(seat_location,seat_number,seat_status,ShowtimeID,CinemaID,starttime,stmovieid) "
+                    + "VALUES" + Slist.get(i);
+            int rows = stmt4.executeUpdate(input);
+
         }
         Slist.clear();
     }
-    
-    static int numofseats; 
-    void get_Cinema_seat_count() throws SQLException{
-        
-           Statement stmt = connMD.createStatement();
+
+    static int numofseats;
+
+    void get_Cinema_seat_count() throws SQLException {
+
+        Statement stmt = connMD.createStatement();
 
         String qry = "select * from Cinema";
         ResultSet rs = stmt.executeQuery(qry);
         while (rs.next()) {
-            if(rs.getString(1).equals(cinema_combo_box.getSelectedItem().toString())){
-              numofseats = Integer.parseInt(rs.getString(2));
+            if (rs.getString(1).equals(cinema_combo_box.getSelectedItem().toString())) {
+                numofseats = Integer.parseInt(rs.getString(2));
             }
         }
     }
-   
-    
+
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddShowtime_Button;
     private javax.swing.JLabel CinemaID_Label;
@@ -289,7 +284,7 @@ public final class Showtime extends javax.swing.JFrame {
     private javax.swing.JLabel ShowtimeID_Label;
     private javax.swing.JTextField ShowtimeID_TX;
     private javax.swing.JLabel StartTime_Label;
-    private javax.swing.JTextField StartTime_Tx;
+    private com.github.lgooddatepicker.components.TimePicker StartTime_Tx;
     private javax.swing.JComboBox<String> cinema_combo_box;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
