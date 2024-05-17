@@ -76,10 +76,10 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
     //this method will get the exact seat count of a cinema where a movie will be played
     
     String qry = "select m.Title, m.MovieID, st.ShowtimeMovieID ,st.startTime, st.ShowtimeCinemaID,\n" +
-                    "        c.CinemaID, c.NumofSteats, m.price, st.showtimeID, m.Movie_pic_loc\n" +
-                    "from cinema c inner join(movie m inner join showtime st\n" +
-                    "              on m.MovieID = st.ShowtimeMovieID)\n" +
-                    "     on c.CinemaID = st.ShowtimeCinemaID";
+"                     c.CinemaID, c.NumofSteats, m.price, st.showtimeID, m.Movie_pic_loc, st.showtime_status\n" +
+"                    from cinema c inner join(movie m inner join showtime st\n" +
+"                                  on m.MovieID = st.ShowtimeMovieID)\n" +
+"                       on c.CinemaID = st.ShowtimeCinemaID";
     
     String st1, cid, mprc, mimgloc, ticket_time;
     String tixid = "T1";
@@ -90,7 +90,7 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         ResultSet rs = stmt.executeQuery(qry);
 
         while(rs.next()){
-            if(rs.getString(1).trim().equals(mvt)){
+            if(rs.getString(1).trim().equals(mvt) && rs.getString(11).equals("A")){
                 
                 String ttime = rs.getString(4);
                 ttime = ttime.substring(0,5);
