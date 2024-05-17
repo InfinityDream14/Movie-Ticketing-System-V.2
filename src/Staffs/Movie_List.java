@@ -1,6 +1,6 @@
-
 package Staffs;
 
+import admin.Admin;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
@@ -10,168 +10,175 @@ import java.util.logging.Logger;
 import javax.swing.*;
 import java.sql.*;
 import java.text.ParseException;
+import java.time.LocalTime;
+
 /**
  *
  * @author Administrator
  */
-public class Movie_List extends javax.swing.JFrame {
+public final class Movie_List extends javax.swing.JFrame {
 
     //Seat_Management sm = new Seat_Management();
     //Payment_Method pm= new Payment_Method();
     static Temp_Data tempd = new Temp_Data();
-    Main_Staff ms = new Main_Staff();
-    public Movie_List() throws SQLException{
+    Main_Staff ms;
+    Statement stmt;
+    ResultSet rs;
+    
+    public Movie_List() throws SQLException {
         initComponents();
         setLocationRelativeTo(null);
-        
-        this.setShape(new RoundRectangle2D.Double(0, 0, (850), 
-        (480), 25, 25));
-        
+        this.ms = new Main_Staff();
+
+        this.setShape(new RoundRectangle2D.Double(0, 0, (850),
+                (480), 25, 25));
+
         left_panel_bg();
         right_panel_bg();
         create_movie_list_panel();
         //create_ticket_list();
         ticklist_scrollpane();
         get_staff_profile();
-        
+
         mlist_prof_icon.setIcon(stf_img_pf);
         tempd.tdstf_img_pf = stf_img_pf;
         tempd.tdstaff_name = staff_names;
-        
+
         components = tempd.jp_mlist.getComponents();
-        try{
-            if(components.length !=0){
-                for(Component c : components){
+        try {
+            if (components.length != 0) {
+                for (Component c : components) {
                     receipt_panel.add(c);
                     System.out.println("Nakuha na ng movie list: " + c.getName());
                 }
                 receipt_panel.revalidate();
                 receipt_panel.repaint();
             }
-        }catch(Exception e){
+        } catch (Exception e) {
             e.getStackTrace();
         }
     }
-    static String title_to_sm,staff_pf,staff_names;
+    static String title_to_sm, staff_pf, staff_names;
     static String genre_to_sm;
     static Component[] components = {};
     String st1, cid, mprc, mimgloc;
     String tixid = "T1";
     static String empid = tempd.empid;
     public static ImageIcon stf_img_pf;
-    
+
     String ticket_title = "The Avengers";
+
     public void create_movie_list_panel() throws SQLException {
-        Main_Staff ms = new Main_Staff();
-        
-        Statement stmt = ms.mc.createStatement();
-            
-            String qry = "select * from movie";
-            ResultSet rs = stmt.executeQuery(qry);
-            while(rs.next()){
-                String mposter = rs.getString(7);
-                ImageIcon m1 = new ImageIcon(mposter);
-                JLabel mve1 = new JLabel(m1);
-                String mtitle = rs.getString(2);
-                JLabel mt = new JLabel(mtitle);
-                String mgenre = rs.getString(3);
-                JLabel gr = new JLabel("Genre: " + mgenre);
-                JPanel movie_panel1 = new JPanel();
-                movie_panel1.setPreferredSize(new Dimension(160,225));
-                movie_panel1.setLayout(new FlowLayout(FlowLayout.CENTER,20,2));
-                
-                movie_panel1.add(mve1);
-                movie_panel1.add(mt);
-                movie_panel1.add(gr);
-                
-                movie_panel.add(movie_panel1);
-                
-                movie_panel1.addMouseListener(new MouseAdapter(){
-                    @Override
-                    public void mouseClicked(MouseEvent e){
+
+        this.stmt = this.ms.mc.createStatement();
+
+        String qry = "select * from movie";
+        this.rs = stmt.executeQuery(qry);
+        while (rs.next()) {
+            String mposter = rs.getString(7);
+            ImageIcon m1 = new ImageIcon(mposter);
+            JLabel mve1 = new JLabel(m1);
+            String mtitle = rs.getString(2);
+            JLabel mt = new JLabel(mtitle);
+            String mgenre = rs.getString(3);
+            JLabel gr = new JLabel("Genre: " + mgenre);
+            JPanel movie_panel1 = new JPanel();
+            movie_panel1.setPreferredSize(new Dimension(160, 225));
+            movie_panel1.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 2));
+
+            movie_panel1.add(mve1);
+            movie_panel1.add(mt);
+            movie_panel1.add(gr);
+
+            movie_panel.add(movie_panel1);
+
+            movie_panel1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    try {
+                        JLabel jt = (JLabel) movie_panel1.getComponent(1);
+                        title_to_sm = jt.getText();
+                        JLabel jg = (JLabel) movie_panel1.getComponent(2);
+                        genre_to_sm = jg.getText();
+                        send_receipt_panel_comp();
                         try {
-                            JLabel jt = (JLabel)movie_panel1.getComponent(1);
-                            title_to_sm = jt.getText();
-                            JLabel jg = (JLabel)movie_panel1.getComponent(2);
-                            genre_to_sm = jg.getText();
-                            send_receipt_panel_comp();
-                            try {
-                                Seat_Management sm = new Seat_Management();
-                                sm.setVisible(true);
-                            } catch (ParseException ex) {
-                                Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            dispose();
-                        } catch (SQLException ex) {
+                            Seat_Management sm = new Seat_Management();
+                            sm.setVisible(true);
+                        } catch (ParseException ex) {
                             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                        dispose();
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                });
-            }
-            
-            main_panel.add(movie_panel);
-            movie_panel.setLayout(new FlowLayout(FlowLayout.LEFT,0,5));
-            movie_panel.setPreferredSize(new Dimension(500,2000));
-            //movie_panel.setBounds(10, 50, 280,530);
-            JScrollPane scrollPane = new JScrollPane(movie_panel);
-            scrollPane.setMinimumSize(new Dimension(10, 10));
-            scrollPane.setPreferredSize(new Dimension(500,300));
-            scrollPane.setBounds(15, 15, 500, 335);
-            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-            scrollPane.setOpaque(false);
-            main_panel.add(scrollPane);
+                }
+            });
         }
-    
-    public void send_receipt_panel_comp(){
-        
+
+        main_panel.add(movie_panel);
+        movie_panel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 5));
+        movie_panel.setPreferredSize(new Dimension(500, 2000));
+        //movie_panel.setBounds(10, 50, 280,530);
+        JScrollPane scrollPane = new JScrollPane(movie_panel);
+        scrollPane.setMinimumSize(new Dimension(10, 10));
+        scrollPane.setPreferredSize(new Dimension(500, 300));
+        scrollPane.setBounds(15, 15, 500, 335);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setOpaque(false);
+        main_panel.add(scrollPane);
+    }
+
+    public void send_receipt_panel_comp() {
+
         Component[] c = receipt_panel.getComponents();
-        for(Component cp : c){
+        for (Component cp : c) {
             tempd.jp_mlist.add(cp);
             System.out.println("nalagay na ulit sa tempd for seat: " + cp.getName());
         }
-        
+
     }
-    
-    void left_panel_bg(){
+
+    void left_panel_bg() {
         ImageIcon rpbg = new ImageIcon("lpbg.png");
         Image image = rpbg.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(570, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        Image newimg = image.getScaledInstance(570, 480, java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
         rpbg = new ImageIcon(newimg);
         lp_bg.setIcon(rpbg);
     }
-    void right_panel_bg(){
+
+    void right_panel_bg() {
 
         ImageIcon rpbg = new ImageIcon("rpbg.png");
         Image image = rpbg.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(570, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        Image newimg = image.getScaledInstance(570, 480, java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
         rpbg = new ImageIcon(newimg);
         rp_bg.setIcon(rpbg);
-                
+
     }
-    
+
     public void ticklist_scrollpane() {
         main_receipt_panel.add(receipt_panel);
-        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,5,5));
-        receipt_panel.setPreferredSize(new Dimension(228,900));
+        receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        receipt_panel.setPreferredSize(new Dimension(228, 900));
         JScrollPane scrollPane = new JScrollPane(receipt_panel);
         scrollPane.setMinimumSize(new Dimension(5, 5));
-        scrollPane.setPreferredSize(new Dimension(248,327));
+        scrollPane.setPreferredSize(new Dimension(248, 327));
         scrollPane.setBounds(5, 5, 248, 327);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setOpaque(false);
         main_receipt_panel.add(scrollPane);
     }
-    
-    public void create_ticket_list(JRadioButton rb){
+
+    public void create_ticket_list(JRadioButton rb) {
         JPanel receipt_panel1 = new JPanel();
-        receipt_panel1.setPreferredSize(new Dimension(225,95));
+        receipt_panel1.setPreferredSize(new Dimension(225, 95));
         receipt_panel1.setLayout(null);
         receipt_panel1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         receipt_panel1.setBackground(Color.WHITE);
         receipt_panel.add(receipt_panel1);
-        
+
         JLabel m_title = new JLabel(ticket_title);
         JLabel s_num = new JLabel("Seat No:" + rb.getText());
         JLabel amt = new JLabel("Amount:" + mprc);
@@ -181,10 +188,10 @@ public class Movie_List extends javax.swing.JFrame {
         receipt_panel1.add(m_title);
         receipt_panel1.add(amt);
         receipt_panel1.add(s_num);
-        
-        JPanel image_panel =new JPanel();
+
+        JPanel image_panel = new JPanel();
         receipt_panel1.add(image_panel);
-        image_panel.setLayout(new FlowLayout(FlowLayout.CENTER,1,-7));
+        image_panel.setLayout(new FlowLayout(FlowLayout.CENTER, 1, -7));
         image_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         image_panel.setPreferredSize(new Dimension(89, 85));
         image_panel.setBounds(5, 5, 89, 85);
@@ -193,70 +200,69 @@ public class Movie_List extends javax.swing.JFrame {
         new_image.setSize(89, 85);
         image_panel.add(new_image);
     }
-    
-    public void add_movie_comp_to_receipt_panel() throws SQLException, ParseException{
-        
-        for(Component c : components){
+
+    public void add_movie_comp_to_receipt_panel() throws SQLException, ParseException {
+
+        for (Component c : components) {
             receipt_panel.add(c);
         }
         receipt_panel.revalidate();
         receipt_panel.repaint();
     }
-    
-    void get_staff_profile() throws SQLException{
+
+    void get_staff_profile() throws SQLException {
         Main_Staff ms = new Main_Staff();
         Statement stmt1 = ms.mc.createStatement();
-        
+
         String qry = "select * from staff";
-        
+
         ResultSet rs = stmt1.executeQuery(qry);
-        
-        while(rs.next()){
-            
-            if(rs.getString(1).equals(empid)){
-                staff_pf =rs.getString(8);
+
+        while (rs.next()) {
+
+            if (rs.getString(1).equals(empid)) {
+                staff_pf = rs.getString(8);
                 staff_name.setText(rs.getString(2));
                 staff_names = staff_name.getText();
             }
         }
-        
+
         ImageIcon mi = new ImageIcon(staff_pf);
         Image image = mi.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(57, 57,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-        stf_img_pf = new ImageIcon(newimg); 
-        
+        Image newimg = image.getScaledInstance(57, 57, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+        stf_img_pf = new ImageIcon(newimg);
+
     }
-    void update_seat_list_to_unselected() throws SQLException{
-        
+
+    void update_seat_list_to_unselected() throws SQLException {
+
         Statement stmt = ms.mc.createStatement();
-        
-        String qry = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
-                "from showtime st inner join seat_list sl\n" +
-                "	on st.showtimeid = sl.showtimeid";
-        
-        ResultSet rs  = stmt.executeQuery(qry);
-        while(rs.next()){
-            
+
+        String qry = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n"
+                + "from showtime st inner join seat_list sl\n"
+                + "	on st.showtimeid = sl.showtimeid";
+
+        ResultSet rs = stmt.executeQuery(qry);
+        while (rs.next()) {
+
             Statement stm = ms.mc.createStatement();
-            
-                
-                    
-                String rsin = "UPDATE seat_list\n" +
-                            "set seat_status = 'A'\n" +
-                            "Where seat_status = 'S'";
 
-                int ups = stm.executeUpdate(rsin);
-                if(ups>0){
-                    System.out.println("seat Updated on database");
-                }
+            String rsin = "UPDATE seat_list\n"
+                    + "set seat_status = 'A'\n"
+                    + "Where seat_status = 'S'";
 
-
+            int ups = stm.executeUpdate(rsin);
+            if (ups > 0) {
+                System.out.println("seat Updated on database");
             }
-        
+
+        }
+
         receipt_panel.removeAll();
         receipt_panel.revalidate();
         receipt_panel.repaint();
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -409,7 +415,7 @@ public class Movie_List extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void reset_selected(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reset_selected
-        if(receipt_panel.getComponents().length !=0){
+        if (receipt_panel.getComponents().length != 0) {
             try {
                 JOptionPane.showMessageDialog(null,
                         "The cart will cleared", "System Notice", JOptionPane.INFORMATION_MESSAGE);
@@ -417,8 +423,7 @@ public class Movie_List extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(null,
                     "There's no item in cart", "System Notice", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -457,20 +462,56 @@ public class Movie_List extends javax.swing.JFrame {
             Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jPanel5MouseClicked
- 
+
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
-        System.exit(0);
+        LocalTime lTime = LocalTime.now();
+        Time cTime = Time.valueOf(lTime);
+
+        String empID = "", dateLog = "", logIn = "";
+
+        String q1 = """
+                    select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+                    from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    order by l.DateLog, l.Log_In""";
+
+        try {
+
+            rs = this.stmt.executeQuery(q1);
+
+            while (rs.next()) {
+//                System.out.println(rs.getString(1)+", "+rs.getString(3)+ ", "+rs.getString(4));
+                if (rs.getString("Employee_ID").charAt(0) == 'E') {
+                    empID = rs.getString("Employee_ID");
+                    dateLog = rs.getString("DateLog");
+                    logIn = rs.getString("Log_In");
+                }
+            }
+
+            String q2 = "UPDATE logs SET Log_Out = '" + cTime + "' where Employee_ID = '" + empID + "' AND DateLog = '" + dateLog + "' AND Log_In = '" + logIn + "';";
+            stmt.executeQuery(q2);
+
+        } catch (SQLException ex) {
+        }
+        try {
+            new LogIn.LogIn().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        main.Main.choose = 0;
+        dispose();
     }//GEN-LAST:event_jLabel3MouseClicked
 
     private void exit_staff(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_exit_staff
-        if(evt.getKeyCode() == KeyEvent.VK_END){
-             System.exit(0);
-         }
+        if (evt.getKeyCode() == KeyEvent.VK_END) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_exit_staff
 
     private void mlist_prof_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mlist_prof_iconMouseClicked
         try {
-            Staff_Profile_main spm =new Staff_Profile_main();
+            Staff_Profile_main spm = new Staff_Profile_main();
             spm.setVisible(true);
             this.dispose();
         } catch (SQLException ex) {
@@ -480,7 +521,7 @@ public class Movie_List extends javax.swing.JFrame {
 
     private void staff_nameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staff_nameMouseClicked
         try {
-            Staff_Profile_main spm =new Staff_Profile_main();
+            Staff_Profile_main spm = new Staff_Profile_main();
             spm.setVisible(true);
             this.dispose();
         } catch (SQLException ex) {
@@ -490,7 +531,7 @@ public class Movie_List extends javax.swing.JFrame {
 
     private void p_to_paymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_p_to_paymentActionPerformed
 
-        if(receipt_panel.getComponents().length !=0){
+        if (receipt_panel.getComponents().length != 0) {
             send_receipt_panel_comp();
             Payment_Method pm;
             try {
@@ -501,10 +542,9 @@ public class Movie_List extends javax.swing.JFrame {
             } catch (ParseException ex) {
                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
             this.dispose();
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(null,
                     "Please add to cart first", "System Notice", JOptionPane.INFORMATION_MESSAGE);
         }

@@ -26,7 +26,7 @@ public class LogInProcess implements Logs {
         String sql = """
                      select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
                      \tfrom LOGS l left join staff s on l.Employee_ID = s.EmployeeID
-                     \torder by l.Log_In, l.DateLog""";
+                     \torder by l.DateLog, l.Log_In""";
         String empID = "", logOut = "";
         
         ResultSet rs = stmt.executeQuery(sql);
@@ -91,7 +91,7 @@ public class LogInProcess implements Logs {
         LocalTime now = LocalTime.now();
         System.out.println(employeeID);
         String query = "insert into logs (Employee_ID, Log_In) values ('" + employeeID + "', '" + now + "')";
-
+        
         try {
             stmt.executeQuery(query);
 

@@ -386,6 +386,9 @@
                   <Font name="Segoe UI" size="21" style="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sPassInActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="sUserIn">
               <Properties>
@@ -403,6 +406,9 @@
                   <Font name="Segoe UI" size="21" style="0"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sRPassInActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel7">
               <Properties>

@@ -4,12 +4,22 @@
  */
 package admin;
 
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.text.ParseException;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +29,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.RowFilter;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -38,12 +53,18 @@ public final class Admin extends javax.swing.JFrame {
     int price; // for creating new Movie
     String Duration = "null"; // for creating new Movie;
 
+    int showtimeTime;
+    public static String ShowtimeMovieID;
+    
     Statement stmt;
     Connection conn;
     ResultSet rs;
-    Vector vec;
-    DefaultTableModel tmodel = new DefaultTableModel();
+    ArrayList <Object[]> vec = new ArrayList<>();
+    DefaultTableModel tmodel = new DefaultTableModel(); 
+    DefaultTableModel tmodel1 = new DefaultTableModel();
     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
+
+    File file = null;
 
     public Admin() throws SQLException, ClassNotFoundException {
         connectToDatabase();
@@ -88,6 +109,7 @@ public final class Admin extends javax.swing.JFrame {
         salesTable.setModel(tmodel);
         tmodel.addColumn("Ticket ID");
         tmodel.addColumn("Date Purchased");
+        tmodel.addColumn("Time Purchased");
         ListSelectionModel cellSelectionModel = salesTable.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -112,16 +134,23 @@ public final class Admin extends javax.swing.JFrame {
         String sql = """
                      select t.TicketID, p.PaymentDate
                      from ticket t join payment p on t.TicketPaymentID = p.PaymentID""";
-
+        String newTimeSell, dateSell;
+        
         try {
             stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
-
+            SimpleDateFormat dateFormat  = new SimpleDateFormat("MMMMM dd, yyyy");
+            this.vec = new ArrayList<>();
+            
             while (rs != null && rs.next()) {
-                this.vec = new Vector();
-                this.vec.add(rs.getString("TicketID"));
-                this.vec.add(rs.getString("PaymentDate"));
-                tmodel.addRow(this.vec);
+                
+                newTimeSell = this.dateFormat.format(rs.getTime("PaymentDate"));
+                dateSell = dateFormat.format(rs.getDate("PaymentDate"));
+                
+                this.vec.add(new Object[]{rs.getString("TicketID"), dateSell, newTimeSell});
+            }
+            for(Object[] row : vec){
+                tmodel.addRow(row);
             }
 
         } catch (SQLException e) {
@@ -165,12 +194,13 @@ public final class Admin extends javax.swing.JFrame {
         try {
             stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
+            vec = new ArrayList<>();
 
             while (this.rs != null && rs.next()) {
-                this.vec = new Vector();
-                this.vec.add(rs.getString("EmployeeID"));
-                this.vec.add(rs.getString("FullName"));
-                tmodel.addRow(this.vec);
+                vec.add(new Object[] {rs.getString("EmployeeID"), rs.getString("FullName")});
+            }
+            for(Object[] row : vec){
+                tmodel.addRow(row);
             }
 
         } catch (SQLException e) {
@@ -214,30 +244,27 @@ public final class Admin extends javax.swing.JFrame {
         String sql = """
              select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
              	from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
-             	order by l.Log_In, l.DateLog""";
+             	order by l.DateLog, l.Log_In""";
 
         try {
             this.stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
-
+            vec = new ArrayList<>();
             while (rs.next()) {
                 logInT = rs.getTime("Log_In");
                 newLogIn = (logInT != null) ? dateFormat.format(logInT) : "";
 
                 logOutT = rs.getTime("Log_Out");
                 newLogOut = (logOutT != null) ? dateFormat.format(logOutT) : "";
-
-                this.vec = new Vector();
-                this.vec.add(rs.getString("Employee_ID"));
-                this.vec.add(rs.getString("Full Name"));
-                this.vec.add(rs.getString("DateLog"));
-                this.vec.add(newLogIn);
-                this.vec.add(newLogOut);
-                System.out.println(newLogOut);
-                tmodel.addRow(this.vec);
+                
+                vec.add(new Object[] {rs.getString("Employee_ID"), rs.getString("Full Name"), rs.getString("DateLog"), newLogIn, newLogOut});
+            }
+            
+            for(Object[] row : vec){
+                tmodel.addRow(row);
             }
 
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e);
         }
 
@@ -260,6 +287,7 @@ public final class Admin extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jDateChooser1 = new com.toedter.calendar.JDateChooser();
         logs = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -291,6 +319,16 @@ public final class Admin extends javax.swing.JFrame {
         Add_Another_Staff = new javax.swing.JButton();
         Back = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        logsB = new javax.swing.JButton();
+        staffsB = new javax.swing.JButton();
+        addStaffsB = new javax.swing.JButton();
+        moviesB = new javax.swing.JButton();
+        salesB1 = new javax.swing.JButton();
+        addMoviesB1 = new javax.swing.JButton();
+        logOut = new javax.swing.JButton();
         addMovies = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -308,25 +346,18 @@ public final class Admin extends javax.swing.JFrame {
         AddMovie_Price_Label = new javax.swing.JLabel();
         AddMovie_Price_TextField = new javax.swing.JTextField();
         AddMovie_AddMovie_Button = new javax.swing.JButton();
-        AddMovie_AddAnotherMovie_Button = new javax.swing.JButton();
         AddMovie_Back_Button = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        logsB = new javax.swing.JButton();
-        staffsB = new javax.swing.JButton();
-        addStaffsB = new javax.swing.JButton();
-        moviesB = new javax.swing.JButton();
-        salesB1 = new javax.swing.JButton();
-        addMoviesB1 = new javax.swing.JButton();
+        MoviePoster = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+        PosterName = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
         movies = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        MovieTable = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
-        logOut = new javax.swing.JButton();
+        MovieSearchField = new javax.swing.JTextField();
+        Select_Button_Movies = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -355,8 +386,6 @@ public final class Admin extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel9.setText("Receipt No.");
 
-        jTextField1.setText("jTextField1");
-
         jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton1.setText("Search");
         jButton1.setFocusPainted(false);
@@ -369,11 +398,14 @@ public final class Admin extends javax.swing.JFrame {
             salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(salesLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, salesLayout.createSequentialGroup()
+                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(salesLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(576, 576, 576)
+                        .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(53, Short.MAX_VALUE))
+            .addGroup(salesLayout.createSequentialGroup()
                 .addGap(277, 277, 277)
                 .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, salesLayout.createSequentialGroup()
@@ -383,13 +415,15 @@ public final class Admin extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, salesLayout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addGap(138, 138, 138)))
-                .addGap(270, 270, 270))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         salesLayout.setVerticalGroup(
             salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(salesLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jLabel3)
+                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jDateChooser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(47, 47, 47)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(43, 43, 43)
@@ -402,7 +436,7 @@ public final class Admin extends javax.swing.JFrame {
         );
 
         jPanel3.add(sales);
-        sales.setBounds(162, 0, 939, 652);
+        sales.setBounds(162, 0, 940, 652);
 
         logs.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -745,215 +779,6 @@ public final class Admin extends javax.swing.JFrame {
         jPanel3.add(addEmplyee);
         addEmplyee.setBounds(162, 0, 939, 652);
 
-        addMovies.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
-        jLabel8.setText("Add Movies");
-
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), new java.awt.Color(0, 0, 0)));
-        jPanel4.setPreferredSize(new java.awt.Dimension(676, 424));
-
-        AddMovie_AddMovie_Label.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
-        AddMovie_AddMovie_Label.setText("Movie Details");
-        AddMovie_AddMovie_Label.setMaximumSize(new java.awt.Dimension(156, 31));
-        AddMovie_AddMovie_Label.setMinimumSize(new java.awt.Dimension(156, 31));
-        AddMovie_AddMovie_Label.setPreferredSize(new java.awt.Dimension(156, 31));
-
-        AddMovie_MovieID_Label.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
-        AddMovie_MovieID_Label.setText("Movie ID: ");
-        AddMovie_MovieID_Label.setPreferredSize(new java.awt.Dimension(103, 31));
-
-        AddMovie_MovieID_TextField.setEditable(false);
-        AddMovie_MovieID_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        AddMovie_MovieID_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
-
-        AddMovie_Title_Label1.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
-        AddMovie_Title_Label1.setText("Title: ");
-        AddMovie_Title_Label1.setPreferredSize(new java.awt.Dimension(103, 31));
-
-        AddMovie_Title_TextField1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        AddMovie_Title_TextField1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
-
-        AddMovie_Genre_Label.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
-        AddMovie_Genre_Label.setText("Genre:");
-        AddMovie_Genre_Label.setPreferredSize(new java.awt.Dimension(103, 31));
-
-        AddMovie_Genre_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        AddMovie_Genre_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
-        AddMovie_Genre_TextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddMovie_Genre_TextFieldActionPerformed(evt);
-            }
-        });
-
-        AddMovie_Director_Label.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
-        AddMovie_Director_Label.setText("Director: ");
-        AddMovie_Director_Label.setPreferredSize(new java.awt.Dimension(103, 31));
-
-        AddMovie_Director_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        AddMovie_Director_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
-        AddMovie_Director_TextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddMovie_Director_TextFieldActionPerformed(evt);
-            }
-        });
-
-        AddMovie_Duration_Label.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
-        AddMovie_Duration_Label.setText("Duration:");
-        AddMovie_Duration_Label.setPreferredSize(new java.awt.Dimension(103, 31));
-
-        AddMovie_Duration_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        AddMovie_Duration_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
-
-        AddMovie_Price_Label.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
-        AddMovie_Price_Label.setText("Price:");
-        AddMovie_Price_Label.setPreferredSize(new java.awt.Dimension(103, 31));
-
-        AddMovie_Price_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        AddMovie_Price_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
-
-        AddMovie_AddMovie_Button.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        AddMovie_AddMovie_Button.setText("Add Movie");
-        AddMovie_AddMovie_Button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                AddMovie_AddMovie_ButtonMouseClicked(evt);
-            }
-        });
-        AddMovie_AddMovie_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddMovie_AddMovie_ButtonActionPerformed(evt);
-            }
-        });
-
-        AddMovie_AddAnotherMovie_Button.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        AddMovie_AddAnotherMovie_Button.setText("Add Another Movie");
-        AddMovie_AddAnotherMovie_Button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                AddMovie_AddAnotherMovie_ButtonMouseClicked(evt);
-            }
-        });
-        AddMovie_AddAnotherMovie_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddMovie_AddAnotherMovie_ButtonActionPerformed(evt);
-            }
-        });
-
-        AddMovie_Back_Button.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        AddMovie_Back_Button.setText("Back");
-        AddMovie_Back_Button.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddMovie_Back_ButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(59, 59, 59)
-                        .addComponent(AddMovie_AddMovie_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGap(89, 89, 89)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(AddMovie_Director_Label, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(AddMovie_Title_Label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(AddMovie_MovieID_Label, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(AddMovie_Genre_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddMovie_Duration_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddMovie_Price_Label, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(AddMovie_Genre_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 309, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(AddMovie_Title_TextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 309, Short.MAX_VALUE)
-                                        .addComponent(AddMovie_MovieID_TextField, javax.swing.GroupLayout.Alignment.TRAILING))))
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(65, 65, 65)
-                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(AddMovie_Director_TextField)
-                                    .addComponent(AddMovie_Duration_TextField)
-                                    .addComponent(AddMovie_Price_TextField))))))
-                .addGap(90, 90, 90))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(AddMovie_Back_Button, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(AddMovie_AddAnotherMovie_Button, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(AddMovie_AddMovie_Button, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(AddMovie_AddMovie_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(AddMovie_MovieID_Label, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(AddMovie_MovieID_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(AddMovie_Title_Label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddMovie_Title_TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(AddMovie_Genre_Label, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddMovie_Genre_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(AddMovie_Director_Label, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddMovie_Director_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(AddMovie_Duration_Label, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddMovie_Duration_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(AddMovie_Price_Label, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddMovie_Price_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(AddMovie_AddMovie_Button, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddMovie_AddAnotherMovie_Button, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(AddMovie_Back_Button, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(48, 48, 48))
-        );
-
-        javax.swing.GroupLayout addMoviesLayout = new javax.swing.GroupLayout(addMovies);
-        addMovies.setLayout(addMoviesLayout);
-        addMoviesLayout.setHorizontalGroup(
-            addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(addMoviesLayout.createSequentialGroup()
-                .addGroup(addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(addMoviesLayout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(addMoviesLayout.createSequentialGroup()
-                        .addGap(178, 178, 178)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(103, Short.MAX_VALUE))
-        );
-        addMoviesLayout.setVerticalGroup(
-            addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(addMoviesLayout.createSequentialGroup()
-                .addGap(78, 78, 78)
-                .addComponent(jLabel8)
-                .addGap(34, 34, 34)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(45, Short.MAX_VALUE))
-        );
-
-        jPanel3.add(addMovies);
-        addMovies.setBounds(162, 0, 957, 652);
-
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/AAG Movie Ticketing System Logo .png"))); // NOI18N
         jPanel3.add(jLabel1);
         jLabel1.setBounds(6, 0, 150, 150);
@@ -1037,65 +862,6 @@ public final class Admin extends javax.swing.JFrame {
         jPanel3.add(jPanel1);
         jPanel1.setBounds(6, 224, 150, 310);
 
-        movies.setBackground(new java.awt.Color(255, 255, 255));
-        movies.setMinimumSize(new java.awt.Dimension(932, 652));
-        movies.setPreferredSize(new java.awt.Dimension(939, 652));
-        movies.setLayout(null);
-
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
-        jLabel7.setText("Movies");
-        movies.add(jLabel7);
-        jLabel7.setBounds(34, 39, 117, 48);
-
-        jTable2.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Movie ID", "Movie Title"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane3.setViewportView(jTable2);
-
-        movies.add(jScrollPane3);
-        jScrollPane3.setBounds(45, 132, 847, 365);
-
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel13.setText("Search: ");
-        movies.add(jLabel13);
-        jLabel13.setBounds(210, 510, 70, 25);
-
-        jTextField4.setFont(new java.awt.Font("Segoe UI", 1, 15)); // NOI18N
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
-            }
-        });
-        movies.add(jTextField4);
-        jTextField4.setBounds(297, 506, 365, 23);
-
-        jButton3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton3.setText("Search");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-        movies.add(jButton3);
-        jButton3.setBounds(391, 542, 150, 41);
-
-        jPanel3.add(movies);
-        movies.setBounds(162, 0, 939, 652);
-
         logOut.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         logOut.setText("Log Out");
         logOut.setMargin(new java.awt.Insets(2, 12, 3, 12));
@@ -1106,6 +872,233 @@ public final class Admin extends javax.swing.JFrame {
         });
         jPanel3.add(logOut);
         logOut.setBounds(10, 570, 140, 27);
+
+        addMovies.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
+        jLabel8.setText("Add Movies");
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), new java.awt.Color(0, 0, 0)));
+        jPanel4.setPreferredSize(new java.awt.Dimension(676, 424));
+        jPanel4.setLayout(null);
+
+        AddMovie_AddMovie_Label.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        AddMovie_AddMovie_Label.setText("Movie Details");
+        AddMovie_AddMovie_Label.setMaximumSize(new java.awt.Dimension(156, 31));
+        AddMovie_AddMovie_Label.setMinimumSize(new java.awt.Dimension(156, 31));
+        AddMovie_AddMovie_Label.setPreferredSize(new java.awt.Dimension(156, 31));
+        jPanel4.add(AddMovie_AddMovie_Label);
+        AddMovie_AddMovie_Label.setBounds(61, 29, 175, 31);
+
+        AddMovie_MovieID_Label.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
+        AddMovie_MovieID_Label.setText("Movie ID: ");
+        AddMovie_MovieID_Label.setPreferredSize(new java.awt.Dimension(103, 31));
+        jPanel4.add(AddMovie_MovieID_Label);
+        AddMovie_MovieID_Label.setBounds(201, 78, 103, 31);
+
+        AddMovie_MovieID_TextField.setEditable(false);
+        AddMovie_MovieID_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        AddMovie_MovieID_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
+        jPanel4.add(AddMovie_MovieID_TextField);
+        AddMovie_MovieID_TextField.setBounds(343, 78, 309, 31);
+
+        AddMovie_Title_Label1.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
+        AddMovie_Title_Label1.setText("Title: ");
+        AddMovie_Title_Label1.setPreferredSize(new java.awt.Dimension(103, 31));
+        jPanel4.add(AddMovie_Title_Label1);
+        AddMovie_Title_Label1.setBounds(201, 121, 103, 31);
+
+        AddMovie_Title_TextField1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        AddMovie_Title_TextField1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
+        jPanel4.add(AddMovie_Title_TextField1);
+        AddMovie_Title_TextField1.setBounds(343, 121, 309, 32);
+
+        AddMovie_Genre_Label.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
+        AddMovie_Genre_Label.setText("Genre:");
+        AddMovie_Genre_Label.setPreferredSize(new java.awt.Dimension(103, 31));
+        jPanel4.add(AddMovie_Genre_Label);
+        AddMovie_Genre_Label.setBounds(201, 159, 91, 31);
+
+        AddMovie_Genre_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        AddMovie_Genre_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
+        AddMovie_Genre_TextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddMovie_Genre_TextFieldActionPerformed(evt);
+            }
+        });
+        jPanel4.add(AddMovie_Genre_TextField);
+        AddMovie_Genre_TextField.setBounds(343, 163, 309, 32);
+
+        AddMovie_Director_Label.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
+        AddMovie_Director_Label.setText("Director: ");
+        AddMovie_Director_Label.setPreferredSize(new java.awt.Dimension(103, 31));
+        jPanel4.add(AddMovie_Director_Label);
+        AddMovie_Director_Label.setBounds(201, 201, 119, 31);
+
+        AddMovie_Director_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        AddMovie_Director_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
+        AddMovie_Director_TextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddMovie_Director_TextFieldActionPerformed(evt);
+            }
+        });
+        jPanel4.add(AddMovie_Director_TextField);
+        AddMovie_Director_TextField.setBounds(343, 205, 309, 32);
+
+        AddMovie_Duration_Label.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
+        AddMovie_Duration_Label.setText("Duration:");
+        AddMovie_Duration_Label.setPreferredSize(new java.awt.Dimension(103, 31));
+        jPanel4.add(AddMovie_Duration_Label);
+        AddMovie_Duration_Label.setBounds(201, 243, 119, 31);
+
+        AddMovie_Duration_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        AddMovie_Duration_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
+        jPanel4.add(AddMovie_Duration_TextField);
+        AddMovie_Duration_TextField.setBounds(343, 247, 309, 32);
+
+        AddMovie_Price_Label.setFont(new java.awt.Font("Segoe UI", 0, 23)); // NOI18N
+        AddMovie_Price_Label.setText("Price:");
+        AddMovie_Price_Label.setPreferredSize(new java.awt.Dimension(103, 31));
+        jPanel4.add(AddMovie_Price_Label);
+        AddMovie_Price_Label.setBounds(201, 285, 119, 31);
+
+        AddMovie_Price_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        AddMovie_Price_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
+        AddMovie_Price_TextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                AddMovie_Price_TextFieldKeyTyped(evt);
+            }
+        });
+        jPanel4.add(AddMovie_Price_TextField);
+        AddMovie_Price_TextField.setBounds(343, 289, 309, 32);
+
+        AddMovie_AddMovie_Button.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        AddMovie_AddMovie_Button.setText("Add Movie");
+        AddMovie_AddMovie_Button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                AddMovie_AddMovie_ButtonMouseClicked(evt);
+            }
+        });
+        AddMovie_AddMovie_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddMovie_AddMovie_ButtonActionPerformed(evt);
+            }
+        });
+        jPanel4.add(AddMovie_AddMovie_Button);
+        AddMovie_AddMovie_Button.setBounds(505, 341, 147, 35);
+
+        AddMovie_Back_Button.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        AddMovie_Back_Button.setText("Back");
+        AddMovie_Back_Button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AddMovie_Back_ButtonActionPerformed(evt);
+            }
+        });
+        jPanel4.add(AddMovie_Back_Button);
+        AddMovie_Back_Button.setBounds(340, 340, 147, 35);
+        jPanel4.add(MoviePoster);
+        MoviePoster.setBounds(35, 90, 138, 180);
+
+        jButton5.setText("Add Poster");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        jPanel4.add(jButton5);
+        jButton5.setBounds(50, 290, 100, 30);
+
+        PosterName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PosterNameActionPerformed(evt);
+            }
+        });
+        jPanel4.add(PosterName);
+        PosterName.setBounds(20, 340, 200, 30);
+        jPanel4.add(jLabel11);
+        jLabel11.setBounds(0, 0, 0, 430);
+
+        javax.swing.GroupLayout addMoviesLayout = new javax.swing.GroupLayout(addMovies);
+        addMovies.setLayout(addMoviesLayout);
+        addMoviesLayout.setHorizontalGroup(
+            addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(addMoviesLayout.createSequentialGroup()
+                .addGroup(addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(addMoviesLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(addMoviesLayout.createSequentialGroup()
+                        .addGap(140, 140, 140)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(124, Short.MAX_VALUE))
+        );
+        addMoviesLayout.setVerticalGroup(
+            addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(addMoviesLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel8)
+                .addGap(42, 42, 42)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(106, Short.MAX_VALUE))
+        );
+
+        jPanel3.add(addMovies);
+        addMovies.setBounds(160, 0, 940, 650);
+
+        movies.setBackground(new java.awt.Color(255, 255, 255));
+        movies.setMinimumSize(new java.awt.Dimension(932, 652));
+        movies.setPreferredSize(new java.awt.Dimension(939, 652));
+        movies.setLayout(null);
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
+        jLabel7.setText("Movies");
+        movies.add(jLabel7);
+        jLabel7.setBounds(34, 39, 117, 48);
+
+        MovieTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane3.setViewportView(MovieTable);
+
+        movies.add(jScrollPane3);
+        jScrollPane3.setBounds(45, 132, 847, 365);
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel13.setText("Search: ");
+        movies.add(jLabel13);
+        jLabel13.setBounds(210, 510, 70, 25);
+
+        MovieSearchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MovieSearchFieldActionPerformed(evt);
+            }
+        });
+        MovieSearchField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                MovieSearchFieldKeyReleased(evt);
+            }
+        });
+        movies.add(MovieSearchField);
+        MovieSearchField.setBounds(297, 506, 365, 30);
+
+        Select_Button_Movies.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        Select_Button_Movies.setText("Select");
+        Select_Button_Movies.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Select_Button_MoviesActionPerformed(evt);
+            }
+        });
+        movies.add(Select_Button_Movies);
+        Select_Button_Movies.setBounds(391, 542, 150, 41);
+
+        jPanel3.add(movies);
+        movies.setBounds(160, 0, 940, 652);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1132,8 +1125,8 @@ public final class Admin extends javax.swing.JFrame {
 
         String q1 = """
                     select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
-                    	from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
-                    	order by l.Log_In, l.DateLog""";
+                    from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    order by l.DateLog, l.Log_In""";
 
         try {
 
@@ -1160,6 +1153,7 @@ public final class Admin extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
         }
+        main.Main.choose = 0;
         dispose();
     }//GEN-LAST:event_logOutActionPerformed
 
@@ -1178,10 +1172,10 @@ public final class Admin extends javax.swing.JFrame {
         sales.setVisible(false);
         logs.setVisible(false);
         employee.setVisible(false);
-        addEmplyee.setVisible(false);
+        addEmplyee.setVisible(true);
         AddStaff_EmployeeID_TextField.setText(newempid);
         movies.setVisible(false);
-        addMovies.setVisible(true);
+        addMovies.setVisible(false);
     }//GEN-LAST:event_addStaffsBActionPerformed
 
     private void moviesBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moviesBActionPerformed
@@ -1191,6 +1185,7 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.setVisible(false);
         movies.setVisible(true);
         addMovies.setVisible(false);
+        createTableMovie();
     }//GEN-LAST:event_moviesBActionPerformed
 
     private void logsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logsBActionPerformed
@@ -1306,126 +1301,6 @@ public final class Admin extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_BackActionPerformed
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void AddMovie_AddMovie_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_AddMovie_ButtonActionPerformed
-        // Ang kulang nalang dito is yung pic_poster_location
-        // Tapos may error na lumalabas kapag mali yung input sa price (Ex kapag string yung nailagay mag eerror)
-
-        MovieID = AddMovie_MovieID_TextField.getText();
-        Title = AddMovie_Title_TextField1.getText();
-        Genre = AddMovie_Genre_TextField.getText();
-        Director = AddMovie_Director_TextField.getText();
-        Duration = AddMovie_Duration_TextField.getText();
-        price = Integer.parseInt(AddMovie_Price_TextField.getText());
-        Movie_Pic_Location = "null";
-        Mpass = "Admin";
-
-        adminpass = JOptionPane.showInputDialog("Enter Admin PassWord: ");
-        if (adminpass != null && adminpass.matches(Mpass)) {
-            System.out.println("Data Added: ");
-            System.out.println(MovieID);
-            System.out.println(Title);
-            System.out.println(Genre);
-            //System.out.println(AddStaff_Email_TextField.getText()); // eto reference ng null sa addStaff
-            System.out.println(Director);
-            System.out.println(AddMovie_Duration_TextField.getText());
-            System.out.println(price);
-            System.out.println(Movie_Pic_Location);
-            System.out.println(PNum);
-
-            try {  // INSERTING VALUES FOR ADDMOVIE
-
-                this.stmt = conn.createStatement();
-                String qry = "insert into Movie (MovieID, Title, Genre, Director, Duration, Price, Movie_pic_loc)"
-                        + "values('" + MovieID + "','" + Title + "','" + Genre + "','" + Director + "','" + Duration + "','"
-                        + price + "','" + Movie_Pic_Location + "')";
-                int rows = stmt.executeUpdate(qry);
-                if (rows > 0) {
-                    System.out.println("Insert Successful");
-                }
-                conn.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Confirmation Cancelled");
-        }
-
-
-    }//GEN-LAST:event_AddMovie_AddMovie_ButtonActionPerformed
-
-    private void AddMovie_AddAnotherMovie_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_AddAnotherMovie_ButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_AddMovie_AddAnotherMovie_ButtonActionPerformed
-
-    private void AddMovie_Back_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_Back_ButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_AddMovie_Back_ButtonActionPerformed
-
-    private void AddMovie_Genre_TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_Genre_TextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_AddMovie_Genre_TextFieldActionPerformed
-
-    private void AddMovie_Director_TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_Director_TextFieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_AddMovie_Director_TextFieldActionPerformed
-
-    private void AddMovie_AddMovie_ButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddMovie_AddMovie_ButtonMouseClicked
-        // TODO add your handling code here:
-
-        MovieID = AddMovie_MovieID_TextField.getText();
-        Title = AddMovie_Title_TextField1.getText();
-        Genre = AddMovie_Genre_TextField.getText();
-        Director = AddMovie_Director_TextField.getText();
-        Duration = AddMovie_Duration_TextField.getText();
-        price = Integer.parseInt(AddMovie_Price_TextField.getText());
-
-        for (int i = 0; i < 4; i++) {
-            if (AddMovie_MovieID_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddMovie_Title_TextField1.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddMovie_Genre_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddMovie_Director_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddMovie_Price_TextField.getText().isEmpty() || AddMovie_Price_TextField.getText().matches("[a-zA-Z]+")) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data Correctly");
-                i--;
-                break;
-            } else {
-                System.out.println("Add Movie Details: ");
-                System.out.println(MovieID);
-                System.out.println(Title);
-                System.out.println(Genre);
-                System.out.println(Director);
-                System.out.println(Duration);
-                System.out.println(price);
-            }
-
-        }
-    }//GEN-LAST:event_AddMovie_AddMovie_ButtonMouseClicked
-
-    private void AddMovie_AddAnotherMovie_ButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddMovie_AddAnotherMovie_ButtonMouseClicked
-        // TODO add your handling code here: 
-
-    }//GEN-LAST:event_AddMovie_AddAnotherMovie_ButtonMouseClicked
-
     private void Add_Another_StaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Add_Another_StaffMouseClicked
         newempid = "E" + (lnum + 1);
 
@@ -1448,8 +1323,201 @@ public final class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_salesB1ActionPerformed
 
     private void addMoviesB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMoviesB1ActionPerformed
-        // TODO add your handling code here:
+        sales.setVisible(false);
+        logs.setVisible(false);
+        employee.setVisible(false);
+        addEmplyee.setVisible(false);
+        movies.setVisible(false);
+        addMovies.setVisible(true);
+        AddMovie_MovieID_TextField.setText(newmovieid);
     }//GEN-LAST:event_addMoviesB1ActionPerformed
+
+    private void AddMovie_Genre_TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_Genre_TextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AddMovie_Genre_TextFieldActionPerformed
+
+    private void AddMovie_Director_TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_Director_TextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AddMovie_Director_TextFieldActionPerformed
+
+    private void AddMovie_Price_TextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_AddMovie_Price_TextFieldKeyTyped
+        // TODO add your handling code here:
+        // for number input only in price textfield
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_AddMovie_Price_TextFieldKeyTyped
+
+    private void AddMovie_AddMovie_ButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_AddMovie_AddMovie_ButtonMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AddMovie_AddMovie_ButtonMouseClicked
+
+    private void AddMovie_AddMovie_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_AddMovie_ButtonActionPerformed
+        // Ang kulang nalang dito is yung pic_poster_location
+        // Tapos may error na lumalabas kapag mali yung input sa price (Ex kapag string yung nailagay mag eerror)
+
+        for (int i = 0; i < 4; i++) {
+            MovieID = AddMovie_MovieID_TextField.getText();
+            Title = AddMovie_Title_TextField1.getText();
+            Genre = AddMovie_Genre_TextField.getText();
+            Director = AddMovie_Director_TextField.getText();
+            Duration = AddMovie_Duration_TextField.getText();
+            price = Integer.parseInt(AddMovie_Price_TextField.getText());
+            Movie_Pic_Location = file.toString().substring(file.toString().lastIndexOf("\\") + 1);
+            Mpass = "Admin";
+
+            if (AddMovie_MovieID_TextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please Fill In Data");
+                i--;
+                break;
+            } else if (AddMovie_Title_TextField1.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please Fill In Data");
+                i--;
+                break;
+            } else if (AddMovie_Genre_TextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please Fill In Data");
+                i--;
+                break;
+            } else if (AddMovie_Director_TextField.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Please Fill In Data");
+                i--;
+                break;
+            } else if (AddMovie_Price_TextField.getText().isEmpty() || AddMovie_Price_TextField.getText().matches("[a-zA-Z]+")) {
+                JOptionPane.showMessageDialog(null, "Please Fill In Data Correctly");
+                i--;
+                break;
+            } else {
+                adminpass = JOptionPane.showInputDialog("Enter Admin PassWord: ");
+                if (adminpass != null && adminpass.matches(Mpass)) {
+                    System.out.println("Data Added: ");
+                    System.out.println(MovieID);
+                    System.out.println(Title);
+                    System.out.println(Genre);
+                    System.out.println(Director);
+                    System.out.println(AddMovie_Duration_TextField.getText());
+                    System.out.println(price);
+                    System.out.println(Movie_Pic_Location);
+                    System.out.println(PNum);
+
+                    try {  // INSERTING VALUES FOR ADDMOVIE
+                        Statement stmt2 = conn.createStatement();
+                        stmt2 = conn.createStatement();
+                        String qry = "insert into Movie (MovieID, Title, Genre, Director, Duration, Price, Movie_pic_loc)"
+                                + "values('" + MovieID + "','" + Title + "','" + Genre + "','" + Director + "','" + Duration + "','"
+                                + price + "','" + Movie_Pic_Location + "')";
+                        int rows = stmt.executeUpdate(qry);
+                        if (rows > 0) {
+                            DefaultTableModel model = (DefaultTableModel) MovieTable.getModel();
+                            model.setRowCount(0);
+                            getMovieData();
+                            System.out.println("Insert Successful");
+                            stmt2.close(); // note lang
+
+                        }
+                    } catch (SQLException ex) {
+                        Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    showtimeTime = JOptionPane.showConfirmDialog(this, "Add Show Time? ", "Showtime", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    if (showtimeTime == JOptionPane.YES_OPTION) {
+                        try {
+                            new Showtime().setVisible(true);
+
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ParseException ex) {
+                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+                    } else if (showtimeTime == JOptionPane.NO_OPTION || showtimeTime == JOptionPane.CLOSED_OPTION) {
+
+                        System.out.println("No");
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Confirmation Cancelled");
+                }
+
+                ClearFieldMovies();
+                break;
+            }
+        }
+    }//GEN-LAST:event_AddMovie_AddMovie_ButtonActionPerformed
+
+    private void AddMovie_Back_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_Back_ButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AddMovie_Back_ButtonActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        String fildest = System.getProperty("user.dir");
+        fildest = fildest + "\\Movie Posters\\";
+
+        int res = chooser.showOpenDialog(Admin.this);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            file = chooser.getSelectedFile();
+            String path = file.getAbsolutePath();
+            ImageIcon imgIcon = new ImageIcon(file.getAbsolutePath());
+            Rectangle rec = MoviePoster.getBounds();
+            Image scaledimg = imgIcon.getImage().getScaledInstance(rec.width, rec.height, Image.SCALE_SMOOTH);
+            imgIcon = new ImageIcon(scaledimg);
+            MoviePoster.setIcon(imgIcon);
+            PosterName.setText(file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf("\\") + 1));
+
+            if (file.exists()) {
+                File destfile = new File(fildest + File.separator + file.getName());
+
+                try (InputStream is = new FileInputStream(file); OutputStream os = new FileOutputStream(destfile)) {
+
+                    int len;
+                    float srcfsize = is.available() / 1000.0f;
+                    float totalcopied = 0.0f;
+                    byte[] byt = new byte[1024];
+                    while ((len = is.read(byt)) > 0) {
+                        os.write(byt, 0, len);
+                        totalcopied += len;
+                        System.out.println("\rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
+
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "No Image has been Selected");
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void PosterNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PosterNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_PosterNameActionPerformed
+
+    private void MovieSearchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovieSearchFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_MovieSearchFieldActionPerformed
+
+    private void MovieSearchFieldKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_MovieSearchFieldKeyReleased
+        // TODO add your handling code here:
+        DefaultTableModel SearchTable = (DefaultTableModel) MovieTable.getModel();
+        TableRowSorter<DefaultTableModel> MovieSearch = new TableRowSorter<>(SearchTable);
+        MovieTable.setRowSorter(MovieSearch);
+        MovieSearch.setRowFilter(RowFilter.regexFilter(MovieSearchField.getText()));
+    }//GEN-LAST:event_MovieSearchFieldKeyReleased
+
+    private void Select_Button_MoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Select_Button_MoviesActionPerformed
+
+        try {
+            selectMovie();
+
+        } catch (SQLException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_Select_Button_MoviesActionPerformed
 
     /**
      * @param args
@@ -1468,6 +1536,7 @@ public final class Admin extends javax.swing.JFrame {
     void getIDs() throws SQLException {
         get_last_empid();
         get_last_movieid();
+        get_last_showtimeid();
     }
 
     //Last EmpID
@@ -1481,13 +1550,13 @@ public final class Admin extends javax.swing.JFrame {
 
         String qry = """
                      select * from staff
-                     where employeeID like 'E%' 
                      order by len(EmployeeID), EmployeeID""";
-        this.rs = stmt.executeQuery(qry);
+        ResultSet rs = stmt.executeQuery(qry);
         while (rs.next()) {
             lempid = rs.getString(1);
         }
         lnum = Integer.parseInt(lempid.substring(1, lempid.length())) + 1;
+        String nmpd = "";
         newempid = "E" + String.valueOf(lnum);
 
         System.out.println(newempid);
@@ -1500,21 +1569,141 @@ public final class Admin extends javax.swing.JFrame {
 
     void get_last_movieid() throws SQLException {
         lmovieid = "";
-        this.stmt = conn.createStatement();
+        Statement stmt = conn.createStatement();
 
         String qry = "select * from movie order by len(MovieID), MovieID";
-        this.rs = stmt.executeQuery(qry);
+        ResultSet rs = stmt.executeQuery(qry);
         while (rs.next()) {
             lmovieid = rs.getString(1);
         }
         lmovidnum = Integer.parseInt(lmovieid.substring(1, lmovieid.length())) + 1;
         newmovieid = "M" + String.valueOf(lmovidnum);
         System.out.println(newmovieid);
+        ShowtimeMovieID = newmovieid;
+    }
+
+    static String lshowtimeid; // for creating new showtimeid
+    int lshowtimeidnum;
+    static String newshowtimeid;
+
+    void get_last_showtimeid() throws SQLException {
+        lshowtimeid = "";
+        Statement stmt = conn.createStatement();
+
+        String qry = "select * from showtime order by len(showtimeID), showtimeID";
+        ResultSet rs = stmt.executeQuery(qry);
+        while (rs.next()) {
+            lshowtimeid = rs.getString(2);
+        }
+        lshowtimeidnum = Integer.parseInt(lshowtimeid.substring(1)) + 1;
+        newshowtimeid = "S" + String.valueOf(lshowtimeidnum);
+        System.out.println(newshowtimeid);
+    }
+
+    public void getMovieData() {
+        String sql1 = """
+                  select MovieID, Title
+                   from movie 
+                   order by len (MovieID), MovieID""";
+
+        try {
+
+            stmt = conn.createStatement();
+            this.rs = stmt.executeQuery(sql1);
+            this.vec = new ArrayList<>();
+
+            while (rs != null && rs.next()) {
+
+                this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title")});
+                System.out.println(rs.getString("MovieID"));
+                System.out.println(rs.getString("Title"));
+            }
+
+            for (Object[] row : vec) {
+                tmodel1.addRow(row);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+
+        }
+    }
+
+    public void createTableMovie() {
+        tmodel1 = new DefaultTableModel();
+        MovieTable.setModel(tmodel1);
+        tmodel1.addColumn("Movie ID");
+        tmodel1.addColumn("Movie Title");
+        ListSelectionModel cellSelectionModel = MovieTable.getSelectionModel();
+        cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        cellSelectionModel.addListSelectionListener((e) -> {
+            String SelectedMovieData = null;
+
+            int[] selectedRow = MovieTable.getSelectedRows();
+            int[] selectedColumn = MovieTable.getSelectedColumns();
+
+            for (int i = 0; i < selectedRow.length; i++) {
+                for (int j = 0; j < selectedColumn.length; j++) {
+                    SelectedMovieData = (String) MovieTable.getValueAt(selectedRow[i], selectedColumn[j]);
+                }
+                System.out.println("Selected: " + SelectedMovieData);
+            }
+        });
+        getMovieData();
+    }
+
+    public void ClearFieldStaff() { // for clearing fields sa staff
+        AddStaff_EmployeeID_TextField.setText(newempid = "E" + (lnum + 1));
+        AddStaff_FirstName_TextField.setText(null);
+        AddStaff_LastName_TextField.setText(null);
+        AddStaff_Email_TextField.setText(null);
+        AddStaff_PhoneNumber_TextField1.setText(null);
+        lnum += 1;
+    }
+
+    public void ClearFieldMovies() {
+        AddMovie_MovieID_TextField.setText(ShowtimeMovieID);
+        AddMovie_Title_TextField1.setText(null);
+        AddMovie_Genre_TextField.setText(null);
+        AddMovie_Director_TextField.setText(null);
+        AddMovie_Duration_TextField.setText(null);
+        AddMovie_Price_TextField.setText(null);
+        MoviePoster.setIcon(null);
+        PosterName.setText(null);
+        lmovidnum += 1;
+    }
+
+    public void selectMovie() throws SQLException {
+        int i = MovieTable.getSelectedRow();
+        String movieID = tmodel1.getValueAt(i, 0).toString();
+//        System.out.println(movieID);
+
+        String query = "select * from movie where MovieID = '" + movieID + "' order by len(MovieID), MovieID";
+        ResultSet rs = stmt.executeQuery(query);
+        if (rs.next()) {
+            System.out.println(rs.getString("Title"));
+            System.out.println(rs.getString("Genre"));
+
+            String MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice, MovDetsPLoc;
+            MovieDetails mds = new MovieDetails();
+
+            MovDetsMovID = rs.getString(1);
+            MovDetsTitle = rs.getString(2);
+            MovDetsGenre = rs.getString(3);
+            MovDetsDir = rs.getString(4);
+            MovDetsDur = rs.getString(5);
+            MovDetPrice = rs.getString(6);
+            MovDetsPLoc = rs.getString(7);
+
+            MovieDetails movieDetails = new MovieDetails(MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice);
+            movieDetails.setVisible(true);
+
+        }
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton AddMovie_AddAnotherMovie_Button;
     private javax.swing.JButton AddMovie_AddMovie_Button;
     private javax.swing.JLabel AddMovie_AddMovie_Label;
     private javax.swing.JButton AddMovie_Back_Button;
@@ -1544,6 +1733,11 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JButton Add_Another_Staff;
     private javax.swing.JButton Add_Staff;
     private javax.swing.JButton Back;
+    public javax.swing.JLabel MoviePoster;
+    private javax.swing.JTextField MovieSearchField;
+    private javax.swing.JTable MovieTable;
+    private javax.swing.JTextField PosterName;
+    private javax.swing.JButton Select_Button_Movies;
     private javax.swing.JPanel addEmplyee;
     private javax.swing.JPanel addMovies;
     private javax.swing.JButton addMoviesB1;
@@ -1552,10 +1746,12 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JPanel employee;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private com.toedter.calendar.JDateChooser jDateChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
@@ -1574,10 +1770,8 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTable2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
     private javax.swing.JButton logOut;
     private javax.swing.JPanel logs;

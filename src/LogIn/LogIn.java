@@ -8,6 +8,7 @@ import Staffs.Movie_List;
 import java.awt.Color;
 import admin.Admin;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import main.Main;
@@ -21,30 +22,12 @@ public class LogIn extends javax.swing.JFrame {
     /**
      * Creates new form LogIn
      */
-    Main main;
     LogInProcess process;
 
     public LogIn() throws SQLException, ClassNotFoundException {
-        main = new Main();
-
+        initComponents();
         process = new LogInProcess();
-
-        switch (process.checkIfLoged()) {
-            case 1 -> {
-                System.out.println("1");
-                new Admin().setVisible(true);
-            }
-            case 2 -> {
-                System.out.println("2");
-                new Movie_List().setVisible(true);
-            }
-            case 0 -> {
-                initComponents();
-                SignUp.setVisible(false);
-            }
-            
-        }
-        dispose();
+        SignUp.setVisible(false);
     }
 
     /**
@@ -227,6 +210,11 @@ public class LogIn extends javax.swing.JFrame {
         jLabel6.setText("Password:");
 
         sPassIn.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
+        sPassIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sPassInActionPerformed(evt);
+            }
+        });
 
         sUserIn.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
         sUserIn.addActionListener(new java.awt.event.ActionListener() {
@@ -236,6 +224,11 @@ public class LogIn extends javax.swing.JFrame {
         });
 
         sRPassIn.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
+        sRPassIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sRPassInActionPerformed(evt);
+            }
+        });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
         jLabel7.setText("Re-type pass:");
@@ -353,22 +346,29 @@ public class LogIn extends javax.swing.JFrame {
     private void logInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInActionPerformed
 
         try {
-            int flag = process.checkAcc(lUserIn.getText(), lPassIn.getText());
+            int flag = this.process.checkAcc(lUserIn.getText(), lPassIn.getText());
+            System.out.println(lUserIn.getText());
+            System.out.println(lPassIn.getText());
             switch (flag) {
                 case 1:
-                    Admin.main(null);
-                    dispose();
+                    Main.choose = 1;
                     break;
                 case 2:
-                    new Movie_List().setVisible(true);
-                    dispose();
+                    Main.choose = 2;
+                    System.out.println(Main.choose);
                     break;
                 default:
                     lUserIn.setText("");
                     lPassIn.setText("");
                     break;
             }
+            if (flag == 1 || flag == 2) {
+                Main.main(null);
+                dispose();
+            }
         } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
             Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_logInActionPerformed
@@ -434,6 +434,14 @@ public class LogIn extends javax.swing.JFrame {
         LogIn.setVisible(false);
         SignUp.setVisible(true);
     }//GEN-LAST:event_createAccMouseClicked
+
+    private void sRPassInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sRPassInActionPerformed
+        logIn.doClick();
+    }//GEN-LAST:event_sRPassInActionPerformed
+
+    private void sPassInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sPassInActionPerformed
+        logIn.doClick();
+    }//GEN-LAST:event_sPassInActionPerformed
 
     /**
      * @param args the command line arguments

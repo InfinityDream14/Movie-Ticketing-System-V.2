@@ -15,6 +15,8 @@ import java.awt.Toolkit;
 import java.sql.*;
 import java.text.ParseException;
 
+import LogIn.*;
+
 public class Main {
 
     /**
@@ -23,16 +25,15 @@ public class Main {
      * @throws java.sql.SQLException
      */
     public static Connection mc;
+    public static int choose = 0;
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
         Main m = new Main();
         m.connectToDatabase();
-//      
-        Main_Staff.main(null);
-        
-        
+        m.start();
+
     }
-    
+
     public void connectToDatabase() throws SQLException, ClassNotFoundException {
         try {
             String hostname = "user";
@@ -58,5 +59,25 @@ public class Main {
         //new Seat_Management().setVisible(true);
         //new Payment_Method().setVisible(true);
 
+    }
+
+    public void start() throws SQLException, ClassNotFoundException, ParseException {
+        LogInProcess inProcess = new LogInProcess();
+        choose = 0;
+        choose = inProcess.checkIfLoged();
+
+        switch (choose) {
+            case 1 -> {
+                System.out.println("1");
+                new Admin().setVisible(true);
+            }
+            case 2 -> {
+                System.out.println("2");
+                Main_Staff.main(null);
+            }
+            case 0 -> {
+                new LogIn().setVisible(true);
+            }
+        }
     }
 }

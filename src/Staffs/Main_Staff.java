@@ -33,6 +33,7 @@ public class Main_Staff {
        }catch(SQLException e){
            e.printStackTrace();
        }
+            System.out.println("HELLOOo");
        
            new Movie_List().setVisible(true);
            //new Seat_Management().setVisible(true);
