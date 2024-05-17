@@ -1,10 +1,13 @@
 package admin;
 
+import java.awt.Image;
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.sql.*;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import main.Main;
@@ -23,7 +26,7 @@ public class MovieDetails extends javax.swing.JFrame {
     }
 
     public MovieDetails(String MovieID, String Title, String Genre, String Director, String Duration,
-            String Price, String Mov_PicLoc, String Mov_Status) throws SQLException, ClassNotFoundException {
+            String Price, String PicLoc, String Mov_Status) throws SQLException, ClassNotFoundException {
         initComponents();
         getMovieDets_fromDB();
         
@@ -36,13 +39,14 @@ public class MovieDetails extends javax.swing.JFrame {
         MovieDetails_DirectorTx.setText(Director);
         MovieDetails_DurationTx.setText(Duration);
         MovieDetails_PriceTx.setText(Price);
-        MDMstat = Mov_Status;
-        if(MDMstat.equals("A")){
-          Available.setSelected(true);
-        }
-        else{
-        Unavailable.setSelected(true);
-        }
+        
+        String fildest = System.getProperty("user.dir");
+        fildest = fildest + "\\Movie Posters\\";
+        ImageIcon imgIcon = new ImageIcon(fildest + PicLoc);
+        Rectangle rec = MovieDetails_PosterPic.getBounds();
+        Image scaledimg = imgIcon.getImage().getScaledInstance(rec.width, rec.height, Image.SCALE_SMOOTH);
+        imgIcon = new ImageIcon(scaledimg);
+        MovieDetails_PosterPic.setIcon(imgIcon);
 
     }
 
@@ -71,6 +75,7 @@ public class MovieDetails extends javax.swing.JFrame {
         MovieDetails_DurationTx.setText(MDDuration);
         MovieDetails_PriceTx.setText(MDPrice);
         System.out.println(MDMstat);
+       
     }
 
     @SuppressWarnings("unchecked")
