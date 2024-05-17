@@ -101,8 +101,8 @@ public class MovieDetails extends javax.swing.JFrame {
         MovieDetails_MStatus = new javax.swing.JLabel();
         Available = new javax.swing.JRadioButton();
         Unavailable = new javax.swing.JRadioButton();
-        jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -165,7 +165,7 @@ public class MovieDetails extends javax.swing.JFrame {
                 Save_DetailsActionPerformed(evt);
             }
         });
-        jPanel1.add(Save_Details, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 158, 36));
+        jPanel1.add(Save_Details, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 300, 158, 36));
         jPanel1.add(MovieDetails_PosterPic, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 50, 160, 220));
 
         ShowTimeListBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -194,13 +194,18 @@ public class MovieDetails extends javax.swing.JFrame {
         Unavailable.setText("Unavailable");
         jPanel1.add(Unavailable, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 250, -1, -1));
 
+        jButton1.setText("Delete Movie");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 300, 130, 36));
+
         jLabel3.setBackground(new java.awt.Color(51, 51, 51));
         jLabel3.setForeground(new java.awt.Color(153, 153, 153));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/bg_addmovie.png"))); // NOI18N
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, 660, 360));
-
-        jButton1.setText("jButton1");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 300, 120, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -294,9 +299,19 @@ public class MovieDetails extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_AvailableActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            removemoviefromtable();
+        } catch (SQLException ex) {
+            Logger.getLogger(MovieDetails.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(MovieDetails.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
    
     public void removemoviefromtable() throws SQLException, ClassNotFoundException{
-       Admin ad = new Admin();
+        Admin ad = new Admin();
         int i = ad.MovieTable.getSelectedRow();
         String MovStat = tmodel1.getValueAt(i, 7).toString();
         System.out.println(MovStat);
