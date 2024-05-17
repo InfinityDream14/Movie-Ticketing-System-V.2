@@ -57,11 +57,11 @@ public final class Showtime extends javax.swing.JFrame {
         Movie_Label = new javax.swing.JLabel();
         StartTime_Label = new javax.swing.JLabel();
         ShowtimeID_TX = new javax.swing.JTextField();
-        CinemaID_Tx = new javax.swing.JTextField();
         MovieID_Tx = new javax.swing.JTextField();
         StartTime_Tx = new javax.swing.JTextField();
         AddShowtime_Button = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        cinema_combo_box = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -106,14 +106,6 @@ public final class Showtime extends javax.swing.JFrame {
         jPanel1.add(ShowtimeID_TX);
         ShowtimeID_TX.setBounds(250, 70, 360, 30);
 
-        CinemaID_Tx.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CinemaID_TxActionPerformed(evt);
-            }
-        });
-        jPanel1.add(CinemaID_Tx);
-        CinemaID_Tx.setBounds(250, 120, 360, 30);
-
         MovieID_Tx.setEditable(false);
         jPanel1.add(MovieID_Tx);
         MovieID_Tx.setBounds(250, 170, 360, 30);
@@ -140,6 +132,10 @@ public final class Showtime extends javax.swing.JFrame {
         jPanel1.add(jButton2);
         jButton2.setBounds(330, 280, 160, 30);
 
+        cinema_combo_box.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "C1", "C2", "C3" }));
+        jPanel1.add(cinema_combo_box);
+        cinema_combo_box.setBounds(250, 120, 360, 30);
+
         jLabel1.setBackground(new java.awt.Color(153, 153, 153));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/bg_addmovie.png"))); // NOI18N
         jPanel1.add(jLabel1);
@@ -154,10 +150,6 @@ public final class Showtime extends javax.swing.JFrame {
     private void ShowtimeID_TXActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowtimeID_TXActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_ShowtimeID_TXActionPerformed
-
-    private void CinemaID_TxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CinemaID_TxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CinemaID_TxActionPerformed
 
     private void AddShowtime_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddShowtime_ButtonActionPerformed
           
@@ -198,7 +190,7 @@ public final class Showtime extends javax.swing.JFrame {
     void insert_Showtime_to_DB() throws ParseException, SQLException, ClassNotFoundException{
         
         
-      String STCinemaID = CinemaID_Tx.getText();
+      String STCinemaID = cinema_combo_box.getSelectedItem().toString();
       String STMovieID =  MovieID_Tx.getText().trim();
       String STShowtimeID = ShowtimeID_TX.getText();
       String STStartT = StartTime_Tx.getText();
@@ -239,7 +231,7 @@ public final class Showtime extends javax.swing.JFrame {
     
     void create_seatList () throws SQLException{
         String stime = ShowtimeID_TX.getText();
-        String cinemaid = CinemaID_Tx.getText();
+        String cinemaid = cinema_combo_box.getSelectedItem().toString();
         String starttime = StartTime_Tx.getText();
         String movieid = MovieID_Tx.getText();
         
@@ -281,7 +273,7 @@ public final class Showtime extends javax.swing.JFrame {
         String qry = "select * from Cinema";
         ResultSet rs = stmt.executeQuery(qry);
         while (rs.next()) {
-            if(rs.getString(1).equals(CinemaID_Tx.getText())){
+            if(rs.getString(1).equals(cinema_combo_box.getSelectedItem().toString())){
               numofseats = Integer.parseInt(rs.getString(2));
             }
         }
@@ -291,7 +283,6 @@ public final class Showtime extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddShowtime_Button;
     private javax.swing.JLabel CinemaID_Label;
-    private javax.swing.JTextField CinemaID_Tx;
     private javax.swing.JTextField MovieID_Tx;
     private javax.swing.JLabel Movie_Label;
     private javax.swing.JLabel Showtime;
@@ -299,6 +290,7 @@ public final class Showtime extends javax.swing.JFrame {
     private javax.swing.JTextField ShowtimeID_TX;
     private javax.swing.JLabel StartTime_Label;
     private javax.swing.JTextField StartTime_Tx;
+    private javax.swing.JComboBox<String> cinema_combo_box;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

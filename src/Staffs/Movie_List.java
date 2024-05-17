@@ -74,48 +74,50 @@ public class Movie_List extends javax.swing.JFrame {
             String qry = "select * from movie";
             rs = stmt.executeQuery(qry);
             while(rs.next()){
-                String mposter = rs.getString(7);
-                String fildest = System.getProperty("user.dir");
-                ImageIcon m1 = new ImageIcon(fildest + "\\Movie Posters\\" + mposter);
-                Image image = m1.getImage(); // transform it 
-                Image newimg = image.getScaledInstance(138, 175,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-                m1 = new ImageIcon(newimg);
-                JLabel mve1 = new JLabel(m1);
-                String mtitle = rs.getString(2);
-                JLabel mt = new JLabel(mtitle);
-                String mgenre = rs.getString(3);
-                JLabel gr = new JLabel("Genre: " + mgenre);
-                JPanel movie_panel1 = new JPanel();
-                movie_panel1.setPreferredSize(new Dimension(160,225));
-                movie_panel1.setLayout(new FlowLayout(FlowLayout.CENTER,20,2));
-                
-                movie_panel1.add(mve1);
-                movie_panel1.add(mt);
-                movie_panel1.add(gr);
-                
-                movie_panel.add(movie_panel1);
-                
-                movie_panel1.addMouseListener(new MouseAdapter(){
-                    @Override
-                    public void mouseClicked(MouseEvent e){
-                        try {
-                            JLabel jt = (JLabel)movie_panel1.getComponent(1);
-                            title_to_sm = jt.getText();
-                            JLabel jg = (JLabel)movie_panel1.getComponent(2);
-                            genre_to_sm = jg.getText();
-                            send_receipt_panel_comp();
+                if(rs.getString(8).equals("A")){
+                    String mposter = rs.getString(7);
+                    String fildest = System.getProperty("user.dir");
+                    ImageIcon m1 = new ImageIcon(fildest + "\\Movie Posters\\" + mposter);
+                    Image image = m1.getImage(); // transform it 
+                    Image newimg = image.getScaledInstance(138, 175,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+                    m1 = new ImageIcon(newimg);
+                    JLabel mve1 = new JLabel(m1);
+                    String mtitle = rs.getString(2);
+                    JLabel mt = new JLabel(mtitle);
+                    String mgenre = rs.getString(3);
+                    JLabel gr = new JLabel("Genre: " + mgenre);
+                    JPanel movie_panel1 = new JPanel();
+                    movie_panel1.setPreferredSize(new Dimension(160,225));
+                    movie_panel1.setLayout(new FlowLayout(FlowLayout.CENTER,20,2));
+
+                    movie_panel1.add(mve1);
+                    movie_panel1.add(mt);
+                    movie_panel1.add(gr);
+
+                    movie_panel.add(movie_panel1);
+
+                    movie_panel1.addMouseListener(new MouseAdapter(){
+                        @Override
+                        public void mouseClicked(MouseEvent e){
                             try {
-                                Seat_Management sm = new Seat_Management();
-                                sm.setVisible(true);
-                            } catch (ParseException ex) {
+                                JLabel jt = (JLabel)movie_panel1.getComponent(1);
+                                title_to_sm = jt.getText();
+                                JLabel jg = (JLabel)movie_panel1.getComponent(2);
+                                genre_to_sm = jg.getText();
+                                send_receipt_panel_comp();
+                                try {
+                                    Seat_Management sm = new Seat_Management();
+                                    sm.setVisible(true);
+                                } catch (ParseException ex) {
+                                    Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                                dispose();
+                            } catch (SQLException ex) {
                                 Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            dispose();
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Movie_List.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                    }
-                });
+                    });
+                }
             }
             
             main_panel.add(movie_panel);

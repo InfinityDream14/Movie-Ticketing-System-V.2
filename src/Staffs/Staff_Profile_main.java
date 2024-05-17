@@ -50,7 +50,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 
     }
     
-    void move_pf_file() throws FileNotFoundException, SQLException{
+    void change_pf_pic() throws FileNotFoundException, SQLException{
         
         JFileChooser jfc = new JFileChooser();
         jfc.setCurrentDirectory(new File("D:\\Users\\Backup\\Desktop"));
@@ -106,9 +106,10 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 }
             }
         }
+        this.setVisible(true);
         
     }
-    static String empid = "E5";
+    static String empid = new Temp_Data().empid;
     static String fname,lname,phone,email,passw,pf_loc,usern;
     void get_details_fromdb() throws SQLException{
         
@@ -451,7 +452,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
 
     private void icon_profMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_icon_profMouseClicked
         try {      
-            move_pf_file();
+            change_pf_pic();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
