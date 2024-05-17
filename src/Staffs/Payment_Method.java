@@ -715,7 +715,7 @@ public class Payment_Method extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancel_paymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_paymentActionPerformed
-
+        JOptionPane.showMessageDialog(null, "Will remove all the selected movie", "System Notice", JOptionPane.INFORMATION_MESSAGE);
         try {
             revert_selected_seat();
             Temp_Data td = new Temp_Data();
