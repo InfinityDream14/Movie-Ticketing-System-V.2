@@ -79,7 +79,7 @@ public class MovieDetails extends javax.swing.JFrame {
         MovieDetails_PriceTx = new javax.swing.JTextField();
         Save_Details = new javax.swing.JButton();
         MovieDetails_PosterPic = new javax.swing.JLabel();
-        AddShowtimeButton = new javax.swing.JButton();
+        ShowTimeListBtn = new javax.swing.JButton();
         UpdateMovStatAvail = new javax.swing.JButton();
         UpdateMovStatUnavail = new javax.swing.JButton();
         MovieDetails_MStatus = new javax.swing.JLabel();
@@ -149,14 +149,14 @@ public class MovieDetails extends javax.swing.JFrame {
         jPanel1.add(Save_Details, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 300, 158, 36));
         jPanel1.add(MovieDetails_PosterPic, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 50, 160, 220));
 
-        AddShowtimeButton.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        AddShowtimeButton.setText("Add Showtime");
-        AddShowtimeButton.addActionListener(new java.awt.event.ActionListener() {
+        ShowTimeListBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        ShowTimeListBtn.setText("Showtime List");
+        ShowTimeListBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AddShowtimeButtonActionPerformed(evt);
+                ShowTimeListBtnActionPerformed(evt);
             }
         });
-        jPanel1.add(AddShowtimeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 300, 158, 36));
+        jPanel1.add(ShowTimeListBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 300, 158, 36));
 
         UpdateMovStatAvail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         UpdateMovStatAvail.setText("A");
@@ -243,17 +243,17 @@ public class MovieDetails extends javax.swing.JFrame {
 
     }//GEN-LAST:event_Save_DetailsActionPerformed
     
-    private void AddShowtimeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddShowtimeButtonActionPerformed
+    private void ShowTimeListBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowTimeListBtnActionPerformed
        
+        System.out.println("Hello");
         try {
-            // TODO add your handling code here:
-            new Showtime().movieID = MovieDetails_MovieIDTx.getText();
-            new Showtime().setVisible(true);
-            // ibang showtime yung lumalabas
-        } catch (SQLException | ClassNotFoundException | ParseException ex) {
+            new ShowtimeList().mid = MovieDetails_MovieIDTx.getText();
+            new ShowtimeList().setVisible(true);
+           
+        } catch (ClassNotFoundException ex) {
             Logger.getLogger(MovieDetails.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_AddShowtimeButtonActionPerformed
+    }//GEN-LAST:event_ShowTimeListBtnActionPerformed
 
     private void MovieDetails_PriceTxKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_MovieDetails_PriceTxKeyTyped
         // TODO add your handling code here:
@@ -321,7 +321,6 @@ public class MovieDetails extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton AddShowtimeButton;
     private javax.swing.JLabel MovieDetails_Director;
     private javax.swing.JTextField MovieDetails_DirectorTx;
     private javax.swing.JLabel MovieDetails_Duration;
@@ -331,12 +330,13 @@ public class MovieDetails extends javax.swing.JFrame {
     private javax.swing.JLabel MovieDetails_MStatus;
     private javax.swing.JLabel MovieDetails_MovieID;
     private javax.swing.JTextField MovieDetails_MovieIDTx;
-    private javax.swing.JLabel MovieDetails_PosterPic;
+    public javax.swing.JLabel MovieDetails_PosterPic;
     private javax.swing.JLabel MovieDetails_Price;
     private javax.swing.JTextField MovieDetails_PriceTx;
     private javax.swing.JLabel MovieDetails_Title;
     private javax.swing.JTextField MovieDetails_TitleTx;
     private javax.swing.JButton Save_Details;
+    private javax.swing.JButton ShowTimeListBtn;
     private javax.swing.JButton UpdateMovStatAvail;
     private javax.swing.JButton UpdateMovStatUnavail;
     private javax.swing.JLabel jLabel1;

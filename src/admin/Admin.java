@@ -1702,6 +1702,10 @@ public final class Admin extends javax.swing.JFrame {
 
         }
     }
+    // kukuhanin yung showtime id 
+    // tapos iseset sa null yung mga value
+    
+    //
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
