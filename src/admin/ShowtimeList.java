@@ -4,7 +4,6 @@
  */
 package admin;
 
-
 import static admin.MovieDetails.connMD;
 import java.awt.HeadlessException;
 import java.sql.Connection;
@@ -34,11 +33,12 @@ public final class ShowtimeList extends javax.swing.JFrame {
     }
     public static String mid;
     public Statement stmt;
-    
-     ResultSet rs;
-     
-     DefaultTableModel tmodel1 = new DefaultTableModel();
-     ArrayList<Object[]> vec = new ArrayList<>();
+
+    ResultSet rs;
+
+    DefaultTableModel tmodel1 = new DefaultTableModel();
+    ArrayList<Object[]> vec = new ArrayList<>();
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -145,14 +145,22 @@ public final class ShowtimeList extends javax.swing.JFrame {
     }//GEN-LAST:event_AddShowtimeBtnActionPerformed
 
     private void RemoveBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RemoveBtnActionPerformed
-        // remove button nalang ang wala
+        try {
+            // remove button nalang ang wala
+            removedataselected();
+
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ShowtimeList.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
     }//GEN-LAST:event_RemoveBtnActionPerformed
 
     public void getShowtimelistdata() throws ClassNotFoundException {
         String sql1 = """
-                  select st.showtimeid,st.starttime, st.showtimemovieid, m.movieid, m.title
-                  from showtime st left join movie m
-                  on st.ShowtimeMovieID = m.MovieID
+                  select st.showtimeid,st.starttime, st.showtimemovieid, m.movieid, m.title, st.showtime_status
+                                    from showtime st left join movie m
+                                    on st.ShowtimeMovieID = m.MovieID
                    """;
 
         try {
@@ -163,14 +171,14 @@ public final class ShowtimeList extends javax.swing.JFrame {
 
             while (rs.next()) { // rs.getstring (pangilang moviedid) -- showtimelist
 
-                if(rs.getString(3).equals(mid)){
-                this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title"), rs.getString("Starttime"), rs.getString("showtimeid")});
+                if (rs.getString(3).equals(mid) && !rs.getString(6).equals("U")) {
+                    this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title"), rs.getString("Starttime"), rs.getString("showtimeid")});
                     System.out.println("MovieID");
-                System.out.println(rs.getString("Title"));
-                System.out.println(rs.getString("StartTime"));
-                System.out.println("ShowtimeID");
+                    System.out.println(rs.getString("Title"));
+                    System.out.println(rs.getString("StartTime"));
+                    System.out.println("ShowtimeID");
                 }
-               
+
             }
 
             for (Object[] row : vec) {
@@ -182,15 +190,15 @@ public final class ShowtimeList extends javax.swing.JFrame {
 
         }
     }
-    
-     public void createShowtimeListTable() throws ClassNotFoundException {
+
+    public void createShowtimeListTable() throws ClassNotFoundException {
         tmodel1 = new DefaultTableModel();
         ShowTimeTable.setModel(tmodel1);
         tmodel1.addColumn("Movie ID");
         tmodel1.addColumn("Movie Title");
         tmodel1.addColumn("Start Time");
         tmodel1.addColumn("Showtime ID");
-        
+
         ListSelectionModel cellSelectionModel = ShowTimeTable.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -209,9 +217,20 @@ public final class ShowtimeList extends javax.swing.JFrame {
         });
         getShowtimelistdata();
     }
-     
-     
-    
+
+    public void removedataselected() throws SQLException, ClassNotFoundException {
+        int i = ShowTimeTable.getSelectedRow();
+        String showtimeID = tmodel1.getValueAt(i, 3).toString();
+        System.out.println(showtimeID);
+        String stdel = "update showtime\n"
+                    + "set Showtime_status = 'U'\n"
+                    + "where ShowtimeID = '" + showtimeID + "'";
+        stmt.executeUpdate(stdel);
+        createShowtimeListTable();
+
+    }
+    //basta naselect yung showid, ilalagay lang sa update yung status "++" yung value nung showtime na pinili
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddShowtimeBtn;

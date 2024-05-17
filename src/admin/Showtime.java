@@ -165,7 +165,7 @@ public final class Showtime extends javax.swing.JFrame {
           insert_Showtime_to_DB();
           get_Cinema_seat_count();
           create_seatList();
-      } catch (ParseException | SQLException ex) {
+      } catch (ParseException | SQLException | ClassNotFoundException ex) {
           Logger.getLogger(Showtime.class.getName()).log(Level.SEVERE, null, ex);
       }
       dispose();
@@ -195,7 +195,7 @@ public final class Showtime extends javax.swing.JFrame {
         
     }
     
-    void insert_Showtime_to_DB() throws ParseException, SQLException{
+    void insert_Showtime_to_DB() throws ParseException, SQLException, ClassNotFoundException{
         
         
       String STCinemaID = CinemaID_Tx.getText();
@@ -214,7 +214,7 @@ public final class Showtime extends javax.swing.JFrame {
                         
                         Statement stmt2 = connMD.createStatement();
                         String qry = "INSERT INTO showtime VALUES "
-                                + "('"+STStartT+"','"+STShowtimeID+"','"+STCinemaID+"','"+STMovieID+"')";
+                                + "('"+STStartT+"','"+STShowtimeID+"','"+STCinemaID+"','"+STMovieID+"', 'A')";
                         int rows = stmt2.executeUpdate(qry);
                         if (rows > 0) {
                             System.out.println("Insert Successful");
@@ -222,6 +222,7 @@ public final class Showtime extends javax.swing.JFrame {
                     } catch (SQLException ex) {
                         Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
                     }
+      new ShowtimeList().createShowtimeListTable();
     }
     
     String convert_12hr_to_24hr(String tm) throws ParseException{
