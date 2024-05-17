@@ -6,6 +6,7 @@ package admin;
 
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.RoundingMode;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -31,11 +33,13 @@ import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 import jnafilechooser.api.JnaFileChooser;
+
 /**
  *
  * @author Christian
@@ -55,28 +59,29 @@ public final class Admin extends javax.swing.JFrame {
     String Duration = "null"; // for creating new Movie;
     int showtimeTime;
     public static String ShowtimeMovieID;
-    
+
     Statement stmt;
     Connection conn;
     ResultSet rs;
-    ArrayList <Object[]> vec = new ArrayList<>();
-    DefaultTableModel tmodel = new DefaultTableModel(); 
+    ArrayList<Object[]> vec = new ArrayList<>();
+    DefaultTableModel tmodel = new DefaultTableModel();
     DefaultTableModel tmodel1 = new DefaultTableModel();
     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
     DecimalFormat dec = new DecimalFormat("#.##");
-    
+
     File file = null;
 
-    public Admin() throws SQLException, ClassNotFoundException {
+    public Admin() throws ClassNotFoundException, SQLException{
         connectToDatabase();
         initComponents();
-
+        
+        
         sales.setVisible(true);
         employee.setVisible(false);
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
-        
+
         dec.setRoundingMode(RoundingMode.CEILING);
         createTableSales();
         getIDs();
@@ -138,22 +143,22 @@ public final class Admin extends javax.swing.JFrame {
                      select t.TicketID, p.Amount, p.PaymentDate
                      from ticket t join payment p on t.TicketPaymentID = p.PaymentID""";
         String newTimeSell, dateSell, amount;
-        
+
         try {
             stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
-            SimpleDateFormat dateFormat  = new SimpleDateFormat("MMMMM dd, yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMMM dd, yyyy");
             this.vec = new ArrayList<>();
-            
+
             while (rs != null && rs.next()) {
-                
+
                 amount = (dec.format(rs.getDouble("Amount")));
                 newTimeSell = this.dateFormat.format(rs.getTime("PaymentDate"));
                 dateSell = dateFormat.format(rs.getDate("PaymentDate"));
-                
-                this.vec.add(new Object[]{rs.getString("TicketID"), "Php "+amount, dateSell, newTimeSell});
+
+                this.vec.add(new Object[]{rs.getString("TicketID"), "Php " + amount, dateSell, newTimeSell});
             }
-            for(Object[] row : vec){
+            for (Object[] row : vec) {
                 tmodel.addRow(row);
             }
 
@@ -201,9 +206,9 @@ public final class Admin extends javax.swing.JFrame {
             vec = new ArrayList<>();
 
             while (this.rs != null && rs.next()) {
-                vec.add(new Object[] {rs.getString("EmployeeID"), rs.getString("FullName")});
+                vec.add(new Object[]{rs.getString("EmployeeID"), rs.getString("FullName")});
             }
-            for(Object[] row : vec){
+            for (Object[] row : vec) {
                 tmodel.addRow(row);
             }
 
@@ -260,11 +265,11 @@ public final class Admin extends javax.swing.JFrame {
 
                 logOutT = rs.getTime("Log_Out");
                 newLogOut = (logOutT != null) ? dateFormat.format(logOutT) : "";
-                
-                vec.add(new Object[] {rs.getString("Employee_ID"), rs.getString("Full Name"), rs.getString("DateLog"), newLogIn, newLogOut});
+
+                vec.add(new Object[]{rs.getString("Employee_ID"), rs.getString("Full Name"), rs.getString("DateLog"), newLogIn, newLogOut});
             }
-            
-            for(Object[] row : vec){
+
+            for (Object[] row : vec) {
                 tmodel.addRow(row);
             }
 
@@ -1330,15 +1335,16 @@ public final class Admin extends javax.swing.JFrame {
                     System.out.println(price);
                     System.out.println(Movie_Pic_Location);
                     System.out.println(PNum);
-                    if(Movie_Pic_Location.equals(""))
-                    Movie_Pic_Location = "default poster.jpg";
+                    if (Movie_Pic_Location.equals("")) {
+                        Movie_Pic_Location = "default poster.jpg";
+                    }
 
                     try {  // INSERTING VALUES FOR ADDMOVIE
                         Statement stmt2 = conn.createStatement();
                         stmt2 = conn.createStatement();
                         String qry = "insert into Movie (MovieID, Title, Genre, Director, Duration, Price, Movie_pic_loc)"
-                        + "values('" + MovieID + "','" + Title + "','" + Genre + "','" + Director + "','" + Duration + "','"
-                        + price + "','" + Movie_Pic_Location + "')";
+                                + "values('" + MovieID + "','" + Title + "','" + Genre + "','" + Director + "','" + Duration + "','"
+                                + price + "','" + Movie_Pic_Location + "')";
                         int rows = stmt.executeUpdate(qry);
                         if (rows > 0) {
                             DefaultTableModel model = (DefaultTableModel) MovieTable.getModel();
@@ -1386,10 +1392,10 @@ public final class Admin extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         JnaFileChooser chooser = new JnaFileChooser();
-        
+
         chooser.addFilter("All Files", "*");
         chooser.addFilter("Pictures", "jpg", "jpeg", "png", "gif", "bmp");
-        
+
         String fildest = System.getProperty("user.dir");
         fildest = fildest + "\\Movie Posters\\";
 
@@ -1404,30 +1410,30 @@ public final class Admin extends javax.swing.JFrame {
             MoviePoster.setIcon(imgIcon);
             PosterName.setText(file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf("\\") + 1));
 
-                if (file.exists()) {
-                    File destfile = new File(fildest + File.separator + file.getName());
+            if (file.exists()) {
+                File destfile = new File(fildest + File.separator + file.getName());
 
-                    try (InputStream is = new FileInputStream(file); OutputStream os = new FileOutputStream(destfile)) {
+                try (InputStream is = new FileInputStream(file); OutputStream os = new FileOutputStream(destfile)) {
 
-                        int len;
-                        float srcfsize = is.available() / 1000.0f;
-                        float totalcopied = 0.0f;
-                        byte[] byt = new byte[1024];
-                        while ((len = is.read(byt)) > 0) {
-                            os.write(byt, 0, len);
-                            totalcopied += len;
-                            System.out.println("\rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
+                    int len;
+                    float srcfsize = is.available() / 1000.0f;
+                    float totalcopied = 0.0f;
+                    byte[] byt = new byte[1024];
+                    while ((len = is.read(byt)) > 0) {
+                        os.write(byt, 0, len);
+                        totalcopied += len;
+                        System.out.println("\rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
 
-                        }
-
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
-                }
 
-            } else {
-                JOptionPane.showMessageDialog(null, "No Image has been Selected");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "No Image has been Selected");
+        }
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void PosterNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PosterNameActionPerformed
@@ -1512,8 +1518,8 @@ public final class Admin extends javax.swing.JFrame {
 
                 stmt = conn.createStatement();
                 String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
-                + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
-                + EmpId + "','" + UserPass + "')";
+                        + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
+                        + EmpId + "','" + UserPass + "')";
                 int rows = stmt.executeUpdate(qry);
                 if (rows > 0) {
                     System.out.println("Insert Successful");
@@ -1555,7 +1561,7 @@ public final class Admin extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             try {
                 new Admin().setVisible(true);
-            } catch (SQLException | ClassNotFoundException ex) {
+            } catch (SQLException | ClassNotFoundException  ex) {
                 Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -1731,9 +1737,8 @@ public final class Admin extends javax.swing.JFrame {
     }
     // kukuhanin yung showtime id 
     // tapos iseset sa null yung mga value
-    
-    //
 
+    //
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AddMovie_AddMovie_Button;
