@@ -57,7 +57,7 @@ public final class Admin extends javax.swing.JFrame {
     int showtimeTime;
 
     public Statement stmt;
-    public static Connection conn;
+    static Connection conn;
     ResultSet rs;
     ArrayList<Object[]> vec = new ArrayList<>();
 
@@ -788,29 +788,30 @@ public final class Admin extends javax.swing.JFrame {
 
         jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/bg_addmovie.png"))); // NOI18N
         jPanel4.add(jLabel11);
-        jLabel11.setBounds(0, 0, 670, 420);
+        jLabel11.setBounds(0, 0, 676, 430);
 
         javax.swing.GroupLayout addMoviesLayout = new javax.swing.GroupLayout(addMovies);
         addMovies.setLayout(addMoviesLayout);
         addMoviesLayout.setHorizontalGroup(
             addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addMoviesLayout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, addMoviesLayout.createSequentialGroup()
-                .addContainerGap(144, Short.MAX_VALUE)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(137, 137, 137))
+                .addGroup(addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(addMoviesLayout.createSequentialGroup()
+                        .addGap(50, 50, 50)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(addMoviesLayout.createSequentialGroup()
+                        .addGap(140, 140, 140)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(149, Short.MAX_VALUE))
         );
         addMoviesLayout.setVerticalGroup(
             addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(addMoviesLayout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addGap(30, 30, 30)
                 .addComponent(jLabel8)
-                .addGap(53, 53, 53)
+                .addGap(42, 42, 42)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(83, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
 
         jPanel3.add(addMovies, new org.netbeans.lib.awtextra.AbsoluteConstraints(162, 0, -1, -1));
@@ -1269,7 +1270,8 @@ public final class Admin extends javax.swing.JFrame {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         String fildest = System.getProperty("user.dir");
-
+        fildest = fildest + "\\Movie Posters\\";
+        
         int res = chooser.showOpenDialog(Admin.this);
         if (res == JFileChooser.APPROVE_OPTION) {
             file = chooser.getSelectedFile();
@@ -1294,10 +1296,10 @@ public final class Admin extends javax.swing.JFrame {
                         os.write(byt, 0, len);
                         totalcopied += len;
                         System.out.println("\rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
-                        Thread.sleep(5);
+                       
                     }
 
-                } catch (IOException | InterruptedException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -1484,6 +1486,7 @@ public final class Admin extends javax.swing.JFrame {
             System.out.println(rs.getString("Genre"));
             
            String MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice, MovDetsPLoc;
+           MovieDetails mds = new MovieDetails();
            
            MovDetsMovID = rs.getString(1);
            MovDetsTitle = rs.getString(2);
@@ -1493,10 +1496,11 @@ public final class Admin extends javax.swing.JFrame {
            MovDetPrice = rs.getString(6);
            MovDetsPLoc = rs.getString(7); 
       
-           MovieDetails mds = new MovieDetails();
-           new MovieDetails().setVisible(true);
            
-           mds.getMoviedets(MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice, MovDetsPLoc);
+           MovieDetails movieDetails = new MovieDetails(MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice);
+           movieDetails.setVisible(true);
+           
+           
            
         }
     }
@@ -1531,7 +1535,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel AddStaff_StaffDetailsLabel;
     private javax.swing.JButton Add_Staff;
     private javax.swing.JButton Back;
-    private javax.swing.JLabel MoviePoster;
+    public javax.swing.JLabel MoviePoster;
     private javax.swing.JTextField MovieSearchField;
     private javax.swing.JTable MovieTable;
     private javax.swing.JTextField PosterName;

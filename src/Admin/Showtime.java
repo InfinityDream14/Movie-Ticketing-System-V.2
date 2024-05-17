@@ -64,35 +64,37 @@ public final class Showtime extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setUndecorated(true);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel1.setPreferredSize(new java.awt.Dimension(676, 424));
         jPanel1.setLayout(null);
 
-        Showtime.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        Showtime.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         Showtime.setText("Showtime");
         jPanel1.add(Showtime);
-        Showtime.setBounds(22, 16, 210, 48);
+        Showtime.setBounds(30, 20, 130, 40);
 
-        ShowtimeID_Label.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        ShowtimeID_Label.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         ShowtimeID_Label.setText("Showtime ID: ");
         jPanel1.add(ShowtimeID_Label);
-        ShowtimeID_Label.setBounds(60, 111, 160, 32);
+        ShowtimeID_Label.setBounds(70, 70, 160, 25);
 
-        CinemaID_Label.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        CinemaID_Label.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         CinemaID_Label.setText("Cinema ID: ");
         jPanel1.add(CinemaID_Label);
-        CinemaID_Label.setBounds(61, 161, 160, 32);
+        CinemaID_Label.setBounds(70, 120, 160, 25);
 
-        Movie_Label.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        Movie_Label.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         Movie_Label.setText("Movie ID: ");
         jPanel1.add(Movie_Label);
-        Movie_Label.setBounds(61, 211, 119, 32);
+        Movie_Label.setBounds(70, 170, 119, 25);
 
-        StartTime_Label.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        StartTime_Label.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         StartTime_Label.setText("Start Time: ");
         jPanel1.add(StartTime_Label);
-        StartTime_Label.setBounds(61, 261, 119, 32);
+        StartTime_Label.setBounds(70, 220, 121, 25);
 
         ShowtimeID_TX.setEditable(false);
         ShowtimeID_TX.addActionListener(new java.awt.event.ActionListener() {
@@ -101,7 +103,7 @@ public final class Showtime extends javax.swing.JFrame {
             }
         });
         jPanel1.add(ShowtimeID_TX);
-        ShowtimeID_TX.setBounds(241, 111, 360, 30);
+        ShowtimeID_TX.setBounds(250, 70, 360, 30);
 
         CinemaID_Tx.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -109,13 +111,13 @@ public final class Showtime extends javax.swing.JFrame {
             }
         });
         jPanel1.add(CinemaID_Tx);
-        CinemaID_Tx.setBounds(241, 161, 360, 30);
+        CinemaID_Tx.setBounds(250, 120, 360, 30);
 
         MovieID_Tx.setEditable(false);
         jPanel1.add(MovieID_Tx);
-        MovieID_Tx.setBounds(241, 211, 360, 30);
+        MovieID_Tx.setBounds(250, 170, 360, 30);
         jPanel1.add(StartTime_Tx);
-        StartTime_Tx.setBounds(241, 261, 360, 30);
+        StartTime_Tx.setBounds(250, 220, 360, 30);
 
         AddShowtime_Button.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         AddShowtime_Button.setText("Add Showtime");
@@ -125,7 +127,7 @@ public final class Showtime extends javax.swing.JFrame {
             }
         });
         jPanel1.add(AddShowtime_Button);
-        AddShowtime_Button.setBounds(481, 341, 160, 30);
+        AddShowtime_Button.setBounds(510, 280, 160, 30);
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jButton2.setText("Back");
@@ -135,27 +137,14 @@ public final class Showtime extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jButton2);
-        jButton2.setBounds(301, 341, 160, 30);
+        jButton2.setBounds(330, 280, 160, 30);
 
-        jLabel1.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel1.setBackground(new java.awt.Color(153, 153, 153));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/bg_addmovie.png"))); // NOI18N
         jPanel1.add(jLabel1);
-        jLabel1.setBounds(20, 20, 680, 400);
+        jLabel1.setBounds(20, 20, 670, 320);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 734, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 710, 360));
 
         pack();
         setLocationRelativeTo(null);
