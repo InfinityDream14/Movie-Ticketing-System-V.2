@@ -36,6 +36,13 @@ public class MovieDetails extends javax.swing.JFrame {
         MovieDetails_DirectorTx.setText(Director);
         MovieDetails_DurationTx.setText(Duration);
         MovieDetails_PriceTx.setText(Price);
+        MDMstat = Mov_Status;
+        if(MDMstat.equals("A")){
+          Available.setSelected(true);
+        }
+        else{
+        Unavailable.setSelected(true);
+        }
 
     }
 
@@ -64,12 +71,6 @@ public class MovieDetails extends javax.swing.JFrame {
         MovieDetails_DurationTx.setText(MDDuration);
         MovieDetails_PriceTx.setText(MDPrice);
         System.out.println(MDMstat);
-        if(MDMstat.equals("A")){
-          Available.setSelected(true);
-        }
-        else{
-        Unavailable.setSelected(true);
-        }
     }
 
     @SuppressWarnings("unchecked")
