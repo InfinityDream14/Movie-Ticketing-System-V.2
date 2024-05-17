@@ -3,25 +3,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Staffs;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.Image;
+import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.*;
+import com.itextpdf.text.Rectangle;
+import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
+import java.io.*;
 import java.sql.*;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import javax.swing.ImageIcon;
+import java.awt.Image;
+import java.awt.Font;
+import java.awt.image.BufferedImage;
+
+
+
+
+
 /**
  *
  * @author MIGUEL
@@ -98,7 +104,7 @@ public class Payment_Method extends javax.swing.JFrame {
         loc.setBounds(30, 20, 200, 30);
 
         Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yy");
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String str = formatter.format(date);
         System.out.print("Current date: " + str);
 
@@ -162,15 +168,14 @@ public class Payment_Method extends javax.swing.JFrame {
         
         String seatn = stno.substring(9);
         String cid = cnm.substring(8);
-        String insertticket = "INSERT INTO ticket\n" +"VALUES \n" 
-                    + "('"+newticketid+"','"+str+"','"+seatn+"','"+cid+"','"+
+        String insertticket ="('"+newticketid+"','"+str+"','"+seatn+"','"+cid+"','"+
                     newpaymentid+"','"+mid+"')";
         
         
         System.out.println(insertticket);
         
         ticket_insert.add(insertticket);
-        
+        td.ticklist = ticket_insert;
 //        JLabel total = new JLabel("Total: ");
 //        total.setBounds(70, 330, 150, 30);
 //        total.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -180,13 +185,15 @@ public class Payment_Method extends javax.swing.JFrame {
     public void receipt_scrollpane(){
         main_receipt_panel.add(receipt_panel);
         receipt_panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,5));
-        receipt_panel.setPreferredSize(new Dimension(235,900));
+        receipt_panel.setPreferredSize(new Dimension(235,1200));
+        
         JScrollPane scrollPane = new JScrollPane(receipt_panel);
         scrollPane.setMinimumSize(new Dimension(5, 5));
         scrollPane.setPreferredSize(new Dimension(230,270));
         scrollPane.setBounds(5, 5, 255, 280);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        
         scrollPane.setOpaque(false);
         main_receipt_panel.add(scrollPane);
         
@@ -267,7 +274,7 @@ public class Payment_Method extends javax.swing.JFrame {
     
     void insert_whole_payment(String pm) throws SQLException, ParseException{
         Statement stmtp = ms.mc.createStatement();
-        
+        emp_log = td.empid;
         String timeStamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(Calendar.getInstance().getTime());
         System.out.println(newpaymentid);
         System.out.println(payment_m);
@@ -283,7 +290,6 @@ public class Payment_Method extends javax.swing.JFrame {
             System.out.println("Payment added to database");
         }
         stmtp.close();
-        td.ticklist = ticket_insert;
         update_ticket_on_database();
     }
     
@@ -375,26 +381,21 @@ public class Payment_Method extends javax.swing.JFrame {
             }
         }
     }
-   
     public void update_ticket_on_database() throws SQLException{
         
-        System.out.println("Entered Update Ticket List");
+        System.out.println("Entered update ticket on database");
         System.out.println(td.ticklist.size());
-        
-        for(int i=0; i<td.ticklist.size(); i++){
-            
-            Statement tstmt = Main_Staff.mc.createStatement();
-            
+        ticket_insert =td.ticklist; 
+        for(int i=0; i<ticket_insert.size(); i++){
+            Statement tstmt = ms.mc.createStatement();
             int tins = 0;
-            tins = tstmt.executeUpdate(td.ticklist.get(i));
+            System.out.println(ticket_insert.get(i));
+            tins = tstmt.executeUpdate("Insert into ticket values" + ticket_insert.get(i));
             if(tins>0){
                 System.out.println("ticket inserted in database");
             }
-            else
-                System.out.println("Ticket not inserted");
         }
     }
-    
     void revert_selected_seat() throws SQLException{
         
         Statement stmt1 = ms.mc.createStatement();
@@ -423,6 +424,50 @@ public class Payment_Method extends javax.swing.JFrame {
         }
         
     }
+    
+    void print_receipt_to_pdf(){
+        
+
+        Dimension size = receipt_panel.getPreferredSize();
+        Rectangle ps = new Rectangle(size.width, size.height);
+        Document document = new Document(ps);
+
+        try {
+            String fildest = System.getProperty("user.dir");
+            String filePath = fildest +"\\Receipts\\" + newpaymentid + ".pdf";
+            System.out.println(filePath);
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+
+            PdfContentByte contentByte = writer.getDirectContent();
+            PdfTemplate template = contentByte.createTemplate(size.width, size.height);
+            Graphics2D g2 = template.createGraphics(size.width, size.height);
+
+            // Create an image of the entire panel
+            receipt_panel.setSize(size);
+            BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g2d = image.createGraphics();
+            receipt_panel.printAll(g2d); // Use printAll to capture the entire panel content
+            g2d.dispose();
+
+            // Draw the BufferedImage onto the PdfTemplate's Graphics2D context
+            g2.drawImage(image, 0, 0, size.width,size.height, null);
+            g2.dispose();
+
+            // Add the template to the PDF content
+            contentByte.saveState();
+            contentByte.addTemplate(template, 0, 0); // Adjust the position as necessary
+            contentByte.restoreState();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (document.isOpen()) {
+                document.close();
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -670,7 +715,7 @@ public class Payment_Method extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancel_paymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_paymentActionPerformed
-
+        JOptionPane.showMessageDialog(null, "Will remove all the selected movie", "System Notice", JOptionPane.INFORMATION_MESSAGE);
         try {
             revert_selected_seat();
             Temp_Data td = new Temp_Data();
@@ -687,7 +732,7 @@ public class Payment_Method extends javax.swing.JFrame {
     }//GEN-LAST:event_cancel_paymentActionPerformed
     
     static String payment = "Cash";
-    static String emp_log = "E1";
+    String emp_log = td.empid;
     private void GCashMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_GCashMouseClicked
        try {
             GCash gc=new GCash();

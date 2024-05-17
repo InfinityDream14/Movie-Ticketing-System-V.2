@@ -9,9 +9,10 @@ import java.util.logging.Logger;
 
 public class Main_Staff {
     static Connection mc;
+    static String emplog;
     
     public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
-        
+       
        try{
             String hostname = "localhost";
             String sqlInstanceName = "MTS"; //computer name 
@@ -33,7 +34,7 @@ public class Main_Staff {
        }catch(SQLException e){
            e.printStackTrace();
        }
-            System.out.println("HELLOOo");
+       get_empid();
        
            new Movie_List().setVisible(true);
            //new Seat_Management().setVisible(true);
@@ -41,6 +42,22 @@ public class Main_Staff {
            //new Staffs_Profile().setVisible(true);
            //new Staff_Name().setVisible(true);
         
+    }
+    
+    public static void get_empid() throws SQLException{
+        Statement stmt = mc.createStatement();
+        
+        String qry = """
+                    select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+                    from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    order by l.DateLog, l.Log_In""";
+        
+        ResultSet rs = stmt.executeQuery(qry);
+        
+        while(rs.next()){
+            emplog = rs.getString(1);
+            new Temp_Data().empid = emplog;
+        }
     }
     
 }

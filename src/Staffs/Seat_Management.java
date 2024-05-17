@@ -112,7 +112,8 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         while(rs1.next()){
             if(rs1.getString(2).trim().equals(mvt)){
                 String imgloc = rs1.getString(7);
-                ImageIcon mi = new ImageIcon(imgloc);
+                String fildest = System.getProperty("user.dir");
+                ImageIcon mi = new ImageIcon(fildest +"\\Movie Posters\\"+imgloc);
                 Image image = mi.getImage(); // transform it 
                 Image newimg = image.getScaledInstance(100, 80,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
                 mi = new ImageIcon(newimg);  // transform it back
@@ -196,19 +197,19 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
                         ImageIcon seat_icon = new ImageIcon("seat.png");
                         JRadioButton jr = new JRadioButton();
                         if(rs.getString(5).equals("A")){
-                            jr.setBackground(new Color(255, 255, 255));
+                            jr.setBackground(Color.white);
                         }
                         else if(rs.getString(5).equals("S")){
-                            jr.setBackground(new Color(0, 255, 255));
+                            jr.setBackground(Color.cyan);
                         }
                         else
                             jr.setBackground(new Color(255,204,102));
                         jr.addMouseListener(new MouseAdapter(){
                             @Override
                             public void mouseClicked(MouseEvent e){
-                                if(!(jr.getBackground().equals(new Color(0, 255, 255)))&&
+                                if(!(jr.getBackground().equals(Color.cyan))&&
                                         !(jr.getBackground().equals(new Color(255,204,102)))){
-                                    jr.setBackground(new Color(0, 255, 255));
+                                    jr.setBackground(Color.cyan);
                                     seat_choices.add(jr.getText());
                                     create_ticket_list(jr);
                                     System.out.println("added to list");
@@ -395,7 +396,8 @@ public final class Seat_Management extends javax.swing.JFrame implements MouseLi
         image_panel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         image_panel.setPreferredSize(new Dimension(89, 85));
         image_panel.setBounds(5, 5, 89, 85);
-        ImageIcon image = new ImageIcon(mimgloc);
+        String fildest = System.getProperty("user.dir");
+        ImageIcon image = new ImageIcon(fildest+"\\Movie Posters\\"+mimgloc);
         JLabel new_image = new JLabel(image);
         new_image.setSize(89, 85);
         image_panel.add(new_image);

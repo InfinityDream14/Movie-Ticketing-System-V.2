@@ -356,6 +356,7 @@ public class LogIn extends javax.swing.JFrame {
                 case 2:
                     Main.choose = 2;
                     System.out.println(Main.choose);
+                    Main.empid = lUserIn.getText();
                     break;
                 default:
                     lUserIn.setText("");

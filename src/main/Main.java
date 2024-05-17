@@ -26,6 +26,7 @@ public class Main {
      */
     public static Connection mc;
     public static int choose = 0;
+    public static String empid;
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
         Main m = new Main();
@@ -74,6 +75,7 @@ public class Main {
             case 2 -> {
                 System.out.println("2");
                 Main_Staff.main(null);
+                
             }
             case 0 -> {
                 new LogIn().setVisible(true);

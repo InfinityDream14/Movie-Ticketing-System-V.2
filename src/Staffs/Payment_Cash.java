@@ -91,6 +91,7 @@ public class Payment_Cash extends javax.swing.JFrame {
                             //Payment_Method pm = new Payment_Method();
                             pm.update_seat_list();
                             pm.insert_whole_payment(payment_m);
+                            pm.print_receipt_to_pdf();
                             new Movie_List().setVisible(true);
                             pm.dispose();
                             dispose();

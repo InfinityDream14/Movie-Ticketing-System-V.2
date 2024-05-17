@@ -5,6 +5,7 @@
 package LogIn;
 
 import java.sql.*;
+import java.text.ParseException;
 import java.time.LocalTime;
 import javax.swing.*;
 import main.*;
@@ -14,19 +15,18 @@ import main.*;
  * @author cdgan
  */
 public class LogInProcess implements Logs {
-
-    Statement stmt;
-    Main main = new Main();
     
-    public int checkIfLoged() throws SQLException, ClassNotFoundException{
-        
-        this.main.connectToDatabase();
-        this.stmt = (Statement) this.main.mc.createStatement();
-        
+    static Statement stmt;
+    
+ 
+    public int checkIfLoged() throws SQLException, ClassNotFoundException {
+        Main main = new Main();
+        stmt = main.mc.createStatement();
+
         String sql = """
-                     select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
-                     \tfrom LOGS l left join staff s on l.Employee_ID = s.EmployeeID
-                     \torder by l.DateLog, l.Log_In""";
+                    select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+                    from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    order by l.DateLog, l.Log_In""";
         String empID = "", logOut = "";
         
         ResultSet rs = stmt.executeQuery(sql);
@@ -46,11 +46,12 @@ public class LogInProcess implements Logs {
     }
     
     public int checkAcc(String user, String pass) throws SQLException, ClassNotFoundException {
-        
+        Main main = new Main();
+        stmt = main.mc.createStatement();
 
         int flag = 0;
         String employeeID = "";
-        this.stmt = (Statement) this.main.mc.createStatement();
+ 
 
         String userN = user;
         String userP = pass;
@@ -91,7 +92,7 @@ public class LogInProcess implements Logs {
         LocalTime now = LocalTime.now();
         System.out.println(employeeID);
         String query = "insert into logs (Employee_ID, Log_In) values ('" + employeeID + "', '" + now + "')";
-        
+
         try {
             stmt.executeQuery(query);
 

@@ -242,10 +242,12 @@ public class MovieDetails extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_Save_DetailsActionPerformed
-
+    
     private void AddShowtimeButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddShowtimeButtonActionPerformed
+       
         try {
             // TODO add your handling code here:
+            new Showtime().movieID = MovieDetails_MovieIDTx.getText();
             new Showtime().setVisible(true);
             // ibang showtime yung lumalabas
         } catch (SQLException | ClassNotFoundException | ParseException ex) {

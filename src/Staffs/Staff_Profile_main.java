@@ -55,7 +55,8 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         JFileChooser jfc = new JFileChooser();
         jfc.setCurrentDirectory(new File("D:\\Users\\Backup\\Desktop"));
         int response = jfc.showOpenDialog(null);
-        String fildest = System.getProperty("user.dir");
+        String fildest = System.getProperty("user.dir" );
+        fildest = fildest + "\\Staff Profile";
         String newpf = "pf_null.png";
         if(response == JFileChooser.APPROVE_OPTION){
             File file = new File(jfc.getSelectedFile().getAbsolutePath());
@@ -76,11 +77,11 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                         os.write(byt, 0, len);
                         totalcopied += len;
                         System.out.println("\rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
-                        Thread.sleep(5);
+                        //Thread.sleep(5);
                     }
                     
                     
-                }catch(IOException | InterruptedException e){
+                }catch(IOException e){
                     e.printStackTrace();
                 }
             }
@@ -136,7 +137,8 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         usernjtx.setText(usern);
         passwordpf.setText(passw);
         
-        ImageIcon im = new ImageIcon(pf_loc);
+        String fildest = System.getProperty("user.dir");
+        ImageIcon im = new ImageIcon(fildest +"\\Staff Profile\\"+ pf_loc);
         Image image = im.getImage(); // transform it 
         Image newimg = image.getScaledInstance(90, 90,  java.awt.Image.SCALE_SMOOTH);
         ImageIcon nim =new ImageIcon(newimg);
@@ -205,6 +207,11 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, -1, -1));
 
         jLabel2.setText("Log out");
+        jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pf_log_out(evt);
+            }
+        });
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 390, -1, -1));
         jPanel1.add(lp_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
@@ -449,7 +456,8 @@ public class Staff_Profile_main extends javax.swing.JFrame {
             Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
             Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
-        }   
+        }
+        this.setVisible(true);
     }//GEN-LAST:event_icon_profMouseClicked
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
@@ -536,6 +544,10 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     private void lnamejtxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lnamejtxActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_lnamejtxActionPerformed
+
+    private void pf_log_out(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pf_log_out
+        System.exit(0);
+    }//GEN-LAST:event_pf_log_out
       
     /**
      * @param args the command line arguments

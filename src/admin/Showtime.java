@@ -34,13 +34,14 @@ public final class Showtime extends javax.swing.JFrame {
         get_last_showtimeid();
         
         ShowtimeID_TX.setText(newshowtimeid);
-        MovieID_Tx.setText(ad.ShowtimeMovieID);
+        //MovieID_Tx.setText(ad.ShowtimeMovieID);
+        MovieID_Tx.setText(movieID);
         
         
-        String midnum = MovieID_Tx.getText().substring(1);
-        midnum = "M" + Integer.toString(Integer.parseInt(midnum) - 1);
-        System.out.println(midnum);
-        MovieID_Tx.setText(midnum);
+//        String midnum = MovieID_Tx.getText().substring(1);
+//        midnum = "M" + Integer.toString(Integer.parseInt(midnum) - 1);
+//        System.out.println(midnum);
+//        MovieID_Tx.setText(midnum);
         
         
     }

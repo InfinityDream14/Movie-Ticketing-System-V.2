@@ -52,7 +52,6 @@ public final class Admin extends javax.swing.JFrame {
     String Movie_Pic_Location = "null"; // for creating new Movie
     int price; // for creating new Movie
     String Duration = "null"; // for creating new Movie;
-
     int showtimeTime;
     public static String ShowtimeMovieID;
     
@@ -1364,7 +1363,7 @@ public final class Admin extends javax.swing.JFrame {
             Director = AddMovie_Director_TextField.getText();
             Duration = AddMovie_Duration_TextField.getText();
             price = Integer.parseInt(AddMovie_Price_TextField.getText());
-            Movie_Pic_Location = file.toString().substring(file.toString().lastIndexOf("\\") + 1);
+            Movie_Pic_Location = PosterName.getText();
             Mpass = "Admin";
 
             if (AddMovie_MovieID_TextField.getText().isEmpty()) {
@@ -1399,6 +1398,8 @@ public final class Admin extends javax.swing.JFrame {
                     System.out.println(price);
                     System.out.println(Movie_Pic_Location);
                     System.out.println(PNum);
+                    if(Movie_Pic_Location.equals(""))
+                        Movie_Pic_Location = "default poster.jpg";
 
                     try {  // INSERTING VALUES FOR ADDMOVIE
                         Statement stmt2 = conn.createStatement();
@@ -1421,6 +1422,7 @@ public final class Admin extends javax.swing.JFrame {
                     showtimeTime = JOptionPane.showConfirmDialog(this, "Add Show Time? ", "Showtime", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (showtimeTime == JOptionPane.YES_OPTION) {
                         try {
+                            new Showtime().movieID = AddMovie_MovieID_TextField.getText();
                             new Showtime().setVisible(true);
 
                         } catch (SQLException ex) {
