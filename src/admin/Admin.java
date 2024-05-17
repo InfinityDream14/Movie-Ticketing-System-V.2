@@ -1265,6 +1265,8 @@ public final class Admin extends javax.swing.JFrame {
 
         } catch (SQLException ex) {
             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_Select_Button_MoviesActionPerformed
 
@@ -1708,7 +1710,7 @@ public final class Admin extends javax.swing.JFrame {
         lmovidnum += 1;
     }
 
-    public void selectMovie() throws SQLException {
+    public void selectMovie() throws SQLException, ClassNotFoundException {
         int i = MovieTable.getSelectedRow();
         String movieID = tmodel1.getValueAt(i, 0).toString();
 //        System.out.println(movieID);
@@ -1719,7 +1721,7 @@ public final class Admin extends javax.swing.JFrame {
             System.out.println(rs.getString("Title"));
             System.out.println(rs.getString("Genre"));
 
-            String MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice, MovDetsPLoc;
+            String MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice, MovDetsPLoc, MovDetsMStats;
             MovieDetails mds = new MovieDetails();
 
             MovDetsMovID = rs.getString(1);
@@ -1729,8 +1731,11 @@ public final class Admin extends javax.swing.JFrame {
             MovDetsDur = rs.getString(5);
             MovDetPrice = rs.getString(6);
             MovDetsPLoc = rs.getString(7);
+            MovDetsMStats = rs.getString(8);
 
-            MovieDetails movieDetails = new MovieDetails(MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice);
+            MovieDetails movieDetails = new MovieDetails(MovDetsMovID, MovDetsTitle, 
+                    MovDetsGenre, MovDetsDir, MovDetsDur, 
+                    MovDetPrice, MovDetsPLoc, MovDetsMStats);
             movieDetails.setVisible(true);
 
         }
@@ -1772,7 +1777,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JButton Back;
     public javax.swing.JLabel MoviePoster;
     private javax.swing.JTextField MovieSearchField;
-    private javax.swing.JTable MovieTable;
+    public static javax.swing.JTable MovieTable;
     private javax.swing.JTextField PosterName;
     private javax.swing.JButton Select_Button_Movies;
     private javax.swing.JPanel addEmplyee;

@@ -6,23 +6,30 @@ import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import main.Main;
 
 public class MovieDetails extends javax.swing.JFrame {
 
     static Connection connMD = Main.mc;
+    Statement stmtMD;
+    DefaultTableModel tmodel1 = new DefaultTableModel();
+    
     
 
-    public MovieDetails() {
+    public MovieDetails(){
         initComponents();
 
     }
 
     public MovieDetails(String MovieID, String Title, String Genre, String Director, String Duration,
-            String Price) throws SQLException {
+            String Price, String Mov_PicLoc, String Mov_Status) throws SQLException, ClassNotFoundException {
         initComponents();
         getMovieDets_fromDB();
-
+        
+       
+        
+        
         MovieDetails_MovieIDTx.setText(MovieID);
         MovieDetails_TitleTx.setText(Title);
         MovieDetails_GenreTx.setText(Genre);
@@ -32,7 +39,7 @@ public class MovieDetails extends javax.swing.JFrame {
 
     }
 
-    static String MDTitle, MDGenre, MDDirector, MDDuration, MDPrice;
+    static String MDTitle, MDGenre, MDDirector, MDDuration, MDPrice, MD_PicLoc ,MDMstat;
 
     void getMovieDets_fromDB() throws SQLException {
 
@@ -47,6 +54,8 @@ public class MovieDetails extends javax.swing.JFrame {
                 MDDirector = rs.getString(4);
                 MDDuration = rs.getString(5);
                 MDPrice = rs.getString(6);
+                MDMstat = rs.getString(8);
+                
             }
         }
         MovieDetails_TitleTx.setText(MDTitle);
@@ -54,6 +63,13 @@ public class MovieDetails extends javax.swing.JFrame {
         MovieDetails_DirectorTx.setText(MDDirector);
         MovieDetails_DurationTx.setText(MDDuration);
         MovieDetails_PriceTx.setText(MDPrice);
+        System.out.println(MDMstat);
+        if(MDMstat.equals("A")){
+          Available.setSelected(true);
+        }
+        else{
+        Unavailable.setSelected(true);
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -63,6 +79,7 @@ public class MovieDetails extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
+        MovieStatus = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         MovieDetails_MovieID = new javax.swing.JLabel();
@@ -80,10 +97,11 @@ public class MovieDetails extends javax.swing.JFrame {
         Save_Details = new javax.swing.JButton();
         MovieDetails_PosterPic = new javax.swing.JLabel();
         ShowTimeListBtn = new javax.swing.JButton();
-        UpdateMovStatAvail = new javax.swing.JButton();
-        UpdateMovStatUnavail = new javax.swing.JButton();
         MovieDetails_MStatus = new javax.swing.JLabel();
+        Available = new javax.swing.JRadioButton();
+        Unavailable = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -158,32 +176,30 @@ public class MovieDetails extends javax.swing.JFrame {
         });
         jPanel1.add(ShowTimeListBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 300, 158, 36));
 
-        UpdateMovStatAvail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        UpdateMovStatAvail.setText("A");
-        UpdateMovStatAvail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UpdateMovStatAvailActionPerformed(evt);
-            }
-        });
-        jPanel1.add(UpdateMovStatAvail, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, 60, 20));
-
-        UpdateMovStatUnavail.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        UpdateMovStatUnavail.setText("U");
-        UpdateMovStatUnavail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                UpdateMovStatUnavailActionPerformed(evt);
-            }
-        });
-        jPanel1.add(UpdateMovStatUnavail, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 250, 60, 20));
-
         MovieDetails_MStatus.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         MovieDetails_MStatus.setText("Movie Status: ");
         jPanel1.add(MovieDetails_MStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 100, -1));
+
+        MovieStatus.add(Available);
+        Available.setText("Available");
+        Available.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AvailableActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Available, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 250, -1, -1));
+
+        MovieStatus.add(Unavailable);
+        Unavailable.setText("Unavailable");
+        jPanel1.add(Unavailable, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 250, -1, -1));
 
         jLabel3.setBackground(new java.awt.Color(51, 51, 51));
         jLabel3.setForeground(new java.awt.Color(153, 153, 153));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/bg_addmovie.png"))); // NOI18N
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(-20, 0, 660, 360));
+
+        jButton1.setText("jButton1");
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 300, 120, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -206,7 +222,7 @@ public class MovieDetails extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    String NewMDTitle, NewMDGenre, NewMDDirector, NewMDDuration, NewMDPrice;
+    String NewMDTitle, NewMDGenre, NewMDDirector, NewMDDuration, NewMDPrice, NewMDMStat;
     private void Save_DetailsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Save_DetailsActionPerformed
 
         try {
@@ -219,24 +235,34 @@ public class MovieDetails extends javax.swing.JFrame {
             NewMDDirector = MovieDetails_DirectorTx.getText();
             NewMDDuration = MovieDetails_DurationTx.getText();
             NewMDPrice = MovieDetails_PriceTx.getText();
-
+            if(Available.isSelected()){
+             NewMDMStat = "A";
+            }
+            else if(Unavailable.isSelected()){
+             NewMDMStat = "U";
+            }
             while (rs.next()) {
                 Statement stmt1 = connMD.createStatement();
                 if (rs.getString(1).equals(MovieDetails_MovieIDTx.getText())) {
                     String rsin = "UPDATE Movie \n"
                             + "set Title = '" + NewMDTitle + "', Genre = '" + NewMDGenre + "', Director = '" + NewMDDirector + "',"
-                            + " Duration = '" + NewMDDuration + "', Price = " + NewMDPrice
+                            + " Duration = '" + NewMDDuration + "', Price = " + NewMDPrice + ", Movie_Status = '"+NewMDMStat+"'"
                             + "where MovieID = '" + MovieDetails_MovieIDTx.getText() + "'";
+                    
+                    System.out.println(NewMDMStat);
 
                     int up = stmt1.executeUpdate(rsin);
-                    if (up > 0) {
+                    if (up > 0 ) {
                         System.out.println("Movie details updated");
                         JOptionPane.showMessageDialog(null, "Success");
+                    }
+                    else{
+                     removemoviefromtable();
                     }
                 }
             }
 
-        } catch (SQLException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(MovieDetails.class.getName()).log(Level.SEVERE, null, ex);
         }
 
@@ -263,64 +289,25 @@ public class MovieDetails extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_MovieDetails_PriceTxKeyTyped
 
-    String NewMovStatvail = "A";
-    private void UpdateMovStatAvailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateMovStatAvailActionPerformed
+    private void AvailableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AvailableActionPerformed
         // TODO add your handling code here:
-        try {
-            Statement stmt = connMD.createStatement();
-            String qry = "select * from Movie";
-            ResultSet rs = stmt.executeQuery(qry);
+    }//GEN-LAST:event_AvailableActionPerformed
 
-            while (rs.next()) {
-                Statement stmt1 = connMD.createStatement();
-                if (rs.getString(1).equals(MovieDetails_MovieIDTx.getText())) {
-                    String rsin = "UPDATE Movie \n"
-                            + "set movie_status = '" + NewMovStatvail + "'"
-                            + "where MovieID = '" + MovieDetails_MovieIDTx.getText() + "'";
-
-                    int up = stmt1.executeUpdate(rsin);
-                    if (up > 0) {
-                        System.out.println("Movie Status updated");
-                        JOptionPane.showMessageDialog(null, "Success");
-                    }
-                }
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(MovieDetails.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_UpdateMovStatAvailActionPerformed
-    
-    String NewMovStatUnavail = "U";
-    private void UpdateMovStatUnavailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_UpdateMovStatUnavailActionPerformed
-        // TODO add your handling code here:
-        try {
-            Statement stmt = connMD.createStatement();
-            String qry = "select * from Movie";
-            ResultSet rs = stmt.executeQuery(qry);
-
-            while (rs.next()) {
-                Statement stmt1 = connMD.createStatement();
-                if (rs.getString(1).equals(MovieDetails_MovieIDTx.getText())) {
-                    String rsin = "UPDATE Movie \n"
-                            + "set movie_status = '" + NewMovStatUnavail + "'"
-                            + "where MovieID = '" + MovieDetails_MovieIDTx.getText() + "'";
-
-                    int up = stmt1.executeUpdate(rsin);
-                    if (up > 0) {
-                        System.out.println("Movie Status updated");
-                        JOptionPane.showMessageDialog(null, "Success");
-                    }
-                }
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(MovieDetails.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_UpdateMovStatUnavailActionPerformed
-
+   
+    public void removemoviefromtable() throws SQLException, ClassNotFoundException{
+       Admin ad = new Admin();
+        int i = ad.MovieTable.getSelectedRow();
+        String MovStat = tmodel1.getValueAt(i, 7).toString();
+        System.out.println(MovStat);
+        String stdel = "update movie\n"
+                    + "set Movie_status = 'U'\n"
+                    + "where movie_status = '" + MovStat + "'";
+        stmtMD.executeUpdate(stdel);
+        ad.createTableMovie();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JRadioButton Available;
     private javax.swing.JLabel MovieDetails_Director;
     private javax.swing.JTextField MovieDetails_DirectorTx;
     private javax.swing.JLabel MovieDetails_Duration;
@@ -335,10 +322,11 @@ public class MovieDetails extends javax.swing.JFrame {
     private javax.swing.JTextField MovieDetails_PriceTx;
     private javax.swing.JLabel MovieDetails_Title;
     private javax.swing.JTextField MovieDetails_TitleTx;
+    private javax.swing.ButtonGroup MovieStatus;
     private javax.swing.JButton Save_Details;
     private javax.swing.JButton ShowTimeListBtn;
-    private javax.swing.JButton UpdateMovStatAvail;
-    private javax.swing.JButton UpdateMovStatUnavail;
+    private javax.swing.JRadioButton Unavailable;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
