@@ -1638,7 +1638,7 @@ public final class Admin extends javax.swing.JFrame {
 
     public void getMovieData() {
         String sql1 = """
-                  select MovieID, Title
+                  select MovieID, Title, movie_status
                    from movie 
                    order by len (MovieID), MovieID""";
 
@@ -1649,10 +1649,11 @@ public final class Admin extends javax.swing.JFrame {
             this.vec = new ArrayList<>();
 
             while (rs != null && rs.next()) {
-
-                this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title")});
-                System.out.println(rs.getString("MovieID"));
-                System.out.println(rs.getString("Title"));
+                if(!rs.getString(3).equals("D")){
+                    this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title")});
+                    System.out.println(rs.getString("MovieID"));
+                    System.out.println(rs.getString("Title"));
+                }
             }
 
             for (Object[] row : vec) {

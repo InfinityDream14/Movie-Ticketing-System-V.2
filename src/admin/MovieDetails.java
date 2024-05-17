@@ -39,6 +39,13 @@ public class MovieDetails extends javax.swing.JFrame {
         MovieDetails_DirectorTx.setText(Director);
         MovieDetails_DurationTx.setText(Duration);
         MovieDetails_PriceTx.setText(Price);
+        NewMDMStat = Mov_Status;
+        if(NewMDMStat.equals("A")){
+            Available.setSelected(true);
+        }
+        else{
+           Unavailable.setSelected(true);
+        }
         
         String fildest = System.getProperty("user.dir");
         fildest = fildest + "\\Movie Posters\\";
@@ -47,6 +54,8 @@ public class MovieDetails extends javax.swing.JFrame {
         Image scaledimg = imgIcon.getImage().getScaledInstance(rec.width, rec.height, Image.SCALE_SMOOTH);
         imgIcon = new ImageIcon(scaledimg);
         MovieDetails_PosterPic.setIcon(imgIcon);
+        
+        
 
     }
 
@@ -312,19 +321,19 @@ public class MovieDetails extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MovieDetails.class.getName()).log(Level.SEVERE, null, ex);
         }
+        dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
    
     public void removemoviefromtable() throws SQLException, ClassNotFoundException{
-        Admin ad = new Admin();
-        int i = ad.MovieTable.getSelectedRow();
-        String MovStat = tmodel1.getValueAt(i, 7).toString();
-        System.out.println(MovStat);
+        Statement stm = connMD.createStatement();
+        String Movid = MovieDetails_MovieIDTx.getText();
+        System.out.println(Movid);
         String stdel = "update movie\n"
-                    + "set Movie_status = 'U'\n"
-                    + "where movie_status = '" + MovStat + "'";
-        stmtMD.executeUpdate(stdel);
-        ad.createTableMovie();
+                    + "set Movie_status = 'D'\n"
+                    + "where movieID = '" + Movid + "'";
+        stm.executeUpdate(stdel);
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

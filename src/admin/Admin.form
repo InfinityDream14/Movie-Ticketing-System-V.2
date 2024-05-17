@@ -528,10 +528,10 @@
             </Component>
             <Component class="javax.swing.JButton" name="moviesB">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Movies"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Movies"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 18, 3, 18]"/>
                 </Property>
@@ -587,10 +587,10 @@
         </Container>
         <Component class="javax.swing.JButton" name="logOut">
           <Properties>
+            <Property name="text" type="java.lang.String" value="Log Out"/>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Segoe UI" size="14" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Log Out"/>
             <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
               <Insets value="[2, 12, 3, 12]"/>
             </Property>
@@ -694,10 +694,10 @@
             </Component>
             <Component class="javax.swing.JButton" name="Select_Button_Movies">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Select"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Select"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Select_Button_MoviesActionPerformed"/>
