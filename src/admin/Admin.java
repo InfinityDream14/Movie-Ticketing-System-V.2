@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.RowFilter;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 import jnafilechooser.api.JnaFileChooser;
 
@@ -138,16 +139,15 @@ public final class Admin extends javax.swing.JFrame {
 
         cellSelectionModel.addListSelectionListener((ListSelectionEvent e) -> {
             String selectedData = null;
-
+            
             int[] selectedRow = salesTable.getSelectedRows();
             int[] selectedColumn = salesTable.getSelectedColumns();
-
+            
             for (int i = 0; i < selectedRow.length; i++) {
                 for (int j = 0; j < selectedColumn.length; j++) {
                     selectedData = (String) salesTable.getValueAt(selectedRow[i], selectedColumn[j]);
                 }
             }
-            System.out.println("Selected: " + selectedData);
         });
         getSalesData();
     }
@@ -157,7 +157,8 @@ public final class Admin extends javax.swing.JFrame {
         String sql = """
                      select t.TicketID, p.Amount, p.PaymentMethod, p.PaymentDate
                      from ticket t join payment p on t.TicketPaymentID = p.PaymentID
-                     """ + dateFilter + " and " + searchFilter + " and " + paymentFiltered;
+                     """ + dateFilter + " and " + searchFilter + " and " + paymentFiltered + ""
+                + "order by p.PaymentDate desc";
 
         try {
             totalEarned = 0;
@@ -211,7 +212,6 @@ public final class Admin extends javax.swing.JFrame {
 
             filteredDate = sYearChooser.getYear() + "";
         }
-        System.out.println(filteredDate);
         dateFilter = " WHERE CAST(p.PaymentDate AS date) like '%" + filteredDate + "%'";
 
         if (paymentFilter.getSelectedItem().equals("Cash")) {
@@ -248,7 +248,6 @@ public final class Admin extends javax.swing.JFrame {
                     selectedData = (String) empTable.getValueAt(selectedRow[i], selectedColumn[j]);
                 }
             }
-            System.out.println("Selected: " + selectedData);
         });
         getEmployeedata();
     }
@@ -280,7 +279,8 @@ public final class Admin extends javax.swing.JFrame {
 
         logsTable.setModel(logsTmodel);
         logsTmodel.addColumn("Employee ID");
-        logsTmodel.addColumn("Full Name");
+        logsTmodel.addColumn("First Name");
+        logsTmodel.addColumn("Last Namew");
         logsTmodel.addColumn("Date Logged");
         logsTmodel.addColumn("Log In");
         logsTmodel.addColumn("Log Out");
@@ -298,7 +298,6 @@ public final class Admin extends javax.swing.JFrame {
                     selectedData = (String) logsTable.getValueAt(selectedRow[i], selectedColumn[j]);
                 }
             }
-            System.out.println("Selected: " + selectedData);
         });
         getLogsdata();
     }
@@ -309,7 +308,7 @@ public final class Admin extends javax.swing.JFrame {
         String newLogIn, newLogOut;
 
         String sql = """
-             select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+             select l.Employee_ID, s.Fname, s.Lname, l.DateLog, l.Log_In, l.Log_Out
              	from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
              	order by l.DateLog, l.Log_In""";
 
@@ -324,10 +323,13 @@ public final class Admin extends javax.swing.JFrame {
                 logOutT = rs.getTime("Log_Out");
                 newLogOut = (logOutT != null) ? dateFormat.format(logOutT) : "";
 
-                row.add(new Object[]{rs.getString("Employee_ID"), rs.getString("Full Name"), rs.getString("DateLog"), newLogIn, newLogOut});
+                row.add(new Object[]{rs.getString("Employee_ID"), rs.getString("Fname"), rs.getString("Lname"), rs.getString("DateLog"), newLogIn, newLogOut});
             }
 
-            row.forEach(logsTmodel::addRow);
+            for (int i = row.size() - 1; i >= 0; i--) {
+                logsTmodel.addRow(row.get(i));
+                System.out.println(i);
+            }
 
         } catch (SQLException e) {
             System.out.println(e);
@@ -617,7 +619,6 @@ public final class Admin extends javax.swing.JFrame {
         jLabel4.setText("Logs");
         jLabel4.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
 
-        logsTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         logsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -629,13 +630,20 @@ public final class Admin extends javax.swing.JFrame {
 
             }
         ));
+        logsTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         logsTable.setRowHeight(40);
+        logsTable.setShowGrid(false);
+        logsTable.setSurrendersFocusOnKeystroke(true);
         jScrollPane2.setViewportView(logsTable);
 
         jLabel10.setText("Receipt No.");
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jTextField2.setText("jTextField1");
+        jTextField2.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jTextField2CaretUpdate(evt);
+            }
+        });
 
         jButton2.setText("Search");
         jButton2.setFocusPainted(false);
@@ -1322,8 +1330,6 @@ public final class Admin extends javax.swing.JFrame {
 
         String empID = "", dateLog = "", logIn = "";
 
-        System.out.println(cTime);
-
         String q1 = """
                     select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
                     from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
@@ -1334,7 +1340,6 @@ public final class Admin extends javax.swing.JFrame {
             rs = stmt.executeQuery(q1);
 
             while (rs.next()) {
-//                System.out.println(rs.getString(1)+", "+rs.getString(3)+ ", "+rs.getString(4));
                 if (rs.getString("Employee_ID").charAt(0) == 'A') {
                     empID = rs.getString("Employee_ID");
                     dateLog = rs.getString("DateLog");
@@ -1539,11 +1544,7 @@ public final class Admin extends javax.swing.JFrame {
                             new Showtime().movieID = AddMovie_MovieID_TextField.getText();
                             new Showtime().setVisible(true);
 
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ParseException ex) {
+                        } catch (SQLException | ClassNotFoundException | ParseException ex) {
                             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
@@ -1553,9 +1554,10 @@ public final class Admin extends javax.swing.JFrame {
                             String movid = AddMovie_MovieID_TextField.getText();
                             Statement stm = conn.createStatement();
                             System.out.println(movid);
-                            String stdel = "update movie\n"
-                                    + "set Movie_status = 'U'\n"
-                                    + "where movieID = '" + movid + "'";
+                            String stdel = """
+                                           update movie
+                                           set Movie_status = 'U'
+                                           where movieID = '""" + movid + "'";
                             stm.executeUpdate(stdel);
                         } catch (SQLException ex) {
                             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
@@ -1594,7 +1596,6 @@ public final class Admin extends javax.swing.JFrame {
         boolean res = chooser.showOpenDialog(Admin.this);
         if (res == true) {
             file = chooser.getSelectedFile();
-            String path = file.getAbsolutePath();
             ImageIcon imgIcon = new ImageIcon(file.getAbsolutePath());
             Rectangle rec = MoviePoster.getBounds();
             Image scaledimg = imgIcon.getImage().getScaledInstance(rec.width, rec.height, Image.SCALE_SMOOTH);
@@ -1608,7 +1609,6 @@ public final class Admin extends javax.swing.JFrame {
                 try (InputStream is = new FileInputStream(file); OutputStream os = new FileOutputStream(destfile)) {
 
                     int len;
-                    float srcfsize = is.available() / 1000.0f;
                     float totalcopied = 0.0f;
                     byte[] byt = new byte[1024];
                     while ((len = is.read(byt)) > 0) {
@@ -1619,7 +1619,6 @@ public final class Admin extends javax.swing.JFrame {
                     }
 
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -1785,9 +1784,10 @@ public final class Admin extends javax.swing.JFrame {
             int i = salesTable.getSelectedRow();
             String ticketID = salesTmodel.getValueAt(i, 0).toString();
 
-            String query = "select EmployeeID, Fname, Lname, email, Phone, pf_loc\n"
-                    + "from staff\n"
-                    + "where EmployeeID = '" + ticketID + "'";
+//            String query = """
+//                           select EmployeeID, Fname, Lname, email, Phone, pf_loc
+//                           from staff
+//                           where EmployeeID = '""" + ticketID + "'";
 
         }
     }//GEN-LAST:event_salesTableMouseClicked
@@ -1796,9 +1796,7 @@ public final class Admin extends javax.swing.JFrame {
         if (evt.getClickCount() == 2) {
             try {
                 selectMovie();
-            } catch (SQLException ex) {
-                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (ClassNotFoundException ex) {
+            } catch (SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -1826,6 +1824,11 @@ public final class Admin extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_empTableMouseClicked
+
+    private void jTextField2CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField2CaretUpdate
+        
+        searchFilter = jTextField2.getText();
+    }//GEN-LAST:event_jTextField2CaretUpdate
 
     /**
      * @param args
@@ -1859,7 +1862,7 @@ public final class Admin extends javax.swing.JFrame {
         String qry = """
                      select * from staff
                      order by len(EmployeeID), EmployeeID""";
-        ResultSet rs = stmt.executeQuery(qry);
+        rs = stmt.executeQuery(qry);
         while (rs.next()) {
             lempid = rs.getString(1);
         }
@@ -1876,10 +1879,10 @@ public final class Admin extends javax.swing.JFrame {
 
     void get_last_movieid() throws SQLException {
         lmovieid = "";
-        Statement stmt = conn.createStatement();
+        stmt = conn.createStatement();
 
         String qry = "select * from movie order by len(MovieID), MovieID";
-        ResultSet rs = stmt.executeQuery(qry);
+        rs = stmt.executeQuery(qry);
         while (rs.next()) {
             lmovieid = rs.getString(1);
         }
@@ -1895,10 +1898,10 @@ public final class Admin extends javax.swing.JFrame {
 
     void get_last_showtimeid() throws SQLException {
         lshowtimeid = "";
-        Statement stmt = conn.createStatement();
+        stmt = conn.createStatement();
 
         String qry = "select * from showtime order by len(showtimeID), showtimeID";
-        ResultSet rs = stmt.executeQuery(qry);
+        rs = stmt.executeQuery(qry);
         while (rs.next()) {
             lshowtimeid = rs.getString(2);
         }
@@ -1927,9 +1930,7 @@ public final class Admin extends javax.swing.JFrame {
                 }
             }
 
-            for (Object[] row : row) {
-                tmodel1.addRow(row);
-            }
+            row.forEach(tmodel1::addRow);
 
         } catch (SQLException e) {
             System.out.println(e);
@@ -1988,13 +1989,12 @@ public final class Admin extends javax.swing.JFrame {
 //        System.out.println(movieID);
 
         String query = "select * from movie where MovieID = '" + movieID + "' order by len(MovieID), MovieID";
-        ResultSet rs = stmt.executeQuery(query);
+        rs = stmt.executeQuery(query);
         if (rs.next()) {
             System.out.println(rs.getString("Title"));
             System.out.println(rs.getString("Genre"));
 
             String MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice, MovDetsPLoc, MovDetsMStats;
-            MovieDetails mds = new MovieDetails();
 
             MovDetsMovID = rs.getString(1);
             MovDetsTitle = rs.getString(2);

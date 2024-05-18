@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -164,7 +165,7 @@ public final class ShowtimeList extends javax.swing.JFrame {
                    """;
 
         try {
-
+            SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
             stmt = new Admin().conn.createStatement();
             this.rs = stmt.executeQuery(sql1);
             this.vec = new ArrayList<>();
@@ -172,7 +173,7 @@ public final class ShowtimeList extends javax.swing.JFrame {
             while (rs.next()) { // rs.getstring (pangilang moviedid) -- showtimelist
 
                 if (rs.getString(3).equals(mid) && !rs.getString(6).equals("U")) {
-                    this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title"), rs.getString("Starttime"), rs.getString("showtimeid")});
+                    this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title"), dateFormat.format(rs.getTime("Starttime")), rs.getString("showtimeid")});
                     System.out.println("MovieID");
                     System.out.println(rs.getString("Title"));
                     System.out.println(rs.getString("StartTime"));
