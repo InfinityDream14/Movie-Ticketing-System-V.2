@@ -122,10 +122,10 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel3">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Sales"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Bookman Old Style" size="36" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Sales"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane1">
@@ -154,21 +154,21 @@
             </Container>
             <Component class="javax.swing.JLabel" name="jLabel9">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Receipt No."/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Receipt No."/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField1">
             </Component>
             <Component class="javax.swing.JButton" name="jButton1">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Search"/>
+                <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Search"/>
-                <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 30, 3, 30]"/>
                 </Property>
@@ -246,10 +246,10 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel4">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Logs"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Bookman Old Style" size="36" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Logs"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane2">
@@ -274,10 +274,10 @@
             </Container>
             <Component class="javax.swing.JLabel" name="jLabel10">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Receipt No."/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Receipt No."/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField2">
@@ -287,11 +287,11 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButton2">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Search"/>
+                <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Search"/>
-                <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 30, 3, 30]"/>
                 </Property>
@@ -365,10 +365,10 @@
           <SubComponents>
             <Component class="javax.swing.JLabel" name="jLabel5">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Employees"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Bookman Old Style" size="36" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Employees"/>
               </Properties>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane4">
@@ -394,10 +394,10 @@
             </Container>
             <Component class="javax.swing.JLabel" name="jLabel14">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Receipt No."/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Receipt No."/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="jTextField5">
@@ -407,11 +407,11 @@
             </Component>
             <Component class="javax.swing.JButton" name="jButton4">
               <Properties>
+                <Property name="text" type="java.lang.String" value="Search"/>
+                <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="14" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Search"/>
-                <Property name="focusPainted" type="boolean" value="false"/>
                 <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
                   <Insets value="[2, 30, 3, 30]"/>
                 </Property>
@@ -660,10 +660,10 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="jLabel7">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="Movies"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="36" style="3"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Movies"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -1169,10 +1169,10 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="jLabel12">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="Add Movie"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="36" style="3"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Add Movie"/>
                   </Properties>
                 </Component>
               </SubComponents>
@@ -1229,40 +1229,35 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="AddStaff_StaffDetailsLabel" min="-2" max="-2" attributes="0"/>
                               <Group type="102" attributes="0">
-                                  <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="AddStaff_StaffDetailsLabel" min="-2" max="-2" attributes="0"/>
-                                      <Group type="102" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="AddStaff_EmployeeIDLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="AddStaff_EmailLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="AddStaff_LastNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="AddStaff_PhoneNumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                              <Component id="AddStaff_FirstNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          </Group>
-                                          <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="AddStaff_LastName_TextField" alignment="0" min="-2" pref="316" max="-2" attributes="0"/>
-                                              <Component id="AddStaff_FirstName_TextField" alignment="0" min="-2" pref="316" max="-2" attributes="0"/>
-                                              <Component id="AddStaff_EmployeeID_TextField" alignment="0" min="-2" pref="316" max="-2" attributes="0"/>
-                                              <Component id="AddStaff_Email_TextField" alignment="0" min="-2" pref="316" max="-2" attributes="0"/>
-                                              <Component id="AddStaff_PhoneNumber_TextField1" alignment="0" min="-2" pref="316" max="-2" attributes="0"/>
-                                          </Group>
-                                      </Group>
+                                      <Component id="AddStaff_EmployeeIDLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="AddStaff_EmailLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="AddStaff_LastNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="AddStaff_PhoneNumberLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                                      <Component id="AddStaff_FirstNameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
-                                  <Component id="Back" min="-2" pref="133" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="Add_Another_Staff" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="Add_Staff" min="-2" pref="133" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="AddStaff_LastName_TextField" alignment="0" min="-2" pref="316" max="-2" attributes="0"/>
+                                      <Component id="AddStaff_FirstName_TextField" alignment="0" min="-2" pref="316" max="-2" attributes="0"/>
+                                      <Component id="AddStaff_EmployeeID_TextField" alignment="0" min="-2" pref="316" max="-2" attributes="0"/>
+                                      <Component id="AddStaff_Email_TextField" alignment="0" min="-2" pref="316" max="-2" attributes="0"/>
+                                      <Component id="AddStaff_PhoneNumber_TextField1" alignment="0" min="-2" pref="316" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
                           </Group>
                           <EmptySpace pref="82" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="Back" min="-2" pref="133" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Component id="Add_Staff" min="-2" pref="133" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1301,7 +1296,6 @@
                           <EmptySpace pref="66" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="Add_Staff" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="Add_Another_Staff" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="Back" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
@@ -1312,18 +1306,18 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="AddStaff_StaffDetailsLabel">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="Details"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="23" style="1"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Details"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="AddStaff_EmployeeIDLabel">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="Employee ID: "/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="20" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Employee ID: "/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="AddStaff_EmployeeID_TextField">
@@ -1349,10 +1343,10 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="AddStaff_FirstNameLabel">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="First Name: "/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="20" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="First Name: "/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="AddStaff_FirstName_TextField">
@@ -1377,10 +1371,10 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="AddStaff_LastNameLabel">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="Last Name: "/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="20" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Last Name: "/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="AddStaff_LastName_TextField">
@@ -1405,10 +1399,10 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="AddStaff_EmailLabel">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="Email: "/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="20" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Email: "/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="AddStaff_Email_TextField">
@@ -1433,10 +1427,10 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="AddStaff_PhoneNumberLabel">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="Phone Number: "/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="20" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Phone Number: "/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JTextField" name="AddStaff_PhoneNumber_TextField1">
@@ -1457,30 +1451,19 @@
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AddStaff_PhoneNumber_TextField1ActionPerformed"/>
+                    <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="AddStaff_PhoneNumber_TextField1KeyTyped"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="Add_Staff">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="Add Staff"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="18" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Add Staff"/>
                   </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Add_StaffMouseClicked"/>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Add_StaffActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JButton" name="Add_Another_Staff">
-                  <Properties>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Segoe UI" size="18" style="0"/>
-                    </Property>
-                    <Property name="text" type="java.lang.String" value="Add Another Staff"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="Add_Another_StaffMouseClicked"/>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Add_Another_StaffActionPerformed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="Back">
@@ -1527,10 +1510,10 @@
               <SubComponents>
                 <Component class="javax.swing.JLabel" name="jLabel6">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="Add Staffs"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="36" style="3"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Add Staffs"/>
                   </Properties>
                 </Component>
               </SubComponents>
