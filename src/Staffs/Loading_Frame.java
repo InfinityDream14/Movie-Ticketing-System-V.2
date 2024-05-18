@@ -20,15 +20,13 @@ public class Loading_Frame extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-    public Loading_Frame() {
+    public Loading_Frame() throws InterruptedException {
         
         initComponents();
         this.setShape(new RoundRectangle2D.Double(0, 0, this.getWidth(), 
         this.getHeight(), 25, 25));
         this.setLocationRelativeTo(null);
-        for(int i = 0; i<100; i++){
-            
-        }
+   
         
     }
 
@@ -72,7 +70,7 @@ public class Loading_Frame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     /**
      * @param args the command line arguments
      */
