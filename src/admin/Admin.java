@@ -93,6 +93,7 @@ public final class Admin extends javax.swing.JFrame {
 
         salesTable.setDefaultEditor(Object.class, null);
         MovieTable.setDefaultEditor(Object.class, null);
+        empTable.setDefaultEditor(Object.class, null);
 
         dec.setRoundingMode(RoundingMode.CEILING);
         set_bg_image(s_bg_image);
@@ -375,7 +376,6 @@ public final class Admin extends javax.swing.JFrame {
         jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         employee = new javax.swing.JPanel();
-        empStatus2 = new admin.EmpStatus();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         empTable = new javax.swing.JTable();
@@ -692,7 +692,6 @@ public final class Admin extends javax.swing.JFrame {
         employee.setBackground(new java.awt.Color(255, 255, 255));
         employee.setPreferredSize(new java.awt.Dimension(939, 652));
         employee.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        employee.add(empStatus2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 120, 630, 340));
 
         jLabel5.setText("Employees");
         jLabel5.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
@@ -712,6 +711,11 @@ public final class Admin extends javax.swing.JFrame {
         empTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
         empTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         empTable.setRowHeight(40);
+        empTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                empTableMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(empTable);
 
         employee.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 115, 854, 349));
@@ -758,8 +762,8 @@ public final class Admin extends javax.swing.JFrame {
         jPanel1.add(logsB);
         logsB.setBounds(10, 60, 130, 27);
 
-        staffsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staffsB.setText("Staffs");
+        staffsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staffsB.setMargin(new java.awt.Insets(2, 20, 3, 20));
         staffsB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1361,7 +1365,6 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
-        empStatus2.setVisible(false);
         createTableEmployee();
     }//GEN-LAST:event_staffsBActionPerformed
 
@@ -1781,9 +1784,11 @@ public final class Admin extends javax.swing.JFrame {
         if (evt.getClickCount() == 2) {
             int i = salesTable.getSelectedRow();
             String ticketID = salesTmodel.getValueAt(i, 0).toString();
-            
-            String query = "sel";
-            
+
+            String query = "select EmployeeID, Fname, Lname, email, Phone, pf_loc\n"
+                    + "from staff\n"
+                    + "where EmployeeID = '" + ticketID + "'";
+
         }
     }//GEN-LAST:event_salesTableMouseClicked
 
@@ -1798,6 +1803,29 @@ public final class Admin extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_MovieTableMouseClicked
+
+    private void empTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_empTableMouseClicked
+        if (evt.getClickCount() == 2) {
+            int i = empTable.getSelectedRow();
+            String empID = empTable.getValueAt(i, 0).toString();
+            EmployeeStat empStatus = new EmployeeStat();
+
+            String query = """
+                           select EmployeeID, Fname, Lname, email, Phone, pf_loc
+                           from staff
+                           where EmployeeID = '""" + empID + "'";
+            try {
+                rs = stmt.executeQuery(query);
+                if (rs.next()) {
+                    empStatus.setDatas(rs.getString("EmployeeID"), rs.getString("Fname"), rs.getString("LName"), rs.getString("email"), rs.getString("Phone"), rs.getString("pf_loc"));
+                    empStatus.setVisible(true);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_empTableMouseClicked
 
     /**
      * @param args
@@ -2032,7 +2060,6 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel bg_image;
     private javax.swing.JLabel bg_image1;
     private javax.swing.JComboBox<String> dayFilter;
-    private admin.EmpStatus empStatus2;
     private javax.swing.JTable empTable;
     private javax.swing.JPanel employee;
     private javax.swing.JButton jButton2;
