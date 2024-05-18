@@ -5,6 +5,7 @@
 package Staffs;
 
 //import static Staffs.Payment_Method.totalp;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.logging.Level;
@@ -56,9 +57,21 @@ public class UnionBank extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Account no.");
 
+        acc_num.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                acc_numKeyTyped(evt);
+            }
+        });
+
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Amount");
+
+        amount.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                amountKeyTyped(evt);
+            }
+        });
 
         paynow.setBackground(new java.awt.Color(255, 102, 0));
         paynow.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -181,6 +194,20 @@ public class UnionBank extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Insufficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
         }
     }//GEN-LAST:event_paynowMouseClicked
+
+    private void acc_numKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_acc_numKeyTyped
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_acc_numKeyTyped
+
+    private void amountKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_amountKeyTyped
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_amountKeyTyped
 
     /**
      * @param args the command line arguments
