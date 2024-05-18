@@ -154,6 +154,14 @@ public final class Showtime extends javax.swing.JFrame {
             get_Cinema_seat_count();
             create_seatList();
             list.createShowtimeListTable();
+            String movid = MovieID_Tx.getText();
+                            Statement stm = connMD.createStatement();
+                            System.out.println(movid);
+                            String stdel = "update movie\n"
+                                    + "set Movie_status = 'A'\n"
+                                    + "where movieID = '" + movid + "'";
+                            stm.executeUpdate(stdel);
+            
             dispose();
         } catch (ParseException | SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Showtime.class.getName()).log(Level.SEVERE, null, ex);
