@@ -60,6 +60,7 @@ public final class Admin extends javax.swing.JFrame {
     String Duration = "null"; // for creating new Movie;
     int showtimeTime;
     public static String ShowtimeMovieID;
+    public static String newnewEmployeeID;
 
     Statement stmt;
     Connection conn;
@@ -1261,7 +1262,7 @@ public final class Admin extends javax.swing.JFrame {
         logs.setVisible(false);
         employee.setVisible(false);
         addEmplyee.setVisible(true);
-        AddStaff_EmployeeID_TextField.setText(newempid);
+        AddStaff_EmployeeID_TextField.setText(newnewEmployeeID);
         movies.setVisible(false);
         addMovies.setVisible(false);
     }//GEN-LAST:event_addStaffsBActionPerformed
@@ -1435,8 +1436,18 @@ public final class Admin extends javax.swing.JFrame {
                         }
 
                     } else if (showtimeTime == JOptionPane.NO_OPTION || showtimeTime == JOptionPane.CLOSED_OPTION) {
-
-                        System.out.println("No");
+                        try {
+                            System.out.println("No");
+                            String movid = AddMovie_MovieID_TextField.getText();
+                            Statement stm = conn.createStatement();
+                            System.out.println(movid);
+                            String stdel = "update movie\n"
+                                    + "set Movie_status = 'U'\n"
+                                    + "where movieID = '" + movid + "'";
+                            stm.executeUpdate(stdel);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
 
                 } else {
@@ -1658,10 +1669,9 @@ public final class Admin extends javax.swing.JFrame {
             lempid = rs.getString(1);
         }
         lnum = Integer.parseInt(lempid.substring(1, lempid.length())) + 1;
-        String nmpd = "";
         newempid = "E" + String.valueOf(lnum);
-
         System.out.println(newempid);
+        newnewEmployeeID = newempid;
     }
 
     //Last MovieID
@@ -1757,7 +1767,7 @@ public final class Admin extends javax.swing.JFrame {
     }
 
     public void ClearFieldStaff() { // for clearing fields sa staff
-        AddStaff_EmployeeID_TextField.setText(newempid);
+        AddStaff_EmployeeID_TextField.setText(newempid = "E" + (lnum + 1));
         AddStaff_FirstName_TextField.setText(null);
         AddStaff_LastName_TextField.setText(null);
         AddStaff_Email_TextField.setText(null);
