@@ -20,12 +20,14 @@ public class Loading_Frame extends javax.swing.JFrame {
     /**
      * Creates new form NewJFrame
      */
-    public Loading_Frame() throws InterruptedException {
+    public Loading_Frame(String s) throws InterruptedException {
         
         initComponents();
         this.setShape(new RoundRectangle2D.Double(0, 0, this.getWidth(), 
         this.getHeight(), 25, 25));
         this.setLocationRelativeTo(null);
+        
+        loading_label.setText(s);
    
         
     }
@@ -40,7 +42,7 @@ public class Loading_Frame extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        loading_label = new javax.swing.JLabel();
         loading = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -49,10 +51,10 @@ public class Loading_Frame extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 204, 102));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Loading Text Here...");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 400, 27));
+        loading_label.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        loading_label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        loading_label.setText("Loading Text Here...");
+        jPanel1.add(loading_label, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 400, 27));
 
         loading.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/orange_circles.gif"))); // NOI18N
         jPanel1.add(loading, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 60, 50, 60));
@@ -76,8 +78,8 @@ public class Loading_Frame extends javax.swing.JFrame {
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel loading;
+    private javax.swing.JLabel loading_label;
     // End of variables declaration//GEN-END:variables
 }
