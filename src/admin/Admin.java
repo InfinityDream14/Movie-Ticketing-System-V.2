@@ -339,6 +339,7 @@ public final class Admin extends javax.swing.JFrame {
 
         jPanel3 = new javax.swing.JPanel();
         sales = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         salesTable = new javax.swing.JTable();
@@ -349,6 +350,7 @@ public final class Admin extends javax.swing.JFrame {
         sMonthChooser = new com.toedter.calendar.JMonthChooser();
         sDayChooser = new com.github.lgooddatepicker.components.DatePicker();
         dayFilter = new javax.swing.JComboBox<>();
+        jPanel10 = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
         totalEarnedDis = new javax.swing.JLabel();
         s_bg_image = new javax.swing.JLabel();
@@ -442,10 +444,27 @@ public final class Admin extends javax.swing.JFrame {
         sales.setBackground(new java.awt.Color(255, 255, 255));
         sales.setLayout(null);
 
+        jPanel9.setBackground(new java.awt.Color(255, 204, 102));
+
         jLabel3.setText("Sales");
         jLabel3.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
-        sales.add(jLabel3);
-        jLabel3.setBounds(33, 25, 97, 43);
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addContainerGap(757, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        sales.add(jPanel9);
+        jPanel9.setBounds(30, 60, 860, 40);
 
         salesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -472,16 +491,16 @@ public final class Admin extends javax.swing.JFrame {
         jPanel8.setBackground(new java.awt.Color(246, 243, 243));
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel9.setText("Receipt No.");
+        jLabel9.setText("Ticket No.");
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jPanel8.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
+        jPanel8.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         jTextField1.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
                 jTextField1CaretUpdate(evt);
             }
         });
-        jPanel8.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 200, -1));
+        jPanel8.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 10, 90, -1));
 
         sYearChooser.setFocusable(false);
         sYearChooser.setRequestFocusEnabled(false);
@@ -490,7 +509,7 @@ public final class Admin extends javax.swing.JFrame {
                 sYearChooserPropertyChange(evt);
             }
         });
-        jPanel8.add(sYearChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 80, -1, -1));
+        jPanel8.add(sYearChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 10, -1, -1));
 
         sMonthChooser.setFocusable(false);
         sMonthChooser.setRequestFocusEnabled(false);
@@ -499,14 +518,14 @@ public final class Admin extends javax.swing.JFrame {
                 sMonthChooserPropertyChange(evt);
             }
         });
-        jPanel8.add(sMonthChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 80, -1, -1));
+        jPanel8.add(sMonthChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 10, -1, -1));
 
         sDayChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 sDayChooserPropertyChange(evt);
             }
         });
-        jPanel8.add(sDayChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 80, 190, -1));
+        jPanel8.add(sDayChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 10, 190, -1));
 
         dayFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Day", "Month", "Year" }));
         dayFilter.addActionListener(new java.awt.event.ActionListener() {
@@ -514,18 +533,40 @@ public final class Admin extends javax.swing.JFrame {
                 dayFilterActionPerformed(evt);
             }
         });
-        jPanel8.add(dayFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 80, -1, -1));
-
-        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel16.setText("Total:");
-        jPanel8.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 30, -1, -1));
-
-        totalEarnedDis.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
-        totalEarnedDis.setText("Php");
-        jPanel8.add(totalEarnedDis, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 30, 240, -1));
+        jPanel8.add(dayFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 10, -1, -1));
 
         sales.add(jPanel8);
-        jPanel8.setBounds(70, 470, 790, 130);
+        jPanel8.setBounds(30, 520, 860, 50);
+
+        jLabel16.setText("Total:");
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+
+        totalEarnedDis.setText("Php");
+        totalEarnedDis.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(totalEarnedDis, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(559, Short.MAX_VALUE))
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(totalEarnedDis))
+                .addContainerGap(9, Short.MAX_VALUE))
+        );
+
+        sales.add(jPanel10);
+        jPanel10.setBounds(30, 470, 860, 40);
 
         s_bg_image.setText("jLabel8");
         sales.add(s_bg_image);
@@ -1977,6 +2018,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1984,6 +2026,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
