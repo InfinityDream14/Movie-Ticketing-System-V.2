@@ -374,7 +374,6 @@ public final class Admin extends javax.swing.JFrame {
         AddStaff_PhoneNumberLabel = new javax.swing.JLabel();
         AddStaff_PhoneNumber_TextField1 = new javax.swing.JTextField();
         Add_Staff = new javax.swing.JButton();
-        Add_Another_Staff = new javax.swing.JButton();
         Back = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
@@ -393,8 +392,8 @@ public final class Admin extends javax.swing.JFrame {
 
         sales.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel3.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
         jLabel3.setText("Sales");
+        jLabel3.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
 
         salesTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         salesTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -415,12 +414,12 @@ public final class Admin extends javax.swing.JFrame {
         salesTable.setShowGrid(false);
         jScrollPane1.setViewportView(salesTable);
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel9.setText("Receipt No.");
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton1.setText("Search");
         jButton1.setFocusPainted(false);
+        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton1.setMargin(new java.awt.Insets(2, 30, 3, 30));
         jButton1.setOpaque(true);
 
@@ -478,8 +477,8 @@ public final class Admin extends javax.swing.JFrame {
 
         logs.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel4.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
         jLabel4.setText("Logs");
+        jLabel4.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
 
         logsTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         logsTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -496,14 +495,14 @@ public final class Admin extends javax.swing.JFrame {
         logsTable.setRowHeight(40);
         jScrollPane2.setViewportView(logsTable);
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel10.setText("Receipt No.");
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jTextField2.setText("jTextField1");
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton2.setText("Search");
         jButton2.setFocusPainted(false);
+        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton2.setMargin(new java.awt.Insets(2, 30, 3, 30));
         jButton2.setOpaque(true);
 
@@ -551,8 +550,8 @@ public final class Admin extends javax.swing.JFrame {
         employee.setBackground(new java.awt.Color(255, 255, 255));
         employee.setPreferredSize(new java.awt.Dimension(939, 652));
 
-        jLabel5.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
         jLabel5.setText("Employees");
+        jLabel5.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
 
         empTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         empTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -570,14 +569,14 @@ public final class Admin extends javax.swing.JFrame {
         empTable.setRowHeight(40);
         jScrollPane4.setViewportView(empTable);
 
-        jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel14.setText("Receipt No.");
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jTextField5.setText("jTextField1");
 
-        jButton4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton4.setText("Search");
         jButton4.setFocusPainted(false);
+        jButton4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton4.setMargin(new java.awt.Insets(2, 30, 3, 30));
         jButton4.setOpaque(true);
 
@@ -724,8 +723,8 @@ public final class Admin extends javax.swing.JFrame {
         jPanel7.setBackground(new java.awt.Color(255, 204, 102));
         jPanel7.setForeground(new java.awt.Color(255, 204, 102));
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
         jLabel7.setText("Movies");
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -904,8 +903,8 @@ public final class Admin extends javax.swing.JFrame {
         jPanel4.add(AddMovie_AddMovie_Button);
         AddMovie_AddMovie_Button.setBounds(505, 341, 147, 35);
 
-        AddMovie_Back_Button.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         AddMovie_Back_Button.setText("Back");
+        AddMovie_Back_Button.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         AddMovie_Back_Button.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 AddMovie_Back_ButtonActionPerformed(evt);
@@ -939,8 +938,8 @@ public final class Admin extends javax.swing.JFrame {
 
         jPanel6.setBackground(new java.awt.Color(255, 204, 102));
 
-        jLabel12.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
         jLabel12.setText("Add Movie");
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -973,11 +972,11 @@ public final class Admin extends javax.swing.JFrame {
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), new java.awt.Color(0, 0, 0)));
 
-        AddStaff_StaffDetailsLabel.setFont(new java.awt.Font("Segoe UI", 1, 23)); // NOI18N
         AddStaff_StaffDetailsLabel.setText("Details");
+        AddStaff_StaffDetailsLabel.setFont(new java.awt.Font("Segoe UI", 1, 23)); // NOI18N
 
-        AddStaff_EmployeeIDLabel.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         AddStaff_EmployeeIDLabel.setText("Employee ID: ");
+        AddStaff_EmployeeIDLabel.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
         AddStaff_EmployeeID_TextField.setEditable(false);
         AddStaff_EmployeeID_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -988,8 +987,8 @@ public final class Admin extends javax.swing.JFrame {
             }
         });
 
-        AddStaff_FirstNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         AddStaff_FirstNameLabel.setText("First Name: ");
+        AddStaff_FirstNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
         AddStaff_FirstName_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         AddStaff_FirstName_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
@@ -999,8 +998,8 @@ public final class Admin extends javax.swing.JFrame {
             }
         });
 
-        AddStaff_LastNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         AddStaff_LastNameLabel.setText("Last Name: ");
+        AddStaff_LastNameLabel.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
         AddStaff_LastName_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         AddStaff_LastName_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
@@ -1010,8 +1009,8 @@ public final class Admin extends javax.swing.JFrame {
             }
         });
 
-        AddStaff_EmailLabel.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         AddStaff_EmailLabel.setText("Email: ");
+        AddStaff_EmailLabel.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
         AddStaff_Email_TextField.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         AddStaff_Email_TextField.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
@@ -1021,8 +1020,8 @@ public final class Admin extends javax.swing.JFrame {
             }
         });
 
-        AddStaff_PhoneNumberLabel.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         AddStaff_PhoneNumberLabel.setText("Phone Number: ");
+        AddStaff_PhoneNumberLabel.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
 
         AddStaff_PhoneNumber_TextField1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         AddStaff_PhoneNumber_TextField1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, new java.awt.Color(102, 102, 102), new java.awt.Color(153, 153, 153), new java.awt.Color(51, 51, 51), new java.awt.Color(204, 204, 204)));
@@ -1031,9 +1030,14 @@ public final class Admin extends javax.swing.JFrame {
                 AddStaff_PhoneNumber_TextField1ActionPerformed(evt);
             }
         });
+        AddStaff_PhoneNumber_TextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                AddStaff_PhoneNumber_TextField1KeyTyped(evt);
+            }
+        });
 
-        Add_Staff.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         Add_Staff.setText("Add Staff");
+        Add_Staff.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         Add_Staff.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Add_StaffMouseClicked(evt);
@@ -1045,21 +1049,8 @@ public final class Admin extends javax.swing.JFrame {
             }
         });
 
-        Add_Another_Staff.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        Add_Another_Staff.setText("Add Another Staff");
-        Add_Another_Staff.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                Add_Another_StaffMouseClicked(evt);
-            }
-        });
-        Add_Another_Staff.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Add_Another_StaffActionPerformed(evt);
-            }
-        });
-
-        Back.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         Back.setText("Back");
+        Back.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         Back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BackActionPerformed(evt);
@@ -1071,33 +1062,30 @@ public final class Admin extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(47, 47, 47)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(AddStaff_StaffDetailsLabel)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(47, 47, 47)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(AddStaff_StaffDetailsLabel)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(AddStaff_EmployeeIDLabel)
-                                    .addComponent(AddStaff_EmailLabel)
-                                    .addComponent(AddStaff_LastNameLabel)
-                                    .addComponent(AddStaff_PhoneNumberLabel)
-                                    .addComponent(AddStaff_FirstNameLabel))
-                                .addGap(86, 86, 86)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(AddStaff_LastName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(AddStaff_FirstName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(AddStaff_EmployeeID_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(AddStaff_Email_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(AddStaff_PhoneNumber_TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(100, 100, 100)
-                        .addComponent(Back, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Add_Another_Staff)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(Add_Staff, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(AddStaff_EmployeeIDLabel)
+                            .addComponent(AddStaff_EmailLabel)
+                            .addComponent(AddStaff_LastNameLabel)
+                            .addComponent(AddStaff_PhoneNumberLabel)
+                            .addComponent(AddStaff_FirstNameLabel))
+                        .addGap(86, 86, 86)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(AddStaff_LastName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AddStaff_FirstName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AddStaff_EmployeeID_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AddStaff_Email_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(AddStaff_PhoneNumber_TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(82, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Back, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(Add_Staff, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1129,7 +1117,6 @@ public final class Admin extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Add_Staff)
-                    .addComponent(Add_Another_Staff)
                     .addComponent(Back))
                 .addGap(53, 53, 53))
         );
@@ -1138,8 +1125,8 @@ public final class Admin extends javax.swing.JFrame {
 
         jPanel5.setBackground(new java.awt.Color(255, 204, 102));
 
-        jLabel6.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
         jLabel6.setText("Add Staffs");
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -1198,7 +1185,7 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.add(bg_image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 650));
 
         jPanel3.add(addEmplyee);
-        addEmplyee.setBounds(162, 0, 939, 652);
+        addEmplyee.setBounds(162, 0, 940, 652);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1545,11 +1532,21 @@ public final class Admin extends javax.swing.JFrame {
     private void Add_StaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Add_StaffMouseClicked
 
         //String EmpId, FName, LName, Email ,PNum;
+        
+    }//GEN-LAST:event_Add_StaffMouseClicked
+
+    private void Add_StaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_StaffActionPerformed
+        
+        
         EmpId = AddStaff_EmployeeID_TextField.getText();
         FName = AddStaff_FirstName_TextField.getText();
         LName = AddStaff_LastName_TextField.getText();
         PNum = AddStaff_PhoneNumber_TextField1.getText();
-        AddStaff_EmployeeID_TextField.setText(newempid);
+        Email = AddStaff_Email_TextField.getText();
+        pass = "E00" + lnum;
+        UserPass = " ";
+        Mpass = "Admin";
+
         for (int i = 0; i < 3; i++) {
             if (AddStaff_EmployeeID_TextField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please Fill In Data");
@@ -1568,23 +1565,6 @@ public final class Admin extends javax.swing.JFrame {
                 i--;
                 break;
             } else {
-            }
-
-        }
-    }//GEN-LAST:event_Add_StaffMouseClicked
-
-    private void Add_StaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_StaffActionPerformed
-        EmpId = AddStaff_EmployeeID_TextField.getText();
-        FName = AddStaff_FirstName_TextField.getText();
-        LName = AddStaff_LastName_TextField.getText();
-        PNum = AddStaff_PhoneNumber_TextField1.getText();
-        Email = AddStaff_Email_TextField.getText();
-        pass = "E00" + lnum;
-        UserPass = " ";
-        Mpass = "Admin";
-
-        adminpass = JOptionPane.showInputDialog("Enter Admin Username: ");
-
         UserPass = JOptionPane.showInputDialog("Enter Admin Password: ");
         if (UserPass != null && UserPass.matches(Mpass)) {
             System.out.println("Data Added: ");
@@ -1597,8 +1577,8 @@ public final class Admin extends javax.swing.JFrame {
             System.out.println(lnum);
 
             try {  // INSERTING VALUES FOR ADDSTAFF
-
-                stmt = conn.createStatement();
+                Statement stmt1 = conn.createStatement();
+                stmt1 = conn.createStatement();
                 String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
                         + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
                         + EmpId + "','" + UserPass + "')";
@@ -1606,30 +1586,22 @@ public final class Admin extends javax.swing.JFrame {
                 if (rows > 0) {
                     System.out.println("Insert Successful");
                 }
-
-                conn.close();
+                
             } catch (SQLException ex) {
                 Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Wrong Input");
+            JOptionPane.showMessageDialog(null, "Adding of Staff Canceled");
         }
+                 ClearFieldStaff();
+                 
+                 break;
+            }
+
+        }
+        
+        
     }//GEN-LAST:event_Add_StaffActionPerformed
-
-    private void Add_Another_StaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Add_Another_StaffMouseClicked
-        newempid = "E" + (lnum + 1);
-
-        AddStaff_EmployeeID_TextField.setText(" ");
-        AddStaff_EmployeeID_TextField.setText(newempid);
-        AddStaff_FirstName_TextField.setText(" ");
-        AddStaff_LastName_TextField.setText(" ");
-        AddStaff_Email_TextField.setText(" ");
-        AddStaff_PhoneNumber_TextField1.setText(" ");
-    }//GEN-LAST:event_Add_Another_StaffMouseClicked
-
-    private void Add_Another_StaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_Another_StaffActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_Add_Another_StaffActionPerformed
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
         // TODO add your handling code here:
@@ -1640,6 +1612,14 @@ public final class Admin extends javax.swing.JFrame {
            movies.setVisible(false);
            addMovies.setVisible(false);
     }//GEN-LAST:event_BackActionPerformed
+
+    private void AddStaff_PhoneNumber_TextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_AddStaff_PhoneNumber_TextField1KeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_AddStaff_PhoneNumber_TextField1KeyTyped
 
     /**
      * @param args
@@ -1777,7 +1757,7 @@ public final class Admin extends javax.swing.JFrame {
     }
 
     public void ClearFieldStaff() { // for clearing fields sa staff
-        AddStaff_EmployeeID_TextField.setText(newempid = "E" + (lnum + 1));
+        AddStaff_EmployeeID_TextField.setText(newempid);
         AddStaff_FirstName_TextField.setText(null);
         AddStaff_LastName_TextField.setText(null);
         AddStaff_Email_TextField.setText(null);
@@ -1859,7 +1839,6 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel AddStaff_PhoneNumberLabel;
     private javax.swing.JTextField AddStaff_PhoneNumber_TextField1;
     private javax.swing.JLabel AddStaff_StaffDetailsLabel;
-    private javax.swing.JButton Add_Another_Staff;
     private javax.swing.JButton Add_Staff;
     private javax.swing.JButton Back;
     public javax.swing.JLabel MoviePoster;
