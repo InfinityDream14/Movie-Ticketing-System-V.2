@@ -715,20 +715,26 @@ public class Payment_Method extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void cancel_paymentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_paymentActionPerformed
-        JOptionPane.showMessageDialog(null, "Will remove all the selected movie", "System Notice", JOptionPane.INFORMATION_MESSAGE);
-        try {
-            revert_selected_seat();
-            Temp_Data td = new Temp_Data();
-            td.jp_mlist.removeAll();
-            td.jp_mlist.revalidate();
-            td.jp_mlist.repaint();
-            td.stopper = 0;
-            new Movie_List().setVisible(true);
-        } catch (SQLException ex) {
-            Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+        int n = JOptionPane.showOptionDialog(new JFrame(), "This will remove all data, Continue?",
+                "System Notice", JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                null, new Object[]{"YES", "NO"}, JOptionPane.YES_OPTION);
+
+        if (n == JOptionPane.OK_OPTION) {
+            try {
+                revert_selected_seat();
+                Temp_Data td = new Temp_Data();
+                td.jp_mlist.removeAll();
+                td.jp_mlist.revalidate();
+                td.jp_mlist.repaint();
+                td.stopper = 0;
+                new Movie_List().setVisible(true);
+            } catch (SQLException ex) {
+                Logger.getLogger(Payment_Method.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            dispose();
+        } else if (n == JOptionPane.CANCEL_OPTION) {
+            dispose();
         }
-        
-        dispose();
     }//GEN-LAST:event_cancel_paymentActionPerformed
     
     static String payment = "Cash";

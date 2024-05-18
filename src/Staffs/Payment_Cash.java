@@ -8,6 +8,8 @@ import static Staffs.Payment_Method.*;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.geom.RoundRectangle2D;
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -38,7 +40,7 @@ public class Payment_Cash extends javax.swing.JFrame {
         this.setShape(new RoundRectangle2D.Double(0, 0, (300), 
         (200), 25, 25));
         
-        //right_panel_bg();
+        right_panel_bg();
         pay_cash();
     }
 
@@ -56,6 +58,7 @@ public class Payment_Cash extends javax.swing.JFrame {
         JLabel cash_label = new JLabel("Cash Amount");
         main_panel.add(cash_label);
         cash_label.setBounds(60,50, 95, 50);
+        
         JTextField cash_amount = new JTextField(20);
         main_panel.add(cash_amount);
         cash_amount.setBounds(145,60, 100, 25);
@@ -75,12 +78,12 @@ public class Payment_Cash extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent ae) {
                 String pera = cash_amount.getText();
                 int money = Integer.parseInt(pera);
-                if (okBtn.getActionCommand().equals("OK")) {
+                if (okBtn.getActionCommand().equals("OK") && !cash_amount.getText().equals("") && money >= price) {
                     cash_amount.getText();
                     double sukli = money - price;
                     JOptionPane.showMessageDialog(null, "Successfull, your change is " + sukli, "Payment Success", JOptionPane.INFORMATION_MESSAGE);
                     setVisible(false);
-                    if (!cash_amount.getText().equals("") && price <= money) {
+                    if (!cash_amount.getText().equals("") && money >= price) {
                         try {
                             Temp_Data td = new Temp_Data();
                             td.jp_mlist.removeAll();
@@ -104,9 +107,9 @@ public class Payment_Cash extends javax.swing.JFrame {
 //                        System.out.println(Payment_Method.payment_m);
 //                        System.out.println("ito yung total_amount: " + price);
 //                        System.out.println(Payment_Method.emp_log);
-                    } else if (price > money) {
-                        JOptionPane.showMessageDialog(null, "Insufficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
                     }
+                }else if (money < price) {
+                    JOptionPane.showMessageDialog(null, "Insufficient amount, please enter valid amount", "Payment Unsuccessful", JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
@@ -117,6 +120,26 @@ public class Payment_Cash extends javax.swing.JFrame {
                 if(cancelBtn.getActionCommand().equals("CANCEL")) {
                     setVisible(false);
                 }
+            }
+        });
+        
+        cash_amount.addKeyListener(new KeyListener(){
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char c = e.getKeyChar();
+                if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)) {
+                    e.consume();
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                //throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
             }
         });
     }
