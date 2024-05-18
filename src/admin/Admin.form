@@ -1078,10 +1078,10 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="AddMovie_Back_Button">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="Back"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="18" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Back"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AddMovie_Back_ButtonActionPerformed"/>
@@ -1485,10 +1485,10 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="Back">
                   <Properties>
+                    <Property name="text" type="java.lang.String" value="Back"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Segoe UI" size="18" style="0"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="Back"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BackActionPerformed"/>
