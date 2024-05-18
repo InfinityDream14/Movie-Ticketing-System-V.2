@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.RowFilter;
 import javax.swing.table.TableRowSorter;
 import jnafilechooser.api.JnaFileChooser;
@@ -278,7 +279,12 @@ public final class Admin extends javax.swing.JFrame {
         }
 
     }
-
+    
+    void set_bg_image(JLabel jl){
+        ImageIcon im = new ImageIcon("panel_bg.png");
+        jl.setIcon(im);
+        jl.setText("");
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -322,14 +328,15 @@ public final class Admin extends javax.swing.JFrame {
         addMoviesB1 = new javax.swing.JButton();
         logOut = new javax.swing.JButton();
         movies = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         MovieTable = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
         MovieSearchField = new javax.swing.JTextField();
         Select_Button_Movies = new javax.swing.JButton();
+        m_bg_image = new javax.swing.JLabel();
         addMovies = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         AddMovie_AddMovie_Label = new javax.swing.JLabel();
         AddMovie_MovieID_Label = new javax.swing.JLabel();
@@ -350,6 +357,9 @@ public final class Admin extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         PosterName = new javax.swing.JTextField();
         jLabel11 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jLabel12 = new javax.swing.JLabel();
+        bg_image1 = new javax.swing.JLabel();
         addEmplyee = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         AddStaff_StaffDetailsLabel = new javax.swing.JLabel();
@@ -366,12 +376,19 @@ public final class Admin extends javax.swing.JFrame {
         Add_Staff = new javax.swing.JButton();
         Add_Another_Staff = new javax.swing.JButton();
         Back = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        MovieTable1 = new javax.swing.JTable();
+        jLabel15 = new javax.swing.JLabel();
+        MovieSearchField1 = new javax.swing.JTextField();
+        Select_Button_Movies1 = new javax.swing.JButton();
+        bg_image = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
-        jPanel3.setBackground(new java.awt.Color(211, 191, 114));
+        jPanel3.setBackground(new java.awt.Color(255, 204, 102));
         jPanel3.setLayout(null);
 
         sales.setBackground(new java.awt.Color(255, 255, 255));
@@ -652,8 +669,8 @@ public final class Admin extends javax.swing.JFrame {
         jPanel1.add(addStaffsB);
         addStaffsB.setBounds(10, 160, 130, 27);
 
-        moviesB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         moviesB.setText("Movies");
+        moviesB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         moviesB.setMargin(new java.awt.Insets(2, 18, 3, 18));
         moviesB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -688,8 +705,8 @@ public final class Admin extends javax.swing.JFrame {
         jPanel3.add(jPanel1);
         jPanel1.setBounds(6, 224, 150, 310);
 
-        logOut.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         logOut.setText("Log Out");
+        logOut.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         logOut.setMargin(new java.awt.Insets(2, 12, 3, 12));
         logOut.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -702,12 +719,31 @@ public final class Admin extends javax.swing.JFrame {
         movies.setBackground(new java.awt.Color(255, 255, 255));
         movies.setMinimumSize(new java.awt.Dimension(932, 652));
         movies.setPreferredSize(new java.awt.Dimension(939, 652));
-        movies.setLayout(null);
+        movies.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jPanel7.setBackground(new java.awt.Color(255, 204, 102));
+        jPanel7.setForeground(new java.awt.Color(255, 204, 102));
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
         jLabel7.setText("Movies");
-        movies.add(jLabel7);
-        jLabel7.setBounds(34, 39, 117, 48);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(367, 367, 367)
+                .addComponent(jLabel7)
+                .addContainerGap(366, Short.MAX_VALUE))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        movies.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 850, 60));
+
+        jScrollPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
         MovieTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         MovieTable.setModel(new javax.swing.table.DefaultTableModel(
@@ -722,13 +758,11 @@ public final class Admin extends javax.swing.JFrame {
         MovieTable.setRowHeight(40);
         jScrollPane3.setViewportView(MovieTable);
 
-        movies.add(jScrollPane3);
-        jScrollPane3.setBounds(45, 132, 847, 365);
+        movies.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 132, 847, 365));
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel13.setText("Search: ");
-        movies.add(jLabel13);
-        jLabel13.setBounds(210, 510, 70, 25);
+        movies.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 520, 70, -1));
 
         MovieSearchField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -740,8 +774,7 @@ public final class Admin extends javax.swing.JFrame {
                 MovieSearchFieldKeyReleased(evt);
             }
         });
-        movies.add(MovieSearchField);
-        MovieSearchField.setBounds(297, 506, 365, 30);
+        movies.add(MovieSearchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 520, 365, 30));
 
         Select_Button_Movies.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         Select_Button_Movies.setText("Select");
@@ -750,16 +783,16 @@ public final class Admin extends javax.swing.JFrame {
                 Select_Button_MoviesActionPerformed(evt);
             }
         });
-        movies.add(Select_Button_Movies);
-        Select_Button_Movies.setBounds(391, 542, 150, 41);
+        movies.add(Select_Button_Movies, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 560, 120, 40));
+
+        m_bg_image.setText("jLabel8");
+        movies.add(m_bg_image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 650));
 
         jPanel3.add(movies);
         movies.setBounds(160, 0, 940, 652);
 
         addMovies.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel8.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
-        jLabel8.setText("Add Movies");
+        addMovies.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), new java.awt.Color(0, 0, 0)));
@@ -902,40 +935,46 @@ public final class Admin extends javax.swing.JFrame {
         jPanel4.add(jLabel11);
         jLabel11.setBounds(0, 0, 0, 430);
 
-        javax.swing.GroupLayout addMoviesLayout = new javax.swing.GroupLayout(addMovies);
-        addMovies.setLayout(addMoviesLayout);
-        addMoviesLayout.setHorizontalGroup(
-            addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(addMoviesLayout.createSequentialGroup()
-                .addGroup(addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(addMoviesLayout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(addMoviesLayout.createSequentialGroup()
-                        .addGap(140, 140, 140)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(124, Short.MAX_VALUE))
+        addMovies.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, -1, -1));
+
+        jPanel6.setBackground(new java.awt.Color(255, 204, 102));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
+        jLabel12.setText("Add Movie");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap(247, Short.MAX_VALUE)
+                .addComponent(jLabel12)
+                .addGap(245, 245, 245))
         );
-        addMoviesLayout.setVerticalGroup(
-            addMoviesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(addMoviesLayout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel8)
-                .addGap(42, 42, 42)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(106, Short.MAX_VALUE))
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel12)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        addMovies.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, 670, 60));
+
+        bg_image1.setText("image bg");
+        addMovies.add(bg_image1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 650));
 
         jPanel3.add(addMovies);
         addMovies.setBounds(160, 0, 940, 650);
 
         addEmplyee.setBackground(new java.awt.Color(255, 255, 255));
+        addEmplyee.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), new java.awt.Color(0, 0, 0)));
 
         AddStaff_StaffDetailsLabel.setFont(new java.awt.Font("Segoe UI", 1, 23)); // NOI18N
-        AddStaff_StaffDetailsLabel.setText("Staff Details");
+        AddStaff_StaffDetailsLabel.setText("Details");
 
         AddStaff_EmployeeIDLabel.setFont(new java.awt.Font("Segoe UI", 0, 20)); // NOI18N
         AddStaff_EmployeeIDLabel.setText("Employee ID: ");
@@ -1031,42 +1070,41 @@ public final class Admin extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(Back, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Add_Another_Staff)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(Add_Staff, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(47, 47, 47)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(AddStaff_EmployeeIDLabel)
-                            .addComponent(AddStaff_EmailLabel)
-                            .addComponent(AddStaff_LastNameLabel)
-                            .addComponent(AddStaff_PhoneNumberLabel)
-                            .addComponent(AddStaff_FirstNameLabel))
-                        .addGap(86, 86, 86)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(AddStaff_LastName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddStaff_FirstName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddStaff_EmployeeID_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddStaff_Email_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(AddStaff_PhoneNumber_TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(AddStaff_StaffDetailsLabel)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(AddStaff_EmployeeIDLabel)
+                                    .addComponent(AddStaff_EmailLabel)
+                                    .addComponent(AddStaff_LastNameLabel)
+                                    .addComponent(AddStaff_PhoneNumberLabel)
+                                    .addComponent(AddStaff_FirstNameLabel))
+                                .addGap(86, 86, 86)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(AddStaff_LastName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(AddStaff_FirstName_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(AddStaff_EmployeeID_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(AddStaff_Email_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(AddStaff_PhoneNumber_TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addComponent(AddStaff_StaffDetailsLabel)))
+                        .addGap(100, 100, 100)
+                        .addComponent(Back, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(Add_Another_Staff)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(Add_Staff, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(82, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(26, 26, 26)
                 .addComponent(AddStaff_StaffDetailsLabel)
-                .addGap(52, 52, 52)
+                .addGap(48, 48, 48)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(AddStaff_EmployeeIDLabel)
                     .addComponent(AddStaff_EmployeeID_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1088,43 +1126,76 @@ public final class Admin extends javax.swing.JFrame {
                         .addComponent(AddStaff_EmailLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(AddStaff_PhoneNumberLabel)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Add_Staff)
                     .addComponent(Add_Another_Staff)
                     .addComponent(Back))
-                .addGap(48, 48, 48))
+                .addGap(53, 53, 53))
         );
+
+        addEmplyee.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, -1, -1));
+
+        jPanel5.setBackground(new java.awt.Color(255, 204, 102));
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
         jLabel6.setText("Add Staffs");
 
-        javax.swing.GroupLayout addEmplyeeLayout = new javax.swing.GroupLayout(addEmplyee);
-        addEmplyee.setLayout(addEmplyeeLayout);
-        addEmplyeeLayout.setHorizontalGroup(
-            addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 939, Short.MAX_VALUE)
-            .addGroup(addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(addEmplyeeLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addGroup(addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(addEmplyeeLayout.createSequentialGroup()
-                            .addGap(100, 100, 100)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGap(0, 0, Short.MAX_VALUE)))
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addGap(252, 252, 252)
+                .addComponent(jLabel6)
+                .addContainerGap(243, Short.MAX_VALUE))
         );
-        addEmplyeeLayout.setVerticalGroup(
-            addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 652, Short.MAX_VALUE)
-            .addGroup(addEmplyeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(addEmplyeeLayout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jLabel6)
-                    .addGap(42, 42, 42)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
         );
+
+        addEmplyee.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, 670, 50));
+
+        MovieTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane5.setViewportView(MovieTable1);
+
+        addEmplyee.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, 0));
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel15.setText("Search: ");
+        addEmplyee.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, 0));
+
+        MovieSearchField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MovieSearchFieldActionPerformed(evt);
+            }
+        });
+        MovieSearchField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                MovieSearchFieldKeyReleased(evt);
+            }
+        });
+        addEmplyee.add(MovieSearchField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, 0));
+
+        Select_Button_Movies1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        Select_Button_Movies1.setText("Select");
+        Select_Button_Movies1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Select_Button_MoviesActionPerformed(evt);
+            }
+        });
+        addEmplyee.add(Select_Button_Movies1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, 0));
+
+        bg_image.setText("image bg");
+        addEmplyee.add(bg_image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 650));
 
         jPanel3.add(addEmplyee);
         addEmplyee.setBounds(162, 0, 939, 652);
@@ -1198,6 +1269,7 @@ public final class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_staffsBActionPerformed
 
     private void addStaffsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStaffsBActionPerformed
+        set_bg_image(bg_image);
         sales.setVisible(false);
         logs.setVisible(false);
         employee.setVisible(false);
@@ -1208,6 +1280,7 @@ public final class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_addStaffsBActionPerformed
 
     private void moviesBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moviesBActionPerformed
+        set_bg_image(m_bg_image);
         sales.setVisible(false);
         logs.setVisible(false);
         employee.setVisible(false);
@@ -1237,6 +1310,7 @@ public final class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_salesB1ActionPerformed
 
     private void addMoviesB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMoviesB1ActionPerformed
+        set_bg_image(bg_image1);
         sales.setVisible(false);
         logs.setVisible(false);
         employee.setVisible(false);
@@ -1650,7 +1724,7 @@ public final class Admin extends javax.swing.JFrame {
 
     public void getMovieData() {
         String sql1 = """
-                  select MovieID, Title
+                  select MovieID, Title, movie_status
                    from movie 
                    order by len (MovieID), MovieID""";
 
@@ -1661,10 +1735,11 @@ public final class Admin extends javax.swing.JFrame {
             this.vec = new ArrayList<>();
 
             while (rs != null && rs.next()) {
-
-                this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title")});
-                System.out.println(rs.getString("MovieID"));
-                System.out.println(rs.getString("Title"));
+                if(!rs.getString(3).equals("D")){
+                    this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title")});
+                    System.out.println(rs.getString("MovieID"));
+                    System.out.println(rs.getString("Title"));
+                }
             }
 
             for (Object[] row : vec) {
@@ -1789,13 +1864,18 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JButton Back;
     public javax.swing.JLabel MoviePoster;
     private javax.swing.JTextField MovieSearchField;
-    public static javax.swing.JTable MovieTable;
+    private javax.swing.JTextField MovieSearchField1;
+    private javax.swing.JTable MovieTable;
+    public static javax.swing.JTable MovieTable1;
     private javax.swing.JTextField PosterName;
     private javax.swing.JButton Select_Button_Movies;
+    private javax.swing.JButton Select_Button_Movies1;
     private javax.swing.JPanel addEmplyee;
     private javax.swing.JPanel addMovies;
     private javax.swing.JButton addMoviesB1;
     private javax.swing.JButton addStaffsB;
+    private javax.swing.JLabel bg_image;
+    private javax.swing.JLabel bg_image1;
     private com.github.lgooddatepicker.components.DatePicker datePicker2;
     private javax.swing.JTable empTable;
     private javax.swing.JPanel employee;
@@ -1806,24 +1886,29 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField5;
@@ -1831,6 +1916,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JPanel logs;
     private javax.swing.JButton logsB;
     private javax.swing.JTable logsTable;
+    private javax.swing.JLabel m_bg_image;
     private javax.swing.JPanel movies;
     private javax.swing.JButton moviesB;
     private javax.swing.JPanel sales;
