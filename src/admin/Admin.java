@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.RoundingMode;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -64,13 +63,20 @@ public final class Admin extends javax.swing.JFrame {
     Statement stmt;
     Connection conn;
     ResultSet rs;
-    ArrayList<Object[]> vec = new ArrayList<>();
+    ArrayList<Object[]> row = new ArrayList<>();
     DefaultTableModel tmodel = new DefaultTableModel();
     DefaultTableModel tmodel1 = new DefaultTableModel();
     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
     DecimalFormat dec = new DecimalFormat("#.##");
 
     File file = null;
+    private int totalEarned;
+    private String filter;
+    private String amount;
+    private String newTimeSell;
+    private String dateSell;
+    private String filteredDate;
+    private String filter2;
 
     public Admin() throws ClassNotFoundException, SQLException{
         connectToDatabase();
@@ -78,12 +84,14 @@ public final class Admin extends javax.swing.JFrame {
         
         
         sales.setVisible(true);
+        logs.setVisible(false);
         employee.setVisible(false);
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
 
         dec.setRoundingMode(RoundingMode.CEILING);
+        set_bg_image(s_bg_image);
         createTableSales();
         getIDs();
     }
@@ -142,30 +150,64 @@ public final class Admin extends javax.swing.JFrame {
     public void getSalesData() {
         String sql = """
                      select t.TicketID, p.Amount, p.PaymentDate
-                     from ticket t join payment p on t.TicketPaymentID = p.PaymentID""";
-        String newTimeSell, dateSell, amount;
+                     from ticket t join payment p on t.TicketPaymentID = p.PaymentID
+                     """ + filter;
 
         try {
+            totalEarned = 0;
             stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMMM dd, yyyy");
-            this.vec = new ArrayList<>();
+            var dateFormat2 = new SimpleDateFormat("MMMMM dd, yyyy");
+            this.row = new ArrayList<>();
 
             while (rs != null && rs.next()) {
 
                 amount = (dec.format(rs.getDouble("Amount")));
+                totalEarned += Double.valueOf(amount);
                 newTimeSell = this.dateFormat.format(rs.getTime("PaymentDate"));
-                dateSell = dateFormat.format(rs.getDate("PaymentDate"));
+                dateSell = dateFormat2.format(rs.getDate("PaymentDate"));
 
-                this.vec.add(new Object[]{rs.getString("TicketID"), "Php " + amount, dateSell, newTimeSell});
+                this.row.add(new Object[]{rs.getString("TicketID"), "Php " + amount, dateSell, newTimeSell});
             }
-            for (Object[] row : vec) {
-                tmodel.addRow(row);
-            }
-
+            row.forEach(tmodel::addRow);
+            totalEarnedDis.setText("Php " + totalEarned);
         } catch (SQLException e) {
             System.out.println(e);
         }
+    }
+
+    public void setFilter() {
+        sDayChooser.setVisible(false);
+        sMonthChooser.setVisible(false);
+        sYearChooser.setVisible(false);
+        filter = "";
+        filteredDate = "";
+        String month;
+
+        if (dayFilter.getSelectedItem().equals("Day")) {
+
+            sDayChooser.setVisible(true);
+            filteredDate = sDayChooser.getDateStringOrEmptyString();
+
+        } else if (dayFilter.getSelectedItem().equals("Month")) {
+
+            sMonthChooser.setVisible(true);
+            sYearChooser.setVisible(true);
+
+            month = sMonthChooser.getMonth() + 1 + "";
+            if (month.length() == 1) {
+                month = 0 + month;
+            }
+            filteredDate = sYearChooser.getYear() + "-" + month;
+
+        } else if (dayFilter.getSelectedItem().equals("Year")) {
+            sYearChooser.setVisible(true);
+
+            filteredDate = sYearChooser.getYear() + "";
+        }
+        System.out.println(filteredDate);
+        filter = " WHERE CAST(p.PaymentDate AS date) like '%" + filteredDate + "%'";
+        createTableSales();
     }
 
     // for creating and reseting employee table
@@ -204,12 +246,12 @@ public final class Admin extends javax.swing.JFrame {
         try {
             stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
-            vec = new ArrayList<>();
+            row = new ArrayList<>();
 
             while (this.rs != null && rs.next()) {
-                vec.add(new Object[]{rs.getString("EmployeeID"), rs.getString("FullName")});
+                row.add(new Object[]{rs.getString("EmployeeID"), rs.getString("FullName")});
             }
-            for (Object[] row : vec) {
+            for (Object[] row : row) {
                 tmodel.addRow(row);
             }
 
@@ -259,7 +301,7 @@ public final class Admin extends javax.swing.JFrame {
         try {
             this.stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
-            vec = new ArrayList<>();
+            row = new ArrayList<>();
             while (rs.next()) {
                 logInT = rs.getTime("Log_In");
                 newLogIn = (logInT != null) ? dateFormat.format(logInT) : "";
@@ -267,10 +309,10 @@ public final class Admin extends javax.swing.JFrame {
                 logOutT = rs.getTime("Log_Out");
                 newLogOut = (logOutT != null) ? dateFormat.format(logOutT) : "";
 
-                vec.add(new Object[]{rs.getString("Employee_ID"), rs.getString("Full Name"), rs.getString("DateLog"), newLogIn, newLogOut});
+                row.add(new Object[]{rs.getString("Employee_ID"), rs.getString("Full Name"), rs.getString("DateLog"), newLogIn, newLogOut});
             }
 
-            for (Object[] row : vec) {
+            for (Object[] row : row) {
                 tmodel.addRow(row);
             }
 
@@ -299,10 +341,16 @@ public final class Admin extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         salesTable = new javax.swing.JTable();
+        jPanel8 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        datePicker2 = new com.github.lgooddatepicker.components.DatePicker();
+        sYearChooser = new com.toedter.calendar.JYearChooser();
+        sMonthChooser = new com.toedter.calendar.JMonthChooser();
+        sDayChooser = new com.github.lgooddatepicker.components.DatePicker();
+        dayFilter = new javax.swing.JComboBox<>();
+        jLabel16 = new javax.swing.JLabel();
+        totalEarnedDis = new javax.swing.JLabel();
+        s_bg_image = new javax.swing.JLabel();
         logs = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -391,11 +439,13 @@ public final class Admin extends javax.swing.JFrame {
         jPanel3.setLayout(null);
 
         sales.setBackground(new java.awt.Color(255, 255, 255));
+        sales.setLayout(null);
 
         jLabel3.setText("Sales");
         jLabel3.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
+        sales.add(jLabel3);
+        jLabel3.setBounds(33, 25, 97, 43);
 
-        salesTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         salesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -407,70 +457,78 @@ public final class Admin extends javax.swing.JFrame {
 
             }
         ));
-        salesTable.setToolTipText("");
         salesTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
         salesTable.setFocusable(false);
+        salesTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         salesTable.setRowHeight(40);
         salesTable.setShowGrid(false);
+        salesTable.setToolTipText("");
         jScrollPane1.setViewportView(salesTable);
+
+        sales.add(jScrollPane1);
+        jScrollPane1.setBounds(33, 115, 854, 349);
+
+        jPanel8.setBackground(new java.awt.Color(246, 243, 243));
+        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel9.setText("Receipt No.");
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel8.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 80, -1, -1));
 
-        jButton1.setText("Search");
-        jButton1.setFocusPainted(false);
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton1.setMargin(new java.awt.Insets(2, 30, 3, 30));
-        jButton1.setOpaque(true);
+        jTextField1.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jTextField1CaretUpdate(evt);
+            }
+        });
+        jPanel8.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 80, 200, -1));
 
-        datePicker2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        sYearChooser.setFocusable(false);
+        sYearChooser.setRequestFocusEnabled(false);
+        sYearChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                sYearChooserPropertyChange(evt);
+            }
+        });
+        jPanel8.add(sYearChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 80, -1, -1));
 
-        javax.swing.GroupLayout salesLayout = new javax.swing.GroupLayout(sales);
-        sales.setLayout(salesLayout);
-        salesLayout.setHorizontalGroup(
-            salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(salesLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(salesLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(29, 29, 29)
-                        .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(514, 514, 514))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(53, Short.MAX_VALUE))
-            .addGroup(salesLayout.createSequentialGroup()
-                .addGap(277, 277, 277)
-                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, salesLayout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, salesLayout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(138, 138, 138)))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        salesLayout.setVerticalGroup(
-            salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(salesLayout.createSequentialGroup()
-                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(salesLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel3))
-                    .addGroup(salesLayout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(47, 47, 47)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
-                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addContainerGap(80, Short.MAX_VALUE))
-        );
+        sMonthChooser.setFocusable(false);
+        sMonthChooser.setRequestFocusEnabled(false);
+        sMonthChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                sMonthChooserPropertyChange(evt);
+            }
+        });
+        jPanel8.add(sMonthChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 80, -1, -1));
+
+        sDayChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                sDayChooserPropertyChange(evt);
+            }
+        });
+        jPanel8.add(sDayChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 80, 190, -1));
+
+        dayFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Day", "Month", "Year" }));
+        dayFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dayFilterActionPerformed(evt);
+            }
+        });
+        jPanel8.add(dayFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 80, -1, -1));
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel16.setText("Total:");
+        jPanel8.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 30, -1, -1));
+
+        totalEarnedDis.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
+        totalEarnedDis.setText("Php");
+        jPanel8.add(totalEarnedDis, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 30, 240, -1));
+
+        sales.add(jPanel8);
+        jPanel8.setBounds(70, 470, 790, 130);
+
+        s_bg_image.setText("jLabel8");
+        sales.add(s_bg_image);
+        s_bg_image.setBounds(0, 0, 940, 650);
 
         jPanel3.add(sales);
         sales.setBounds(162, 0, 940, 652);
@@ -505,6 +563,11 @@ public final class Admin extends javax.swing.JFrame {
         jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton2.setMargin(new java.awt.Insets(2, 30, 3, 30));
         jButton2.setOpaque(true);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout logsLayout = new javax.swing.GroupLayout(logs);
         logs.setLayout(logsLayout);
@@ -545,7 +608,7 @@ public final class Admin extends javax.swing.JFrame {
         );
 
         jPanel3.add(logs);
-        logs.setBounds(162, 0, 939, 652);
+        logs.setBounds(161, 0, 940, 652);
 
         employee.setBackground(new java.awt.Color(255, 255, 255));
         employee.setPreferredSize(new java.awt.Dimension(939, 652));
@@ -619,14 +682,14 @@ public final class Admin extends javax.swing.JFrame {
         );
 
         jPanel3.add(employee);
-        employee.setBounds(162, 0, 939, 652);
+        employee.setBounds(161, 0, 940, 652);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/AAG Movie Ticketing System Logo .png"))); // NOI18N
         jPanel3.add(jLabel1);
         jLabel1.setBounds(6, 0, 150, 150);
 
-        jLabel2.setFont(new java.awt.Font("Bookman Old Style", 0, 24)); // NOI18N
         jLabel2.setText("Admin");
+        jLabel2.setFont(new java.awt.Font("Bookman Old Style", 0, 24)); // NOI18N
         jPanel3.add(jLabel2);
         jLabel2.setBounds(39, 156, 77, 29);
 
@@ -791,6 +854,7 @@ public final class Admin extends javax.swing.JFrame {
         movies.setBounds(160, 0, 940, 652);
 
         addMovies.setBackground(new java.awt.Color(255, 255, 255));
+        addMovies.setPreferredSize(new java.awt.Dimension(939, 652));
         addMovies.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -967,6 +1031,7 @@ public final class Admin extends javax.swing.JFrame {
         addMovies.setBounds(160, 0, 940, 650);
 
         addEmplyee.setBackground(new java.awt.Color(255, 255, 255));
+        addEmplyee.setPreferredSize(new java.awt.Dimension(939, 652));
         addEmplyee.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -1185,7 +1250,7 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.add(bg_image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 650));
 
         jPanel3.add(addEmplyee);
-        addEmplyee.setBounds(162, 0, 940, 652);
+        addEmplyee.setBounds(161, 0, 940, 652);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1621,6 +1686,31 @@ public final class Admin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_AddStaff_PhoneNumber_TextField1KeyTyped
 
+    private void sYearChooserPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_sYearChooserPropertyChange
+        setFilter();
+    }//GEN-LAST:event_sYearChooserPropertyChange
+
+    private void sDayChooserPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_sDayChooserPropertyChange
+        setFilter();
+    }//GEN-LAST:event_sDayChooserPropertyChange
+
+    private void dayFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayFilterActionPerformed
+        setFilter();
+    }//GEN-LAST:event_dayFilterActionPerformed
+
+    private void sMonthChooserPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_sMonthChooserPropertyChange
+        setFilter();
+    }//GEN-LAST:event_sMonthChooserPropertyChange
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTextField1CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField1CaretUpdate
+        filter2 = jTextField1.getText();
+        System.out.println(filter2);
+    }//GEN-LAST:event_jTextField1CaretUpdate
+
     /**
      * @param args
      */
@@ -1712,17 +1802,17 @@ public final class Admin extends javax.swing.JFrame {
 
             stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql1);
-            this.vec = new ArrayList<>();
+            this.row = new ArrayList<>();
 
             while (rs != null && rs.next()) {
                 if(!rs.getString(3).equals("D")){
-                    this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title")});
+                    this.row.add(new Object[]{rs.getString("MovieID"), rs.getString("Title")});
                     System.out.println(rs.getString("MovieID"));
                     System.out.println(rs.getString("Title"));
                 }
             }
 
-            for (Object[] row : vec) {
+            for (Object[] row : row) {
                 tmodel1.addRow(row);
             }
 
@@ -1855,10 +1945,9 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JButton addStaffsB;
     private javax.swing.JLabel bg_image;
     private javax.swing.JLabel bg_image1;
-    private com.github.lgooddatepicker.components.DatePicker datePicker2;
+    private javax.swing.JComboBox<String> dayFilter;
     private javax.swing.JTable empTable;
     private javax.swing.JPanel employee;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -1869,6 +1958,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1883,6 +1973,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1898,10 +1989,15 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel m_bg_image;
     private javax.swing.JPanel movies;
     private javax.swing.JButton moviesB;
+    private com.github.lgooddatepicker.components.DatePicker sDayChooser;
+    private com.toedter.calendar.JMonthChooser sMonthChooser;
+    private com.toedter.calendar.JYearChooser sYearChooser;
+    private javax.swing.JLabel s_bg_image;
     private javax.swing.JPanel sales;
     private javax.swing.JButton salesB1;
     private javax.swing.JTable salesTable;
     private javax.swing.JButton staffsB;
+    private javax.swing.JLabel totalEarnedDis;
     // End of variables declaration//GEN-END:variables
 
 }
