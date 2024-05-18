@@ -333,7 +333,6 @@ public class MovieDetails extends javax.swing.JFrame {
                     + "set Movie_status = 'D'\n"
                     + "where movieID = '" + Movid + "'";
         stm.executeUpdate(stdel);
-
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
