@@ -4,6 +4,10 @@
  */
 package admin;
 
+import java.awt.Image;
+import java.awt.Rectangle;
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author Christian
@@ -16,6 +20,20 @@ public class EmpStatus extends javax.swing.JPanel {
     public EmpStatus() {
         initComponents();
     }
+    
+    public void setDatas(String empID, String firstname, String lastname, String phoneNum, String picLoc){
+        empIDTF.setText(empID);
+        nameTF.setText(lastname+", "+firstname);
+        phoneNumTF.setText(phoneNum);
+        
+        String fildest = System.getProperty("user.dir");
+        fildest = fildest + "\\Staff Profile\\";
+        ImageIcon imgIcon = new ImageIcon(fildest + picLoc);
+        Rectangle rec = profilePic.getBounds();
+        Image scaledimg = imgIcon.getImage().getScaledInstance(rec.width, rec.height, Image.SCALE_SMOOTH);
+        imgIcon = new ImageIcon(scaledimg);
+        profilePic.setIcon(imgIcon);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -26,25 +44,25 @@ public class EmpStatus extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
+        profilePic = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
+        nameTF = new javax.swing.JTextField();
+        empIDTF = new javax.swing.JTextField();
+        phoneNumTF = new javax.swing.JTextField();
+        emailTF = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(javax.swing.BorderFactory.createMatteBorder(1, 1, 1, 1, new java.awt.Color(204, 204, 204)));
         setLayout(null);
 
-        jLabel1.setText("jLabel1");
-        add(jLabel1);
-        jLabel1.setBounds(42, 49, 129, 152);
+        profilePic.setText("jLabel1");
+        add(profilePic);
+        profilePic.setBounds(42, 49, 129, 152);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel2.setText("Last Name, First Name");
@@ -71,30 +89,29 @@ public class EmpStatus extends javax.swing.JPanel {
         add(jLabel9);
         jLabel9.setBounds(240, 90, 170, 40);
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jTextField1.setText("jTextField1");
-        add(jTextField1);
-        jTextField1.setBounds(360, 100, 250, 30);
+        nameTF.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        nameTF.setText("jTextField1");
+        add(nameTF);
+        nameTF.setBounds(360, 100, 250, 30);
 
-        jTextField2.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jTextField2.setText("jTextField1");
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        empIDTF.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        empIDTF.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                empIDTFActionPerformed(evt);
             }
         });
-        add(jTextField2);
-        jTextField2.setBounds(360, 50, 250, 30);
+        add(empIDTF);
+        empIDTF.setBounds(360, 50, 250, 30);
 
-        jTextField3.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jTextField3.setText("jTextField1");
-        add(jTextField3);
-        jTextField3.setBounds(360, 150, 250, 30);
+        phoneNumTF.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        phoneNumTF.setText("jTextField1");
+        add(phoneNumTF);
+        phoneNumTF.setBounds(360, 150, 250, 30);
 
-        jTextField4.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jTextField4.setText("jTextField1");
-        add(jTextField4);
-        jTextField4.setBounds(360, 200, 250, 30);
+        emailTF.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        emailTF.setText("jTextField1");
+        add(emailTF);
+        emailTF.setBounds(360, 200, 250, 30);
 
         jButton1.setText("Back");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -106,9 +123,9 @@ public class EmpStatus extends javax.swing.JPanel {
         jButton1.setBounds(280, 280, 75, 23);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    private void empIDTFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_empIDTFActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_empIDTFActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         setVisible(false);
@@ -116,16 +133,16 @@ public class EmpStatus extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField emailTF;
+    private javax.swing.JTextField empIDTF;
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JTextField nameTF;
+    private javax.swing.JTextField phoneNumTF;
+    private javax.swing.JLabel profilePic;
     // End of variables declaration//GEN-END:variables
 }

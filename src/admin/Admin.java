@@ -1361,7 +1361,7 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
-
+        empStatus2.setVisible(false);
         createTableEmployee();
     }//GEN-LAST:event_staffsBActionPerformed
 
@@ -1781,8 +1781,9 @@ public final class Admin extends javax.swing.JFrame {
         if (evt.getClickCount() == 2) {
             int i = salesTable.getSelectedRow();
             String ticketID = salesTmodel.getValueAt(i, 0).toString();
-            System.out.println(ticketID);
-
+            
+            String query = "sel";
+            
         }
     }//GEN-LAST:event_salesTableMouseClicked
 
