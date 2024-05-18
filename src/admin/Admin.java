@@ -1390,6 +1390,12 @@ public final class Admin extends javax.swing.JFrame {
 
     private void AddMovie_Back_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_Back_ButtonActionPerformed
         // TODO add your handling code here:
+           sales.setVisible(true);
+        logs.setVisible(false);
+        employee.setVisible(false);
+        addEmplyee.setVisible(false);
+        movies.setVisible(false);
+        addMovies.setVisible(false);
     }//GEN-LAST:event_AddMovie_Back_ButtonActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -1553,6 +1559,12 @@ public final class Admin extends javax.swing.JFrame {
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
         // TODO add your handling code here:
+           sales.setVisible(true);
+           logs.setVisible(false);
+           employee.setVisible(false);
+           addEmplyee.setVisible(false);
+           movies.setVisible(false);
+           addMovies.setVisible(false);
     }//GEN-LAST:event_BackActionPerformed
 
     /**
