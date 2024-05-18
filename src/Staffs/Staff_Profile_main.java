@@ -10,6 +10,7 @@ import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
+import jnafilechooser.api.JnaFileChooser;
 
 /**
  *
@@ -52,13 +53,15 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     
     void change_pf_pic() throws FileNotFoundException, SQLException{
         
-        JFileChooser jfc = new JFileChooser();
-        jfc.setCurrentDirectory(new File("D:\\Users\\Backup\\Desktop"));
-        int response = jfc.showOpenDialog(null);
+        JnaFileChooser jfc = new JnaFileChooser();
+        jfc.addFilter("All Files", "*");
+        jfc.addFilter("Pictures", "jpg", "jpeg", "png", "gif", "bmp");
+        //jfc.setCurrentDirectory(new File("D:\\Users\\Backup\\Desktop"));
+        boolean response = jfc.showOpenDialog(null);
         String fildest = System.getProperty("user.dir" );
         fildest = fildest + "\\Staff Profile";
         String newpf = "pf_null.png";
-        if(response == JFileChooser.APPROVE_OPTION){
+        if(response == true){
             File file = new File(jfc.getSelectedFile().getAbsolutePath());
             System.out.println(file);
             newpf = file.toString().substring(file.toString().lastIndexOf("\\")+1);
