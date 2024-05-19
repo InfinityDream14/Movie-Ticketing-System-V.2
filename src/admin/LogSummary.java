@@ -4,8 +4,10 @@
  */
 package admin;
 
+import java.awt.Image;
 import java.sql.*;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 import main.Main;
 
@@ -22,7 +24,12 @@ public class LogSummary extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         setFilter();
-      
+        
+        ImageIcon rpbg = new ImageIcon("lpbg.png");
+        Image image = rpbg.getImage(); // transform it 
+        Image newimg = image.getScaledInstance(688, 444,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        rpbg = new ImageIcon(newimg);
+        img_bg.setIcon(rpbg);
     }
     static Connection mc;
     Statement stmt;
@@ -122,12 +129,20 @@ public class LogSummary extends javax.swing.JFrame {
         sYearChooser = new com.toedter.calendar.JYearChooser();
         sDayChooser = new com.github.lgooddatepicker.components.DatePicker();
         dayFilter = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        img_bg = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
+
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Logs Summary");
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(6, 12, 676, -1));
+
+        jScrollPane1.setViewportBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         LogTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -141,6 +156,8 @@ public class LogSummary extends javax.swing.JFrame {
         LogTable.setRowHeight(40);
         jScrollPane1.setViewportView(LogTable);
 
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 62, 610, 302));
+
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         sMonthChooser.setFocusable(false);
@@ -150,7 +167,7 @@ public class LogSummary extends javax.swing.JFrame {
                 sMonthChooserPropertyChange(evt);
             }
         });
-        jPanel2.add(sMonthChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, -1, -1));
+        jPanel2.add(sMonthChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, -1, -1));
 
         sYearChooser.setFocusable(false);
         sYearChooser.setRequestFocusEnabled(false);
@@ -159,14 +176,14 @@ public class LogSummary extends javax.swing.JFrame {
                 sYearChooserPropertyChange(evt);
             }
         });
-        jPanel2.add(sYearChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, -1, -1));
+        jPanel2.add(sYearChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 10, -1, -1));
 
         sDayChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
             public void propertyChange(java.beans.PropertyChangeEvent evt) {
                 sDayChooserPropertyChange(evt);
             }
         });
-        jPanel2.add(sDayChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 20, 190, -1));
+        jPanel2.add(sDayChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 10, 190, -1));
 
         dayFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Day", "Month", "Year" }));
         dayFilter.addActionListener(new java.awt.event.ActionListener() {
@@ -179,40 +196,22 @@ public class LogSummary extends javax.swing.JFrame {
                 dayFilterPropertyChange(evt);
             }
         });
-        jPanel2.add(dayFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 20, 90, -1));
+        jPanel2.add(dayFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(510, 10, 90, -1));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(39, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(21, Short.MAX_VALUE))
-        );
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel2.setText("Date Filter");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(39, 376, -1, 41));
+
+        img_bg.setText("jLabel3");
+        jPanel1.add(img_bg, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 690, 440));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -277,7 +276,9 @@ public class LogSummary extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable LogTable;
     private javax.swing.JComboBox<String> dayFilter;
+    private javax.swing.JLabel img_bg;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;

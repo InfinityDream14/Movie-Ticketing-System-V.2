@@ -6,6 +6,9 @@ package Staffs;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -87,6 +90,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 }catch(IOException e){
                     e.printStackTrace();
                 }
+                
             }
         }
         Statement stmpf = ms.mc.createStatement();
@@ -99,7 +103,17 @@ public class Staff_Profile_main extends javax.swing.JFrame {
             Statement stmpf1 = ms.mc.createStatement();
             
             if(rs.getString(1).equals(empid)){
-                
+                if(!rs.getString(8).equals("pf_null.png")){
+                    try {
+                        String dest = System.getProperty("user.dir" );
+                        dest = dest + "\\Staff Profile\\";
+                        String loc = dest + rs.getString(8);
+                        Path p = Paths.get(loc);
+                        Files.delete(p);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
                 String pfin = "UPDATE staff set pf_loc = '"+newpf+"' where employeeid = '"+empid+"'";
                 
                 int row = stmpf1.executeUpdate(pfin);
@@ -454,11 +468,14 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     }//GEN-LAST:event_Edit_profActionPerformed
 
     private void icon_profMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_icon_profMouseClicked
+
         try {      
             change_pf_pic();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
+            Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
         }
         this.setVisible(true);
