@@ -4,6 +4,7 @@
  */
 package admin;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
@@ -126,6 +127,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         set_bg_image(s_bg_image);
         createTableSales();
         getIDs();
+        salesB1.setBackground(Color.white);
     }
 
     public void connectToDatabase() throws ClassNotFoundException {
@@ -399,7 +401,6 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         totalEarnedDis = new javax.swing.JLabel();
         s_bg_image = new javax.swing.JLabel();
         logs = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         logsTable = new javax.swing.JTable();
         jPanel11 = new javax.swing.JPanel();
@@ -407,13 +408,19 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jPanel12 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         employee = new javax.swing.JPanel();
-        jLabel5 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         empTable = new javax.swing.JTable();
+        jPanel13 = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jPanel14 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         jTextField5 = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
+        jLabel17 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -429,8 +436,10 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         jLabel7 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         MovieTable = new javax.swing.JTable();
+        jPanel15 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         MovieSearchField = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
         m_bg_image = new javax.swing.JLabel();
         addMovies = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -509,7 +518,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         );
 
         sales.add(jPanel9);
-        jPanel9.setBounds(30, 60, 860, 40);
+        jPanel9.setBounds(40, 40, 860, 40);
 
         salesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -536,7 +545,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         jScrollPane1.setViewportView(salesTable);
 
         sales.add(jScrollPane1);
-        jScrollPane1.setBounds(33, 115, 854, 349);
+        jScrollPane1.setBounds(40, 80, 860, 400);
 
         jPanel8.setBackground(new java.awt.Color(246, 243, 243));
         jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -605,7 +614,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         jPanel8.add(paymentFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 10, 90, -1));
 
         sales.add(jPanel8);
-        jPanel8.setBounds(30, 520, 860, 70);
+        jPanel8.setBounds(40, 520, 860, 70);
 
         jLabel16.setText("Total:");
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -626,16 +635,12 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel10Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
-                    .addComponent(totalEarnedDis))
-                .addContainerGap(9, Short.MAX_VALUE))
+            .addComponent(totalEarnedDis, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+            .addComponent(jLabel16, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         sales.add(jPanel10);
-        jPanel10.setBounds(30, 470, 860, 40);
+        jPanel10.setBounds(40, 480, 860, 40);
 
         s_bg_image.setText("jLabel8");
         sales.add(s_bg_image);
@@ -645,9 +650,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         sales.setBounds(162, 0, 940, 652);
 
         logs.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel4.setText("Logs");
-        jLabel4.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
+        logs.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         logsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -665,6 +668,8 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         logsTable.setShowGrid(false);
         logsTable.setSurrendersFocusOnKeystroke(true);
         jScrollPane2.setViewportView(logsTable);
+
+        logs.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 870, 460));
 
         jLabel10.setText("Employee name:");
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -704,7 +709,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                 .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 301, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -721,29 +726,31 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                 .addContainerGap(8, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout logsLayout = new javax.swing.GroupLayout(logs);
-        logs.setLayout(logsLayout);
-        logsLayout.setHorizontalGroup(
-            logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(logsLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 854, Short.MAX_VALUE)
-                    .addComponent(jLabel4)
-                    .addComponent(jPanel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(53, Short.MAX_VALUE))
-        );
-        logsLayout.setVerticalGroup(
-            logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(logsLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
+        logs.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 530, 870, -1));
+
+        jPanel12.setBackground(new java.awt.Color(255, 204, 102));
+
+        jLabel4.setText("Logs");
+        jLabel4.setFont(new java.awt.Font("Bookman Old Style", 1, 30)); // NOI18N
+
+        javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
+        jPanel12.setLayout(jPanel12Layout);
+        jPanel12Layout.setHorizontalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(jLabel4)
-                .addGap(47, 47, 47)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(56, Short.MAX_VALUE))
+                .addContainerGap(793, Short.MAX_VALUE))
         );
+        jPanel12Layout.setVerticalGroup(
+            jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        logs.add(jPanel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 870, 40));
+        logs.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 650));
 
         jPanel3.add(logs);
         logs.setBounds(161, 0, 940, 652);
@@ -752,9 +759,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         employee.setPreferredSize(new java.awt.Dimension(939, 652));
         employee.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel5.setText("Employees");
-        jLabel5.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
-        employee.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 25, -1, -1));
+        jScrollPane4.setBorder(null);
 
         empTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -777,14 +782,31 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         });
         jScrollPane4.setViewportView(empTable);
 
-        employee.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 115, 854, 349));
+        employee.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, 880, 470));
 
-        jLabel14.setText("Receipt No.");
+        jPanel13.setBackground(new java.awt.Color(255, 204, 102));
+
+        jLabel5.setText("Employees");
+        jLabel5.setFont(new java.awt.Font("Bookman Old Style", 1, 30)); // NOI18N
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 483, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(391, Short.MAX_VALUE))
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+        );
+
+        employee.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 880, 40));
+
+        jLabel14.setText("Employee Name:");
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        employee.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(277, 507, -1, -1));
-
-        jTextField5.setText("jTextField1");
-        employee.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(374, 511, 295, -1));
 
         jButton4.setText("Search");
         jButton4.setFocusPainted(false);
@@ -796,7 +818,36 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                 jButton4ActionPerformed(evt);
             }
         });
-        employee.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(429, 545, -1, -1));
+
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        jPanel14.setLayout(jPanel14Layout);
+        jPanel14Layout.setHorizontalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
+                .addComponent(jButton4)
+                .addContainerGap(316, Short.MAX_VALUE))
+        );
+        jPanel14Layout.setVerticalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel14)
+                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton4))
+                .addContainerGap(9, Short.MAX_VALUE))
+        );
+
+        employee.add(jPanel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 540, 880, 50));
+
+        jLabel17.setText("jLabel17");
+        employee.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 650));
 
         jPanel3.add(employee);
         employee.setBounds(161, 0, 940, 652);
@@ -816,6 +867,8 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         jPanel1.setLayout(null);
 
         logsB.setText("Logs");
+        logsB.setBackground(new java.awt.Color(255, 204, 102));
+        logsB.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
         logsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         logsB.setMargin(new java.awt.Insets(2, 20, 3, 20));
         logsB.addActionListener(new java.awt.event.ActionListener() {
@@ -824,9 +877,11 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
             }
         });
         jPanel1.add(logsB);
-        logsB.setBounds(10, 60, 130, 27);
+        logsB.setBounds(10, 60, 130, 24);
 
         staffsB.setText("Staffs");
+        staffsB.setBackground(new java.awt.Color(255, 204, 102));
+        staffsB.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
         staffsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staffsB.setMargin(new java.awt.Insets(2, 20, 3, 20));
         staffsB.addActionListener(new java.awt.event.ActionListener() {
@@ -835,10 +890,12 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
             }
         });
         jPanel1.add(staffsB);
-        staffsB.setBounds(10, 110, 130, 27);
+        staffsB.setBounds(10, 110, 130, 24);
 
-        addStaffsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         addStaffsB.setText("Add Staffs");
+        addStaffsB.setBackground(new java.awt.Color(255, 204, 102));
+        addStaffsB.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
+        addStaffsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         addStaffsB.setMargin(new java.awt.Insets(2, 18, 3, 18));
         addStaffsB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -846,9 +903,11 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
             }
         });
         jPanel1.add(addStaffsB);
-        addStaffsB.setBounds(10, 160, 130, 27);
+        addStaffsB.setBounds(10, 160, 130, 24);
 
         moviesB.setText("Movies");
+        moviesB.setBackground(new java.awt.Color(255, 204, 102));
+        moviesB.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
         moviesB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         moviesB.setMargin(new java.awt.Insets(2, 18, 3, 18));
         moviesB.addActionListener(new java.awt.event.ActionListener() {
@@ -857,9 +916,10 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
             }
         });
         jPanel1.add(moviesB);
-        moviesB.setBounds(10, 210, 130, 27);
+        moviesB.setBounds(10, 210, 130, 24);
 
         salesB1.setText("Sales");
+        salesB1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
         salesB1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         salesB1.setMargin(new java.awt.Insets(2, 20, 3, 20));
         salesB1.addActionListener(new java.awt.event.ActionListener() {
@@ -868,9 +928,11 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
             }
         });
         jPanel1.add(salesB1);
-        salesB1.setBounds(10, 10, 130, 27);
+        salesB1.setBounds(10, 10, 130, 24);
 
         addMoviesB1.setText("Add Movies");
+        addMoviesB1.setBackground(new java.awt.Color(255, 204, 102));
+        addMoviesB1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 2));
         addMoviesB1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         addMoviesB1.setMargin(new java.awt.Insets(2, 12, 3, 12));
         addMoviesB1.addActionListener(new java.awt.event.ActionListener() {
@@ -879,12 +941,14 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
             }
         });
         jPanel1.add(addMoviesB1);
-        addMoviesB1.setBounds(10, 260, 130, 27);
+        addMoviesB1.setBounds(10, 260, 130, 24);
 
         jPanel3.add(jPanel1);
         jPanel1.setBounds(6, 224, 150, 310);
 
         logOut.setText("Log Out");
+        logOut.setBackground(new java.awt.Color(255, 204, 102));
+        logOut.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 204, 102), 2));
         logOut.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         logOut.setMargin(new java.awt.Insets(2, 12, 3, 12));
         logOut.addActionListener(new java.awt.event.ActionListener() {
@@ -893,7 +957,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
             }
         });
         jPanel3.add(logOut);
-        logOut.setBounds(10, 570, 140, 27);
+        logOut.setBounds(10, 570, 140, 24);
 
         movies.setBackground(new java.awt.Color(255, 255, 255));
         movies.setMinimumSize(new java.awt.Dimension(932, 652));
@@ -913,16 +977,18 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(367, 367, 367)
                 .addComponent(jLabel7)
-                .addContainerGap(366, Short.MAX_VALUE))
+                .addContainerGap(376, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 7, Short.MAX_VALUE))
         );
 
-        movies.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 50, 850, 60));
+        movies.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 860, 40));
 
-        jScrollPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        jScrollPane3.setBorder(null);
 
         MovieTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -942,11 +1008,10 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         });
         jScrollPane3.setViewportView(MovieTable);
 
-        movies.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 847, 365));
+        movies.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 70, 860, 470));
 
         jLabel13.setText("Search: ");
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        movies.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 550, 70, -1));
 
         MovieSearchField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -958,10 +1023,37 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                 MovieSearchFieldKeyReleased(evt);
             }
         });
-        movies.add(MovieSearchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 550, 365, 30));
+
+        jButton3.setText("Search");
+
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel15Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MovieSearchField, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addContainerGap(335, Short.MAX_VALUE))
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel15Layout.createSequentialGroup()
+                .addContainerGap(12, Short.MAX_VALUE)
+                .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(MovieSearchField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3))
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+
+        movies.add(jPanel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 540, 860, 60));
 
         m_bg_image.setText("jLabel8");
-        movies.add(m_bg_image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 650));
+        movies.add(m_bg_image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 950, 650));
 
         jPanel3.add(movies);
         movies.setBounds(160, 0, 940, 652);
@@ -971,7 +1063,6 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         addMovies.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), new java.awt.Color(0, 0, 0)));
         jPanel4.setPreferredSize(new java.awt.Dimension(676, 424));
         jPanel4.setLayout(null);
 
@@ -1111,7 +1202,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         jPanel4.add(jLabel11);
         jLabel11.setBounds(0, 0, 0, 430);
 
-        addMovies.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 140, -1, -1));
+        addMovies.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 110, 670, -1));
 
         jPanel6.setBackground(new java.awt.Color(255, 204, 102));
 
@@ -1135,7 +1226,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        addMovies.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 70, 670, 60));
+        addMovies.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, 670, 60));
 
         bg_image1.setText("image bg");
         addMovies.add(bg_image1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 650));
@@ -1148,7 +1239,6 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         addEmplyee.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder(new java.awt.Color(153, 153, 153), new java.awt.Color(0, 0, 0)));
 
         AddStaff_StaffDetailsLabel.setText("Details");
         AddStaff_StaffDetailsLabel.setFont(new java.awt.Font("Segoe UI", 1, 23)); // NOI18N
@@ -1257,7 +1347,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                             .addComponent(AddStaff_EmployeeID_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(AddStaff_Email_TextField, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(AddStaff_PhoneNumber_TextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 316, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addContainerGap(80, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(Back, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1299,7 +1389,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                 .addGap(53, 53, 53))
         );
 
-        addEmplyee.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 130, -1, -1));
+        addEmplyee.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 120, 670, 420));
 
         jPanel5.setBackground(new java.awt.Color(255, 204, 102));
 
@@ -1317,10 +1407,10 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+            .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
         );
 
-        addEmplyee.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, 670, 50));
+        addEmplyee.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, 670, 60));
 
         MovieTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1418,10 +1508,15 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         main.Main.choose = 0;
         dispose();
     }//GEN-LAST:event_logOutActionPerformed
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
-
-    }
     private void staffsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffsBActionPerformed
+        salesB1.setBackground(new Color(255,204,102));
+        logsB.setBackground(new Color(255,204,102));
+        staffsB.setBackground(Color.white);
+        addStaffsB.setBackground(new Color(255,204,102));
+        moviesB.setBackground(new Color(255,204,102));
+        addMoviesB1.setBackground(new Color(255,204,102));
+        
+        set_bg_image(jLabel17);
         sales.setVisible(false);
         logs.setVisible(false);
         employee.setVisible(true);
@@ -1432,6 +1527,13 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     }//GEN-LAST:event_staffsBActionPerformed
 
     private void addStaffsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStaffsBActionPerformed
+        salesB1.setBackground(new Color(255,204,102));
+        logsB.setBackground(new Color(255,204,102));
+        staffsB.setBackground(new Color(255,204,102));
+        addStaffsB.setBackground(Color.white);
+        moviesB.setBackground(new Color(255,204,102));
+        addMoviesB1.setBackground(new Color(255,204,102));
+        
         set_bg_image(bg_image);
         sales.setVisible(false);
         logs.setVisible(false);
@@ -1443,6 +1545,13 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     }//GEN-LAST:event_addStaffsBActionPerformed
 
     private void moviesBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moviesBActionPerformed
+        salesB1.setBackground(new Color(255,204,102));
+        logsB.setBackground(new Color(255,204,102));
+        staffsB.setBackground(new Color(255,204,102));
+        addStaffsB.setBackground(new Color(255,204,102));
+        moviesB.setBackground(Color.white);
+        addMoviesB1.setBackground(new Color(255,204,102));
+        
         set_bg_image(m_bg_image);
         sales.setVisible(false);
         logs.setVisible(false);
@@ -1454,6 +1563,14 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     }//GEN-LAST:event_moviesBActionPerformed
 
     private void logsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logsBActionPerformed
+        salesB1.setBackground(new Color(255,204,102));
+        logsB.setBackground(Color.white);
+        staffsB.setBackground(new Color(255,204,102));
+        addStaffsB.setBackground(new Color(255,204,102));
+        moviesB.setBackground(new Color(255,204,102));
+        addMoviesB1.setBackground(new Color(255,204,102));
+        
+        set_bg_image(jLabel8);
         sales.setVisible(false);
         logs.setVisible(true);
         createTableLogs();
@@ -1461,9 +1578,18 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
+        
     }//GEN-LAST:event_logsBActionPerformed
 
     private void salesB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesB1ActionPerformed
+        salesB1.setBackground(Color.white);
+        logsB.setBackground(new Color(255,204,102));
+        staffsB.setBackground(new Color(255,204,102));
+        addStaffsB.setBackground(new Color(255,204,102));
+        moviesB.setBackground(new Color(255,204,102));
+        addMoviesB1.setBackground(new Color(255,204,102));
+
+        
         sales.setVisible(true);
         logs.setVisible(false);
         employee.setVisible(false);
@@ -1473,6 +1599,13 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     }//GEN-LAST:event_salesB1ActionPerformed
 
     private void addMoviesB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMoviesB1ActionPerformed
+        salesB1.setBackground(new Color(255,204,102));
+        logsB.setBackground(new Color(255,204,102));
+        staffsB.setBackground(new Color(255,204,102));
+        addStaffsB.setBackground(new Color(255,204,102));
+        moviesB.setBackground(new Color(255,204,102));
+        addMoviesB1.setBackground(Color.white);
+        
         set_bg_image(bg_image1);
         sales.setVisible(false);
         logs.setVisible(false);
@@ -1916,6 +2049,10 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         new LogSummary().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     /**
      * @param args
      */
@@ -2149,6 +2286,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     private javax.swing.JPanel employee;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
@@ -2159,16 +2297,22 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
+    private javax.swing.JPanel jPanel12;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
+    private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
