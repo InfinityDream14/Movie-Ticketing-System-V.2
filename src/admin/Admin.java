@@ -1503,9 +1503,25 @@ public final class Admin extends javax.swing.JFrame {
             Genre = AddMovie_Genre_TextField.getText();
             Director = AddMovie_Director_TextField.getText();
             Duration = AddMovie_Duration_TextField.getText();
-            price = Integer.parseInt(AddMovie_Price_TextField.getText());
+            //price = Integer.parseInt(AddMovie_Price_TextField.getText().trim());
             Movie_Pic_Location = PosterName.getText();
             Mpass = "Admin";
+
+            try {
+                String inputprice = AddMovie_Price_TextField.getText();
+
+                if (!inputprice.isEmpty()) {
+                    price = Integer.parseInt(inputprice);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please Fill In Data");
+                    i--;
+                    break;
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input String" + e.getMessage());
+            }
 
             if (AddMovie_MovieID_TextField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please Fill In Data");
@@ -1521,10 +1537,6 @@ public final class Admin extends javax.swing.JFrame {
                 break;
             } else if (AddMovie_Director_TextField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddMovie_Price_TextField.getText().isEmpty() || AddMovie_Price_TextField.getText().matches("[a-zA-Z]+")) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data Correctly");
                 i--;
                 break;
             } else {
@@ -1681,7 +1693,7 @@ public final class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_Add_StaffMouseClicked
 
     private void Add_StaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_StaffActionPerformed
-
+        int flag = 0;
         EmpId = AddStaff_EmployeeID_TextField.getText();
         FName = AddStaff_FirstName_TextField.getText();
         LName = AddStaff_LastName_TextField.getText();
@@ -1691,60 +1703,63 @@ public final class Admin extends javax.swing.JFrame {
         UserPass = " ";
         Mpass = "Admin";
 
-        for (int i = 0; i < 3; i++) {
-            if (AddStaff_EmployeeID_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddStaff_FirstName_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddStaff_LastName_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddStaff_PhoneNumber_TextField1.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else {
-                UserPass = JOptionPane.showInputDialog("Enter Admin Password: ");
-                if (UserPass != null && UserPass.matches(Mpass)) {
-                    System.out.println("Data Added: ");
-                    System.out.println(EmpId);
-                    System.out.println(FName);
-                    System.out.println(LName);
-                    System.out.println(AddStaff_Email_TextField.getText());
-                    System.out.println(PNum);
-                    System.out.println(UserPass = pass);
-                    System.out.println(lnum);
+        if (AddStaff_FirstName_TextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your first name");
+            flag = 1;
+        }
+        if (AddStaff_LastName_TextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your last name");
+            flag = 1;
+        }
+        if (AddStaff_Email_TextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your email");
+            flag = 1;
+        } else if (!(AddStaff_Email_TextField.getText().contains("@") && AddStaff_Email_TextField.getText().contains(".com"))) {
+            JOptionPane.showMessageDialog(null, "Please input a valid email address");
+            flag = 1;
+        }
+        if (AddStaff_PhoneNumber_TextField1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your phone number");
+            flag = 1;
+        } else if (AddStaff_PhoneNumber_TextField1.getText().length() < 10 && AddStaff_PhoneNumber_TextField1.getText().length() > 11) {
+            JOptionPane.showMessageDialog(null, "Please fill-in correct length of Philippine phone number");
+            flag = 1;
+        } else if (!(AddStaff_PhoneNumber_TextField1.getText().startsWith("09") || AddStaff_PhoneNumber_TextField1.getText().startsWith("9"))) {
+            JOptionPane.showMessageDialog(null, "Phone Number Must Start with 09 or 9");
+            flag = 1;
+        }
+        if (flag == 0) {
+            UserPass = JOptionPane.showInputDialog("Enter Admin Password: ");
+            if (UserPass != null && UserPass.matches(Mpass)) {
+                System.out.println("Data Added: ");
+                System.out.println(EmpId);
+                System.out.println(FName);
+                System.out.println(LName);
+                System.out.println(AddStaff_Email_TextField.getText());
+                System.out.println(PNum);
+                System.out.println(UserPass = pass);
+                System.out.println(lnum);
 
-                    try {  // INSERTING VALUES FOR ADDSTAFF
-                        Statement stmt1 = conn.createStatement();
-                        stmt1 = conn.createStatement();
-                        String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
-                                + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
-                                + EmpId + "','" + UserPass + "')";
-                        int rows = stmt.executeUpdate(qry);
-                        if (rows > 0) {
-                            System.out.println("Insert Successful");
-                        }
-
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                try {  // INSERTING VALUES FOR ADDSTAFF
+                    Statement stmt1 = conn.createStatement();
+                    stmt1 = conn.createStatement();
+                    String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
+                            + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
+                            + EmpId + "','" + UserPass + "')";
+                    int rows = stmt.executeUpdate(qry);
+                    if (rows > 0) {
+                        System.out.println("Insert Successful");
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Adding of Staff Canceled");
-                }
-                ClearFieldStaff();
 
-                break;
+                } catch (SQLException ex) {
+                    Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Adding of Staff Canceled");
             }
+            ClearFieldStaff();
 
         }
-
-
     }//GEN-LAST:event_Add_StaffActionPerformed
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
@@ -1760,7 +1775,9 @@ public final class Admin extends javax.swing.JFrame {
     private void AddStaff_PhoneNumber_TextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_AddStaff_PhoneNumber_TextField1KeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
-        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)) {
+
+        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)
+                || AddStaff_PhoneNumber_TextField1.getText().length() > 10) {
             evt.consume();
         }
     }//GEN-LAST:event_AddStaff_PhoneNumber_TextField1KeyTyped
@@ -1995,7 +2012,6 @@ public final class Admin extends javax.swing.JFrame {
         AddStaff_LastName_TextField.setText(null);
         AddStaff_Email_TextField.setText(null);
         AddStaff_PhoneNumber_TextField1.setText(null);
-        lnum += 1;
     }
 
     public void ClearFieldMovies() {
