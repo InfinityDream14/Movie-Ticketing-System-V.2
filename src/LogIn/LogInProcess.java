@@ -60,7 +60,6 @@ public class LogInProcess implements Logs, Crypting {
         ResultSet rs = stmt.executeQuery(query);
 
         while (rs.next()) {
-            System.out.println(rs.getString("username") + ", " + rs.getString("passw") + " dsdsafsd");
 
             String checkUser = rs.getString(3);
             if (checkUser.equals("A1") || checkUser.equals("E1") || 
@@ -73,7 +72,6 @@ public class LogInProcess implements Logs, Crypting {
                     } else {
                         flag = 2;
                     }
-                    System.out.println(rs.getString("EmployeeID"));
                     employeeID = rs.getString("EmployeeID");
                     logs(employeeID);
                     break;
@@ -88,7 +86,8 @@ public class LogInProcess implements Logs, Crypting {
                     } else {
                         flag = 2;
                     }
-                    employeeID = decrypt(rs.getString("EmployeeID"));
+                    employeeID = rs.getString("EmployeeID");
+                    System.out.println(employeeID + "If empid != E1-E5");
                     logs(employeeID);
                     break;
                 } else if (userN.equals(decrypt(rs.getString(1)))) {
@@ -115,7 +114,7 @@ public class LogInProcess implements Logs, Crypting {
     @Override
     public void logs(String employeeID) {
         LocalTime now = LocalTime.now();
-        System.out.println(employeeID+"  dsdsdfsd");
+        System.out.println(employeeID + "  dsdsdfsd");
         String query = "insert into logs (Employee_ID, Log_In) values ('" + employeeID + "', '" + now + "')";
 
         try {
