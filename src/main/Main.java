@@ -30,7 +30,7 @@ public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException, ParseException {
         Main m = new Main();
-        m.connectToDatabase();
+        m.connectToDatabase(); 
         m.start();
 
     }
@@ -64,6 +64,7 @@ public class Main {
 
     public void start() throws SQLException, ClassNotFoundException, ParseException {
         LogInProcess inProcess = new LogInProcess();
+        inProcess.resetSeat();
         choose = 0;
         choose = inProcess.checkIfLoged();
 

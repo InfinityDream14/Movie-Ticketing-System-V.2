@@ -4,20 +4,25 @@
  */
 package LogIn;
 
+import static LogIn.LogInProcess.stmt;
 import Staffs.Movie_List;
 import java.awt.Color;
 import admin.Admin;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import main.Crypting;
 import main.Main;
 
 /**
  *
  * @author cdgan
  */
-public class LogIn extends javax.swing.JFrame {
+public class LogIn extends javax.swing.JFrame implements Crypting {
 
     /**
      * Creates new form LogIn
@@ -56,11 +61,11 @@ public class LogIn extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        sPassIn = new javax.swing.JPasswordField();
         sUserIn = new javax.swing.JTextField();
         sRPassIn = new javax.swing.JPasswordField();
         jLabel7 = new javax.swing.JLabel();
         showPass2 = new javax.swing.JCheckBox();
+        sPhoneIn = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -111,7 +116,8 @@ public class LogIn extends javax.swing.JFrame {
             }
         });
 
-        createAcc.setText("Don't have account? Create one");
+        createAcc.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        createAcc.setText("Forgot Password?");
         createAcc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 createAccMouseClicked(evt);
@@ -128,34 +134,35 @@ public class LogIn extends javax.swing.JFrame {
         LogIn.setLayout(LogInLayout);
         LogInLayout.setHorizontalGroup(
             LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(logIn)
-                .addGap(200, 200, 200))
             .addGroup(LogInLayout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(showPass)
-                    .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(lUserIn)
-                        .addComponent(lPassIn, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(LogInLayout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(showPass)
+                            .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(lUserIn)
+                                .addComponent(lPassIn, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE))))
+                    .addGroup(LogInLayout.createSequentialGroup()
+                        .addGap(196, 196, 196)
+                        .addComponent(createAcc)))
+                .addContainerGap(54, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
-                .addContainerGap(172, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(174, 174, 174))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
-                        .addComponent(createAcc)
-                        .addGap(162, 162, 162))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
                         .addComponent(Close)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
+                        .addComponent(logIn)
+                        .addGap(210, 210, 210))))
         );
         LogInLayout.setVerticalGroup(
             LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -174,11 +181,11 @@ public class LogIn extends javax.swing.JFrame {
                     .addComponent(lPassIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(showPass)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                 .addComponent(logIn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(createAcc)
-                .addGap(15, 15, 15))
+                .addGap(21, 21, 21))
         );
 
         SignUp.setBackground(new java.awt.Color(255, 255, 255));
@@ -186,7 +193,7 @@ public class LogIn extends javax.swing.JFrame {
         SignUp.setPreferredSize(new java.awt.Dimension(502, 392));
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jButton2.setText("Sign Up");
+        jButton2.setText("Done");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -201,20 +208,13 @@ public class LogIn extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Bookman Old Style", 0, 36)); // NOI18N
-        jLabel4.setText("Sign Up");
+        jLabel4.setText("Forgot Password");
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
-        jLabel5.setText("User:");
+        jLabel5.setText("Employee ID:");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
-        jLabel6.setText("Password:");
-
-        sPassIn.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
-        sPassIn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                sPassInActionPerformed(evt);
-            }
-        });
+        jLabel6.setText("Phone #:");
 
         sUserIn.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
         sUserIn.addActionListener(new java.awt.event.ActionListener() {
@@ -231,7 +231,7 @@ public class LogIn extends javax.swing.JFrame {
         });
 
         jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
-        jLabel7.setText("Re-type pass:");
+        jLabel7.setText("New Password:");
 
         showPass2.setText("Show Password");
         showPass2.addActionListener(new java.awt.event.ActionListener() {
@@ -240,28 +240,35 @@ public class LogIn extends javax.swing.JFrame {
             }
         });
 
+        sPhoneIn.setFont(new java.awt.Font("Segoe UI", 0, 21)); // NOI18N
+        sPhoneIn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sPhoneInActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout SignUpLayout = new javax.swing.GroupLayout(SignUp);
         SignUp.setLayout(SignUpLayout);
         SignUpLayout.setHorizontalGroup(
             SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(SignUpLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(29, 29, 29)
+                .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(SignUpLayout.createSequentialGroup()
                         .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(sUserIn)
-                            .addComponent(sPassIn, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel5))
+                        .addGap(24, 24, 24)
+                        .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(sUserIn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(sPhoneIn, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(SignUpLayout.createSequentialGroup()
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(showPass2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(sRPassIn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 44, Short.MAX_VALUE))
+                        .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(showPass2)
+                            .addComponent(sRPassIn, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(0, 37, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SignUpLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,10 +277,10 @@ public class LogIn extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SignUpLayout.createSequentialGroup()
                         .addComponent(jLabel4)
-                        .addGap(174, 174, 174))
+                        .addGap(85, 85, 85))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SignUpLayout.createSequentialGroup()
                         .addComponent(jButton2)
-                        .addGap(197, 197, 197))))
+                        .addGap(208, 208, 208))))
         );
         SignUpLayout.setVerticalGroup(
             SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -282,23 +289,23 @@ public class LogIn extends javax.swing.JFrame {
                 .addComponent(Close1)
                 .addGap(7, 7, 7)
                 .addComponent(jLabel4)
-                .addGap(36, 36, 36)
+                .addGap(18, 18, 18)
                 .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(sUserIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(sPassIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(36, 36, 36)
+                .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sPhoneIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(35, 35, 35)
                 .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sRPassIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(showPass2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton2)
-                .addGap(35, 35, 35))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/AAG Movie Ticketing System Logo .png"))); // NOI18N
@@ -332,7 +339,7 @@ public class LogIn extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(BackGround, javax.swing.GroupLayout.PREFERRED_SIZE, 662, Short.MAX_VALUE)
+            .addComponent(BackGround, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -343,6 +350,7 @@ public class LogIn extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    //checking if saan mapupunta yung user, ililipat magbabato siya ng int sa main para doon mismo ang pinaka login destination
     private void logInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logInActionPerformed
 
         try {
@@ -367,20 +375,57 @@ public class LogIn extends javax.swing.JFrame {
                 Main.main(null);
                 dispose();
             }
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
+        } catch (SQLException | ClassNotFoundException | ParseException ex) {
             Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_logInActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        SignUp.setVisible(false);
-        LogIn.setVisible(true);
+        LogIn.setVisible(false);
+        SignUp.setVisible(true);
+
+        try {
+            stmt = Main.mc.createStatement();
+            String empID;
+            String phoneNum;
+
+            String select = "select EmployeeID, Phone from staff where EmployeeID = '" + sUserIn.getText() + "'";
+
+            ResultSet rsSelect = stmt.executeQuery(select);
+            if (rsSelect.next()) {
+                empID = rsSelect.getString("EmployeeID");
+                if (empID.equals("A1") || empID.equals("E1") || empID.equals("E2") || empID.equals("E3") || empID.equals("E4") || empID.equals("E5")) {
+                    if (sPhoneIn.getText().equals(rsSelect.getString("Phone"))) {
+                        phoneNum = rsSelect.getString("Phone");
+                        System.out.println(phoneNum);
+                        updatePass(empID, phoneNum);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "You must enter the corrrect phone number", "Phone number Incorrect", HEIGHT);
+                    }
+                } else {
+                    if (sPhoneIn.getText().equals(decrypt(rsSelect.getString("Phone")))) {
+                        phoneNum = rsSelect.getString("Phone");
+                        System.out.println(phoneNum);
+                        updatePass(empID, phoneNum);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "You must enter the corrrect phone number", "Phone number Incorrect", HEIGHT);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "You must enter an existing Employee ID", "EmployeeID Incorrect", HEIGHT);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(LogIn.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void Close1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Close1MouseClicked
-        System.exit(0);
+        SignUp.setVisible(false);
+        LogIn.setVisible(true);
+        sUserIn.setText("");
+        sRPassIn.setText("");
+        sPhoneIn.setText("");
     }//GEN-LAST:event_Close1MouseClicked
 
     private void CloseMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CloseMouseClicked
@@ -392,15 +437,12 @@ public class LogIn extends javax.swing.JFrame {
     }//GEN-LAST:event_lUserInActionPerformed
 
     private void showPassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showPassActionPerformed
-        int ctr;
         if (showPass.isSelected()) {
             char c = 0;
             lPassIn.setEchoChar(c);
-            ctr = 1;
         } else {
             char c = '*';
             lPassIn.setEchoChar(c);
-            ctr = 0;
         }
     }//GEN-LAST:event_showPassActionPerformed
 
@@ -420,12 +462,10 @@ public class LogIn extends javax.swing.JFrame {
         int ctr;
         if (showPass2.isSelected()) {
             char c = 0;
-            sPassIn.setEchoChar(c);
             sRPassIn.setEchoChar(c);
             ctr = 1;
         } else {
             char c = '*';
-            sPassIn.setEchoChar(c);
             sRPassIn.setEchoChar(c);
             ctr = 0;
         }
@@ -440,9 +480,9 @@ public class LogIn extends javax.swing.JFrame {
         logIn.doClick();
     }//GEN-LAST:event_sRPassInActionPerformed
 
-    private void sPassInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sPassInActionPerformed
-        logIn.doClick();
-    }//GEN-LAST:event_sPassInActionPerformed
+    private void sPhoneInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sPhoneInActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_sPhoneInActionPerformed
 
     /**
      * @param args the command line arguments
@@ -504,10 +544,58 @@ public class LogIn extends javax.swing.JFrame {
     public javax.swing.JPasswordField lPassIn;
     public javax.swing.JTextField lUserIn;
     private javax.swing.JButton logIn;
-    private javax.swing.JPasswordField sPassIn;
+    private javax.swing.JTextField sPhoneIn;
     private javax.swing.JPasswordField sRPassIn;
     private javax.swing.JTextField sUserIn;
     private javax.swing.JCheckBox showPass;
     private javax.swing.JCheckBox showPass2;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public String encrypt(String value) {
+        try {
+            return Base64.getEncoder().encodeToString(value.getBytes());
+
+        } catch (Exception e) {
+            System.err.println("Error in Encrypt: " + e);
+        }
+        return null;
+    }
+
+    @Override
+    public String decrypt(String value) {
+        try {
+            byte[] decodedBytes = Base64.getDecoder().decode(value);
+            return new String(decodedBytes);
+        } catch (Exception e) {
+            System.err.println("Error in Decryption: " + e);
+        }
+        return null;
+    }
+
+    private void updatePass(String empID, String phoneNum) throws SQLException {
+        System.out.println("HII");
+        String pass;
+        if (empID.equals("A1") || empID.equals("E1") || empID.equals("E2") || empID.equals("E3") || empID.equals("E4") || empID.equals("E5")) {
+            pass = sRPassIn.getText();
+        } else {
+            pass = encrypt(sRPassIn.getText());
+        }
+
+        String update = "update staff"
+                + " set passw = '" + pass + "'"
+                + " where  EmployeeID = '" + empID + "' and Phone = '" + phoneNum + "'";
+        int rs = stmt.executeUpdate(update);
+        if (rs > 0) {
+            JOptionPane.showMessageDialog(null, "Change successfull!");
+            sUserIn.setText("");
+            sRPassIn.setText("");
+            sPhoneIn.setText("");
+            SignUp.setVisible(false);
+            LogIn.setVisible(true);
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Change is not successfull!");
+        }
+    }
 }

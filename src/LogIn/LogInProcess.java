@@ -5,7 +5,6 @@
 package LogIn;
 
 import java.sql.*;
-import java.text.ParseException;
 import java.time.LocalTime;
 import java.util.Base64;
 import javax.swing.*;
@@ -18,7 +17,9 @@ import main.*;
 public class LogInProcess implements Logs, Crypting {
 
     static Statement stmt;
-
+    
+    
+    // nagchecheck kung may nakalog-in na
     public int checkIfLoged() throws SQLException, ClassNotFoundException {
         Main main = new Main();
         stmt = main.mc.createStatement();
@@ -45,6 +46,8 @@ public class LogInProcess implements Logs, Crypting {
         return 0;
     }
 
+    //checking if mayroong user and their coresponded password
+    // naka encrypt na din sila for their security purposes
     public int checkAcc(String user, String pass) throws SQLException, ClassNotFoundException {
         Main main = new Main();
         stmt = main.mc.createStatement();
@@ -111,7 +114,8 @@ public class LogInProcess implements Logs, Crypting {
 
         return flag;
     }
-
+    
+    // implementation ng logs
     @Override
     public void logs(String employeeID) {
         LocalTime now = LocalTime.now();
@@ -126,7 +130,29 @@ public class LogInProcess implements Logs, Crypting {
             System.out.println(ex);
         }
     }
-
+    
+    //if the user will use the computer in a new day, the seat allocation will reset
+    public void resetSeat() throws SQLException{
+        Date currentDate = null, pastDate = null;
+        
+        Main main = new Main();
+        stmt = main.mc.createStatement();
+        
+        String sql = """
+                    select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+                    from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    order by l.DateLog, l.Log_In""";
+        
+        ResultSet rs = stmt.executeQuery(sql);
+        while(rs.next()){
+            pastDate = currentDate;
+            currentDate = rs.getDate("DateLog");
+        }
+        System.out.println("Past Date: "+pastDate);
+        System.out.println("Current Date: "+currentDate);
+    }
+    
+    // implementation ng encryption
     @Override
     public String encrypt(String value) {
         try {
@@ -137,7 +163,8 @@ public class LogInProcess implements Logs, Crypting {
         }
         return null;
     }
-
+    
+    // implementation ng decryption
     @Override
     public String decrypt(String value) {
         try {
