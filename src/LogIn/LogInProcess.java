@@ -150,6 +150,30 @@ public class LogInProcess implements Logs, Crypting {
         }
         System.out.println("Past Date: "+pastDate);
         System.out.println("Current Date: "+currentDate);
+        
+        if(currentDate.after(pastDate)){
+            Statement stml = main.mc.createStatement();
+            
+            String qry2 = "select st.showtimeid, sl.showtimeid,sl.seat_location, sl.seat_number, sl.seat_status\n" +
+                "from showtime st inner join seat_list sl\n" +
+                "	on st.showtimeid = sl.showtimeid";
+        
+        rs = stml.executeQuery(qry2);
+            
+        while(rs.next()){
+            stml = main.mc.createStatement();
+
+            String rsin = "UPDATE seat_list\n" +
+                        "set seat_status = 'A'\n" +
+                        "Where seat_status = 'U' or seat_status = 'S'";
+
+            int ups = stml.executeUpdate(rsin);
+
+            if(ups>0){
+                System.out.println("All Selected Seat has been removed");
+            }
+        }
+        }
     }
     
     // implementation ng encryption
