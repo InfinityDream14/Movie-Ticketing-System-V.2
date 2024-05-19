@@ -116,7 +116,8 @@ public class LogIn extends javax.swing.JFrame implements Crypting {
             }
         });
 
-        createAcc.setText("Don't have account? Create one");
+        createAcc.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        createAcc.setText("Forgot Password?");
         createAcc.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 createAccMouseClicked(evt);
@@ -133,34 +134,35 @@ public class LogIn extends javax.swing.JFrame implements Crypting {
         LogIn.setLayout(LogInLayout);
         LogInLayout.setHorizontalGroup(
             LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(logIn)
-                .addGap(200, 200, 200))
             .addGroup(LogInLayout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(showPass)
-                    .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(lUserIn)
-                        .addComponent(lPassIn, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(LogInLayout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(showPass)
+                            .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(lUserIn)
+                                .addComponent(lPassIn, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE))))
+                    .addGroup(LogInLayout.createSequentialGroup()
+                        .addGap(196, 196, 196)
+                        .addComponent(createAcc)))
+                .addContainerGap(54, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
-                .addContainerGap(172, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addGap(174, 174, 174))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
-                        .addComponent(createAcc)
-                        .addGap(162, 162, 162))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
                         .addComponent(Close)
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, LogInLayout.createSequentialGroup()
+                        .addComponent(logIn)
+                        .addGap(210, 210, 210))))
         );
         LogInLayout.setVerticalGroup(
             LogInLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -179,11 +181,11 @@ public class LogIn extends javax.swing.JFrame implements Crypting {
                     .addComponent(lPassIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(showPass)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
                 .addComponent(logIn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(createAcc)
-                .addGap(15, 15, 15))
+                .addGap(21, 21, 21))
         );
 
         SignUp.setBackground(new java.awt.Color(255, 255, 255));
@@ -250,7 +252,7 @@ public class LogIn extends javax.swing.JFrame implements Crypting {
         SignUpLayout.setHorizontalGroup(
             SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(SignUpLayout.createSequentialGroup()
-                .addGap(21, 21, 21)
+                .addGap(29, 29, 29)
                 .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(SignUpLayout.createSequentialGroup()
                         .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -266,7 +268,7 @@ public class LogIn extends javax.swing.JFrame implements Crypting {
                         .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(showPass2)
                             .addComponent(sRPassIn, javax.swing.GroupLayout.PREFERRED_SIZE, 284, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(0, 44, Short.MAX_VALUE))
+                .addGap(0, 37, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SignUpLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,7 +280,7 @@ public class LogIn extends javax.swing.JFrame implements Crypting {
                         .addGap(85, 85, 85))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, SignUpLayout.createSequentialGroup()
                         .addComponent(jButton2)
-                        .addGap(207, 207, 207))))
+                        .addGap(208, 208, 208))))
         );
         SignUpLayout.setVerticalGroup(
             SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -287,7 +289,7 @@ public class LogIn extends javax.swing.JFrame implements Crypting {
                 .addComponent(Close1)
                 .addGap(7, 7, 7)
                 .addComponent(jLabel4)
-                .addGap(36, 36, 36)
+                .addGap(18, 18, 18)
                 .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(sUserIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -299,11 +301,11 @@ public class LogIn extends javax.swing.JFrame implements Crypting {
                 .addGroup(SignUpLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(sRPassIn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(showPass2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jButton2)
-                .addGap(36, 36, 36))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/AAG Movie Ticketing System Logo .png"))); // NOI18N
@@ -398,7 +400,7 @@ public class LogIn extends javax.swing.JFrame implements Crypting {
                         System.out.println(phoneNum);
                         updatePass(empID, phoneNum);
                     } else {
-                        JOptionPane.showMessageDialog(null, "You must enter the corrrect phone number", "EmployeeID Incorrect", HEIGHT);
+                        JOptionPane.showMessageDialog(null, "You must enter the corrrect phone number", "Phone number Incorrect", HEIGHT);
                     }
                 } else {
                     if (sPhoneIn.getText().equals(decrypt(rsSelect.getString("Phone")))) {
@@ -406,7 +408,7 @@ public class LogIn extends javax.swing.JFrame implements Crypting {
                         System.out.println(phoneNum);
                         updatePass(empID, phoneNum);
                     } else {
-                        JOptionPane.showMessageDialog(null, "You must enter the corrrect phone number", "EmployeeID Incorrect", HEIGHT);
+                        JOptionPane.showMessageDialog(null, "You must enter the corrrect phone number", "Phone number Incorrect", HEIGHT);
                     }
                 }
             } else {

@@ -131,6 +131,27 @@ public class LogInProcess implements Logs, Crypting {
         }
     }
     
+    //if the user will use the computer in a new day, the seat allocation will reset
+    public void resetSeat() throws SQLException{
+        Date currentDate = null, pastDate = null;
+        
+        Main main = new Main();
+        stmt = main.mc.createStatement();
+        
+        String sql = """
+                    select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+                    from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    order by l.DateLog, l.Log_In""";
+        
+        ResultSet rs = stmt.executeQuery(sql);
+        while(rs.next()){
+            pastDate = currentDate;
+            currentDate = rs.getDate("DateLog");
+        }
+        System.out.println("Past Date: "+pastDate);
+        System.out.println("Current Date: "+currentDate);
+    }
+    
     // implementation ng encryption
     @Override
     public String encrypt(String value) {
