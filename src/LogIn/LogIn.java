@@ -66,7 +66,7 @@ public class LogIn extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
 
-        BackGround.setBackground(new java.awt.Color(211, 191, 114));
+        BackGround.setBackground(new java.awt.Color(255, 204, 102));
 
         LogIn.setBackground(new java.awt.Color(255, 255, 255));
         LogIn.setPreferredSize(new java.awt.Dimension(502, 392));

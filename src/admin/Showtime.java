@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Date;
+import javax.swing.JOptionPane;
 import main.Main;
 
 /**
@@ -155,16 +156,18 @@ public final class Showtime extends javax.swing.JFrame {
             create_seatList();
             list.createShowtimeListTable();
             String movid = MovieID_Tx.getText();
-                            Statement stm = connMD.createStatement();
-                            System.out.println(movid);
-                            String stdel = "update movie\n"
-                                    + "set Movie_status = 'A'\n"
-                                    + "where movieID = '" + movid + "'";
-                            stm.executeUpdate(stdel);
+            Statement stm = connMD.createStatement();
+            System.out.println(movid);
+            String stdel = "update movie\n"
+                    + "set Movie_status = 'A'\n"
+                    + "where movieID = '" + movid + "'";
+            stm.executeUpdate(stdel);
             
             dispose();
-        } catch (ParseException | SQLException | ClassNotFoundException ex) {
+        } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(Showtime.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(null, "Please input a proper time slot", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_AddShowtime_ButtonActionPerformed
 

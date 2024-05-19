@@ -101,9 +101,13 @@ public class Payment_Cash extends javax.swing.JFrame {
                             //pm.update_ticket_on_database();
                         } catch (SQLException ex) {
                             Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ParseException ex) {
+                        }catch (ParseException ex) {
                             Logger.getLogger(BDO.class.getName()).log(Level.SEVERE, null, ex);
                         }
+//                        System.out.println(Payment_Method.payment_m);
+//                        System.out.println("ito yung total_amount: " + price);
+//                        System.out.println(Payment_Method.emp_log);
+                        
 //                        System.out.println(Payment_Method.payment_m);
 //                        System.out.println("ito yung total_amount: " + price);
 //                        System.out.println(Payment_Method.emp_log);

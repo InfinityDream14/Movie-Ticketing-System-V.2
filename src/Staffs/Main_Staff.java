@@ -35,7 +35,7 @@ public class Main_Staff {
            e.printStackTrace();
        }
        get_empid();
-       
+           
            new Movie_List().setVisible(true);
            //new Seat_Management().setVisible(true);
            //new Payment_Method().setVisible(true);

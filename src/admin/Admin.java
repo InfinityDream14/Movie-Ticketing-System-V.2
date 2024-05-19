@@ -6,7 +6,6 @@ package admin;
 
 import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.RoundingMode;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -33,11 +31,10 @@ import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.RowFilter;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 import jnafilechooser.api.JnaFileChooser;
 
@@ -65,25 +62,42 @@ public final class Admin extends javax.swing.JFrame {
     Statement stmt;
     Connection conn;
     ResultSet rs;
-    ArrayList<Object[]> vec = new ArrayList<>();
-    DefaultTableModel tmodel = new DefaultTableModel();
+    ArrayList<Object[]> row = new ArrayList<>();
+    DefaultTableModel salesTmodel = new DefaultTableModel();
     DefaultTableModel tmodel1 = new DefaultTableModel();
     SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm a");
     DecimalFormat dec = new DecimalFormat("#.##");
 
     File file = null;
+    private int totalEarned;
+    private String dateFilter;
+    private String amount;
+    private String newTimeSell;
+    private String dateSell;
+    private String filteredDate;
+    private String searchFilter = "t.TicketID like '%%'";
+    private String payemntMethod;
+    private String paymentFiltered;
+    private DefaultTableModel employeeTmodel;
+    private DefaultTableModel logsTmodel;
 
     public Admin() throws ClassNotFoundException, SQLException {
         connectToDatabase();
         initComponents();
 
         sales.setVisible(true);
+        logs.setVisible(false);
         employee.setVisible(false);
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
 
+        salesTable.setDefaultEditor(Object.class, null);
+        MovieTable.setDefaultEditor(Object.class, null);
+        empTable.setDefaultEditor(Object.class, null);
+
         dec.setRoundingMode(RoundingMode.CEILING);
+        set_bg_image(s_bg_image);
         createTableSales();
         getIDs();
     }
@@ -112,28 +126,28 @@ public final class Admin extends javax.swing.JFrame {
 
     // for creating and reseting sales table
     public void createTableSales() {
-        tmodel = new DefaultTableModel();
+        salesTmodel = new DefaultTableModel();
 
-        salesTable.setModel(tmodel);
-        tmodel.addColumn("Ticket ID");
-        tmodel.addColumn("Amount");
-        tmodel.addColumn("Date Purchased");
-        tmodel.addColumn("Time Purchased");
+        salesTable.setModel(salesTmodel);
+        salesTmodel.addColumn("Ticket ID");
+        salesTmodel.addColumn("Amount");
+        salesTmodel.addColumn("Payment Method");
+        salesTmodel.addColumn("Date Purchased");
+        salesTmodel.addColumn("Time Purchased");
         ListSelectionModel cellSelectionModel = salesTable.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         cellSelectionModel.addListSelectionListener((ListSelectionEvent e) -> {
             String selectedData = null;
-
+            
             int[] selectedRow = salesTable.getSelectedRows();
             int[] selectedColumn = salesTable.getSelectedColumns();
-
+            
             for (int i = 0; i < selectedRow.length; i++) {
                 for (int j = 0; j < selectedColumn.length; j++) {
                     selectedData = (String) salesTable.getValueAt(selectedRow[i], selectedColumn[j]);
                 }
             }
-            System.out.println("Selected: " + selectedData);
         });
         getSalesData();
     }
@@ -141,40 +155,85 @@ public final class Admin extends javax.swing.JFrame {
     // for getting the sales datas from database to the jtable
     public void getSalesData() {
         String sql = """
-                     select t.TicketID, p.Amount, p.PaymentDate
-                     from ticket t join payment p on t.TicketPaymentID = p.PaymentID""";
-        String newTimeSell, dateSell, amount;
+                     select t.TicketID, p.Amount, p.PaymentMethod, p.PaymentDate
+                     from ticket t join payment p on t.TicketPaymentID = p.PaymentID
+                     """ + dateFilter + " and " + searchFilter + " and " + paymentFiltered + ""
+                + "order by p.PaymentDate desc";
 
         try {
+            totalEarned = 0;
             stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
-            SimpleDateFormat dateFormat = new SimpleDateFormat("MMMMM dd, yyyy");
-            this.vec = new ArrayList<>();
+            var dateFormat2 = new SimpleDateFormat("MMMMM dd, yyyy");
+            this.row = new ArrayList<>();
 
             while (rs != null && rs.next()) {
 
                 amount = (dec.format(rs.getDouble("Amount")));
+                totalEarned += Double.valueOf(amount);
                 newTimeSell = this.dateFormat.format(rs.getTime("PaymentDate"));
-                dateSell = dateFormat.format(rs.getDate("PaymentDate"));
+                dateSell = dateFormat2.format(rs.getDate("PaymentDate"));
+                payemntMethod = rs.getString("PaymentMethod");
 
-                this.vec.add(new Object[]{rs.getString("TicketID"), "Php " + amount, dateSell, newTimeSell});
+                this.row.add(new Object[]{rs.getString("TicketID"), "Php " + amount, payemntMethod, dateSell, newTimeSell});
             }
-            for (Object[] row : vec) {
-                tmodel.addRow(row);
-            }
-
+            row.forEach(salesTmodel::addRow);
+            totalEarnedDis.setText("Php " + totalEarned);
         } catch (SQLException e) {
             System.out.println(e);
         }
     }
 
+    public void setFilter() {
+        sDayChooser.setVisible(false);
+        sMonthChooser.setVisible(false);
+        sYearChooser.setVisible(false);
+        dateFilter = "";
+        filteredDate = "";
+        String month;
+
+        if (dayFilter.getSelectedItem().equals("Day")) {
+            sDayChooser.setVisible(true);
+            filteredDate = sDayChooser.getDateStringOrEmptyString();
+
+        } else if (dayFilter.getSelectedItem().equals("Month")) {
+
+            sMonthChooser.setVisible(true);
+            sYearChooser.setVisible(true);
+
+            month = sMonthChooser.getMonth() + 1 + "";
+            if (month.length() == 1) {
+                month = 0 + month;
+            }
+            filteredDate = sYearChooser.getYear() + "-" + month;
+
+        } else if (dayFilter.getSelectedItem().equals("Year")) {
+            sYearChooser.setVisible(true);
+
+            filteredDate = sYearChooser.getYear() + "";
+        }
+        dateFilter = " WHERE CAST(p.PaymentDate AS date) like '%" + filteredDate + "%'";
+
+        if (paymentFilter.getSelectedItem().equals("Cash")) {
+            paymentFiltered = "p.PaymentMethod like '%Cash%'";
+        } else if (paymentFilter.getSelectedItem().equals("E-Wallet")) {
+            paymentFiltered = "p.PaymentMethod like '%E-Wallet%'";
+        } else if (paymentFilter.getSelectedItem().equals("Credit Card")) {
+            paymentFiltered = "p.PaymentMethod like '%Credit Card%'";
+        } else {
+            paymentFiltered = "p.PaymentMethod like '%%'";
+        }
+
+        createTableSales();
+    }
+
     // for creating and reseting employee table
     public void createTableEmployee() {
-        tmodel = new DefaultTableModel();
+        employeeTmodel = new DefaultTableModel();
 
-        empTable.setModel(tmodel);
-        tmodel.addColumn("Employee ID");
-        tmodel.addColumn("Name");
+        empTable.setModel(employeeTmodel);
+        employeeTmodel.addColumn("Employee ID");
+        employeeTmodel.addColumn("Name");
         ListSelectionModel cellSelectionModel = empTable.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -189,7 +248,6 @@ public final class Admin extends javax.swing.JFrame {
                     selectedData = (String) empTable.getValueAt(selectedRow[i], selectedColumn[j]);
                 }
             }
-            System.out.println("Selected: " + selectedData);
         });
         getEmployeedata();
     }
@@ -204,14 +262,12 @@ public final class Admin extends javax.swing.JFrame {
         try {
             stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
-            vec = new ArrayList<>();
+            row = new ArrayList<>();
 
             while (this.rs != null && rs.next()) {
-                vec.add(new Object[]{rs.getString("EmployeeID"), rs.getString("FullName")});
+                row.add(new Object[]{rs.getString("EmployeeID"), rs.getString("FullName")});
             }
-            for (Object[] row : vec) {
-                tmodel.addRow(row);
-            }
+            row.forEach(employeeTmodel::addRow);
 
         } catch (SQLException e) {
             System.out.println(e);
@@ -219,14 +275,15 @@ public final class Admin extends javax.swing.JFrame {
     }
 
     public void createTableLogs() {
-        tmodel = new DefaultTableModel();
+        logsTmodel = new DefaultTableModel();
 
-        logsTable.setModel(tmodel);
-        tmodel.addColumn("Employee ID");
-        tmodel.addColumn("Full Name");
-        tmodel.addColumn("Date Logged");
-        tmodel.addColumn("Log In");
-        tmodel.addColumn("Log Out");
+        logsTable.setModel(logsTmodel);
+        logsTmodel.addColumn("Employee ID");
+        logsTmodel.addColumn("First Name");
+        logsTmodel.addColumn("Last Namew");
+        logsTmodel.addColumn("Date Logged");
+        logsTmodel.addColumn("Log In");
+        logsTmodel.addColumn("Log Out");
         ListSelectionModel cellSelectionModel = logsTable.getSelectionModel();
         cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -241,7 +298,6 @@ public final class Admin extends javax.swing.JFrame {
                     selectedData = (String) logsTable.getValueAt(selectedRow[i], selectedColumn[j]);
                 }
             }
-            System.out.println("Selected: " + selectedData);
         });
         getLogsdata();
     }
@@ -249,17 +305,17 @@ public final class Admin extends javax.swing.JFrame {
     // for getting the employee datas from database to the jtable
     public void getLogsdata() {
         Time logInT, logOutT;
-        String newLogIn = "", newLogOut = "";
+        String newLogIn, newLogOut;
 
         String sql = """
-             select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+             select l.Employee_ID, s.Fname, s.Lname, l.DateLog, l.Log_In, l.Log_Out
              	from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
              	order by l.DateLog, l.Log_In""";
 
         try {
             this.stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql);
-            vec = new ArrayList<>();
+            row = new ArrayList<>();
             while (rs.next()) {
                 logInT = rs.getTime("Log_In");
                 newLogIn = (logInT != null) ? dateFormat.format(logInT) : "";
@@ -267,11 +323,12 @@ public final class Admin extends javax.swing.JFrame {
                 logOutT = rs.getTime("Log_Out");
                 newLogOut = (logOutT != null) ? dateFormat.format(logOutT) : "";
 
-                vec.add(new Object[]{rs.getString("Employee_ID"), rs.getString("Full Name"), rs.getString("DateLog"), newLogIn, newLogOut});
+                row.add(new Object[]{rs.getString("Employee_ID"), rs.getString("Fname"), rs.getString("Lname"), rs.getString("DateLog"), newLogIn, newLogOut});
             }
 
-            for (Object[] row : vec) {
-                tmodel.addRow(row);
+            for (int i = row.size() - 1; i >= 0; i--) {
+                logsTmodel.addRow(row.get(i));
+                System.out.println(i);
             }
 
         } catch (SQLException e) {
@@ -297,20 +354,31 @@ public final class Admin extends javax.swing.JFrame {
 
         jPanel3 = new javax.swing.JPanel();
         sales = new javax.swing.JPanel();
+        jPanel9 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         salesTable = new javax.swing.JTable();
+        jPanel8 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        datePicker2 = new com.github.lgooddatepicker.components.DatePicker();
+        sYearChooser = new com.toedter.calendar.JYearChooser();
+        sMonthChooser = new com.toedter.calendar.JMonthChooser();
+        sDayChooser = new com.github.lgooddatepicker.components.DatePicker();
+        dayFilter = new javax.swing.JComboBox<>();
+        paymentFilter = new javax.swing.JComboBox<>();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        totalEarnedDis = new javax.swing.JLabel();
+        s_bg_image = new javax.swing.JLabel();
         logs = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         logsTable = new javax.swing.JTable();
+        jPanel11 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         employee = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -335,7 +403,6 @@ public final class Admin extends javax.swing.JFrame {
         MovieTable = new javax.swing.JTable();
         jLabel13 = new javax.swing.JLabel();
         MovieSearchField = new javax.swing.JTextField();
-        Select_Button_Movies = new javax.swing.JButton();
         m_bg_image = new javax.swing.JLabel();
         addMovies = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -392,11 +459,30 @@ public final class Admin extends javax.swing.JFrame {
         jPanel3.setLayout(null);
 
         sales.setBackground(new java.awt.Color(255, 255, 255));
+        sales.setLayout(null);
+
+        jPanel9.setBackground(new java.awt.Color(255, 204, 102));
 
         jLabel3.setText("Sales");
         jLabel3.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
 
-        salesTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addContainerGap(757, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        sales.add(jPanel9);
+        jPanel9.setBounds(30, 60, 860, 40);
+
         salesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -408,70 +494,124 @@ public final class Admin extends javax.swing.JFrame {
 
             }
         ));
-        salesTable.setToolTipText("");
         salesTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
         salesTable.setFocusable(false);
+        salesTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         salesTable.setRowHeight(40);
         salesTable.setShowGrid(false);
+        salesTable.setToolTipText("");
+        salesTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                salesTableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(salesTable);
 
-        jLabel9.setText("Receipt No.");
+        sales.add(jScrollPane1);
+        jScrollPane1.setBounds(33, 115, 854, 349);
+
+        jPanel8.setBackground(new java.awt.Color(246, 243, 243));
+        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel9.setText("Ticket No.");
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jPanel8.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
-        jButton1.setText("Search");
-        jButton1.setFocusPainted(false);
-        jButton1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton1.setMargin(new java.awt.Insets(2, 30, 3, 30));
-        jButton1.setOpaque(true);
+        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        jTextField1.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jTextField1CaretUpdate(evt);
+            }
+        });
+        jPanel8.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 20, 90, -1));
 
-        datePicker2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        sYearChooser.setFocusable(false);
+        sYearChooser.setRequestFocusEnabled(false);
+        sYearChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                sYearChooserPropertyChange(evt);
+            }
+        });
+        jPanel8.add(sYearChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 40, -1, -1));
 
-        javax.swing.GroupLayout salesLayout = new javax.swing.GroupLayout(sales);
-        sales.setLayout(salesLayout);
-        salesLayout.setHorizontalGroup(
-            salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(salesLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(salesLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(29, 29, 29)
-                        .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(514, 514, 514))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(53, Short.MAX_VALUE))
-            .addGroup(salesLayout.createSequentialGroup()
-                .addGap(277, 277, 277)
-                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, salesLayout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, salesLayout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(138, 138, 138)))
-                .addGap(0, 0, Short.MAX_VALUE))
+        sMonthChooser.setFocusable(false);
+        sMonthChooser.setRequestFocusEnabled(false);
+        sMonthChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                sMonthChooserPropertyChange(evt);
+            }
+        });
+        jPanel8.add(sMonthChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 40, -1, -1));
+
+        sDayChooser.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                sDayChooserPropertyChange(evt);
+            }
+        });
+        jPanel8.add(sDayChooser, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 40, 190, -1));
+
+        dayFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Day", "Month", "Year" }));
+        dayFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dayFilterActionPerformed(evt);
+            }
+        });
+        dayFilter.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                dayFilterPropertyChange(evt);
+            }
+        });
+        jPanel8.add(dayFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 40, 90, -1));
+
+        paymentFilter.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "All", "Cash", "E-Wallet", "Credit Card" }));
+        paymentFilter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                paymentFilterActionPerformed(evt);
+            }
+        });
+        paymentFilter.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                paymentFilterPropertyChange(evt);
+            }
+        });
+        jPanel8.add(paymentFilter, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 10, 90, -1));
+
+        sales.add(jPanel8);
+        jPanel8.setBounds(30, 520, 860, 70);
+
+        jLabel16.setText("Total:");
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+
+        totalEarnedDis.setText("Php");
+        totalEarnedDis.setFont(new java.awt.Font("Segoe UI", 2, 18)); // NOI18N
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(totalEarnedDis, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(559, Short.MAX_VALUE))
         );
-        salesLayout.setVerticalGroup(
-            salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(salesLayout.createSequentialGroup()
-                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(salesLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel3))
-                    .addGroup(salesLayout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(datePicker2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(47, 47, 47)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
-                .addGroup(salesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1)
-                .addContainerGap(80, Short.MAX_VALUE))
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(totalEarnedDis))
+                .addContainerGap(9, Short.MAX_VALUE))
         );
+
+        sales.add(jPanel10);
+        jPanel10.setBounds(30, 470, 860, 40);
+
+        s_bg_image.setText("jLabel8");
+        sales.add(s_bg_image);
+        s_bg_image.setBounds(0, 0, 940, 650);
 
         jPanel3.add(sales);
         sales.setBounds(162, 0, 940, 652);
@@ -481,7 +621,6 @@ public final class Admin extends javax.swing.JFrame {
         jLabel4.setText("Logs");
         jLabel4.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
 
-        logsTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         logsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -493,19 +632,66 @@ public final class Admin extends javax.swing.JFrame {
 
             }
         ));
+        logsTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         logsTable.setRowHeight(40);
+        logsTable.setShowGrid(false);
+        logsTable.setSurrendersFocusOnKeystroke(true);
         jScrollPane2.setViewportView(logsTable);
 
-        jLabel10.setText("Receipt No.");
+        jLabel10.setText("Employee name:");
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jTextField2.setText("jTextField1");
+        jTextField2.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jTextField2CaretUpdate(evt);
+            }
+        });
 
         jButton2.setText("Search");
         jButton2.setFocusPainted(false);
         jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton2.setMargin(new java.awt.Insets(2, 30, 3, 30));
         jButton2.setOpaque(true);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Summary");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel10)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2))
+                    .addComponent(jButton1))
+                .addContainerGap(8, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout logsLayout = new javax.swing.GroupLayout(logs);
         logs.setLayout(logsLayout);
@@ -513,21 +699,11 @@ public final class Admin extends javax.swing.JFrame {
             logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(logsLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logsLayout.createSequentialGroup()
-                .addGap(277, 277, 277)
-                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logsLayout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logsLayout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addGap(138, 138, 138)))
-                .addGap(270, 270, 270))
+                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 854, Short.MAX_VALUE)
+                    .addComponent(jLabel4)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         logsLayout.setVerticalGroup(
             logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -536,25 +712,22 @@ public final class Admin extends javax.swing.JFrame {
                 .addComponent(jLabel4)
                 .addGap(47, 47, 47)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
-                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         jPanel3.add(logs);
-        logs.setBounds(162, 0, 939, 652);
+        logs.setBounds(161, 0, 940, 652);
 
         employee.setBackground(new java.awt.Color(255, 255, 255));
         employee.setPreferredSize(new java.awt.Dimension(939, 652));
+        employee.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel5.setText("Employees");
         jLabel5.setFont(new java.awt.Font("Bookman Old Style", 1, 36)); // NOI18N
+        employee.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 25, -1, -1));
 
-        empTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         empTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -567,67 +740,40 @@ public final class Admin extends javax.swing.JFrame {
             }
         ));
         empTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
+        empTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         empTable.setRowHeight(40);
+        empTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                empTableMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(empTable);
+
+        employee.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(33, 115, 854, 349));
 
         jLabel14.setText("Receipt No.");
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        employee.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(277, 507, -1, -1));
 
         jTextField5.setText("jTextField1");
+        employee.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(374, 511, 295, -1));
 
         jButton4.setText("Search");
         jButton4.setFocusPainted(false);
         jButton4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton4.setMargin(new java.awt.Insets(2, 30, 3, 30));
         jButton4.setOpaque(true);
-
-        javax.swing.GroupLayout employeeLayout = new javax.swing.GroupLayout(employee);
-        employee.setLayout(employeeLayout);
-        employeeLayout.setHorizontalGroup(
-            employeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(employeeLayout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addGroup(employeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, employeeLayout.createSequentialGroup()
-                .addGap(277, 277, 277)
-                .addGroup(employeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, employeeLayout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, employeeLayout.createSequentialGroup()
-                        .addComponent(jButton4)
-                        .addGap(138, 138, 138)))
-                .addGap(270, 270, 270))
-        );
-        employeeLayout.setVerticalGroup(
-            employeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(employeeLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(jLabel5)
-                .addGap(47, 47, 47)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
-                .addGroup(employeeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel14)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton4)
-                .addContainerGap(80, Short.MAX_VALUE))
-        );
+        employee.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(429, 545, -1, -1));
 
         jPanel3.add(employee);
-        employee.setBounds(162, 0, 939, 652);
+        employee.setBounds(161, 0, 940, 652);
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/AAG Movie Ticketing System Logo .png"))); // NOI18N
         jPanel3.add(jLabel1);
         jLabel1.setBounds(6, 0, 150, 150);
 
-        jLabel2.setFont(new java.awt.Font("Bookman Old Style", 0, 24)); // NOI18N
         jLabel2.setText("Admin");
+        jLabel2.setFont(new java.awt.Font("Bookman Old Style", 0, 24)); // NOI18N
         jPanel3.add(jLabel2);
         jLabel2.setBounds(39, 156, 77, 29);
 
@@ -636,8 +782,8 @@ public final class Admin extends javax.swing.JFrame {
         jPanel1.setOpaque(false);
         jPanel1.setLayout(null);
 
-        logsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         logsB.setText("Logs");
+        logsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         logsB.setMargin(new java.awt.Insets(2, 20, 3, 20));
         logsB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -647,8 +793,8 @@ public final class Admin extends javax.swing.JFrame {
         jPanel1.add(logsB);
         logsB.setBounds(10, 60, 130, 27);
 
-        staffsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staffsB.setText("Staffs");
+        staffsB.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         staffsB.setMargin(new java.awt.Insets(2, 20, 3, 20));
         staffsB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -680,8 +826,8 @@ public final class Admin extends javax.swing.JFrame {
         jPanel1.add(moviesB);
         moviesB.setBounds(10, 210, 130, 27);
 
-        salesB1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         salesB1.setText("Sales");
+        salesB1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         salesB1.setMargin(new java.awt.Insets(2, 20, 3, 20));
         salesB1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -691,8 +837,8 @@ public final class Admin extends javax.swing.JFrame {
         jPanel1.add(salesB1);
         salesB1.setBounds(10, 10, 130, 27);
 
-        addMoviesB1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         addMoviesB1.setText("Add Movies");
+        addMoviesB1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         addMoviesB1.setMargin(new java.awt.Insets(2, 12, 3, 12));
         addMoviesB1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -745,7 +891,6 @@ public final class Admin extends javax.swing.JFrame {
 
         jScrollPane3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
-        MovieTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         MovieTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -755,14 +900,20 @@ public final class Admin extends javax.swing.JFrame {
             }
         ));
         MovieTable.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
+        MovieTable.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         MovieTable.setRowHeight(40);
+        MovieTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MovieTableMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(MovieTable);
 
-        movies.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(45, 132, 847, 365));
+        movies.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 847, 365));
 
-        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel13.setText("Search: ");
-        movies.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 520, 70, -1));
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        movies.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 550, 70, -1));
 
         MovieSearchField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -774,16 +925,7 @@ public final class Admin extends javax.swing.JFrame {
                 MovieSearchFieldKeyReleased(evt);
             }
         });
-        movies.add(MovieSearchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 520, 365, 30));
-
-        Select_Button_Movies.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        Select_Button_Movies.setText("Select");
-        Select_Button_Movies.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Select_Button_MoviesActionPerformed(evt);
-            }
-        });
-        movies.add(Select_Button_Movies, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 560, 120, 40));
+        movies.add(MovieSearchField, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 550, 365, 30));
 
         m_bg_image.setText("jLabel8");
         movies.add(m_bg_image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 650));
@@ -792,6 +934,7 @@ public final class Admin extends javax.swing.JFrame {
         movies.setBounds(160, 0, 940, 652);
 
         addMovies.setBackground(new java.awt.Color(255, 255, 255));
+        addMovies.setPreferredSize(new java.awt.Dimension(939, 652));
         addMovies.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -968,6 +1111,7 @@ public final class Admin extends javax.swing.JFrame {
         addMovies.setBounds(160, 0, 940, 650);
 
         addEmplyee.setBackground(new java.awt.Color(255, 255, 255));
+        addEmplyee.setPreferredSize(new java.awt.Dimension(939, 652));
         addEmplyee.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
@@ -1157,8 +1301,8 @@ public final class Admin extends javax.swing.JFrame {
 
         addEmplyee.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, 0));
 
-        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel15.setText("Search: ");
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         addEmplyee.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, 0));
 
         MovieSearchField1.addActionListener(new java.awt.event.ActionListener() {
@@ -1186,7 +1330,7 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.add(bg_image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 940, 650));
 
         jPanel3.add(addEmplyee);
-        addEmplyee.setBounds(162, 0, 940, 652);
+        addEmplyee.setBounds(161, 0, 940, 652);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -1196,10 +1340,10 @@ public final class Admin extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(1117, 660));
+        setSize(new java.awt.Dimension(1117, 658));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -1208,8 +1352,6 @@ public final class Admin extends javax.swing.JFrame {
         Time cTime = Time.valueOf(lTime);
 
         String empID = "", dateLog = "", logIn = "";
-
-        System.out.println(cTime);
 
         String q1 = """
                     select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
@@ -1221,7 +1363,6 @@ public final class Admin extends javax.swing.JFrame {
             rs = stmt.executeQuery(q1);
 
             while (rs.next()) {
-//                System.out.println(rs.getString(1)+", "+rs.getString(3)+ ", "+rs.getString(4));
                 if (rs.getString("Employee_ID").charAt(0) == 'A') {
                     empID = rs.getString("Employee_ID");
                     dateLog = rs.getString("DateLog");
@@ -1252,7 +1393,6 @@ public final class Admin extends javax.swing.JFrame {
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
-
         createTableEmployee();
     }//GEN-LAST:event_staffsBActionPerformed
 
@@ -1439,11 +1579,7 @@ public final class Admin extends javax.swing.JFrame {
                             new Showtime().movieID = AddMovie_MovieID_TextField.getText();
                             new Showtime().setVisible(true);
 
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ParseException ex) {
+                        } catch (SQLException | ClassNotFoundException | ParseException ex) {
                             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
                         }
 
@@ -1453,9 +1589,10 @@ public final class Admin extends javax.swing.JFrame {
                             String movid = AddMovie_MovieID_TextField.getText();
                             Statement stm = conn.createStatement();
                             System.out.println(movid);
-                            String stdel = "update movie\n"
-                                    + "set Movie_status = 'U'\n"
-                                    + "where movieID = '" + movid + "'";
+                            String stdel = """
+                                           update movie
+                                           set Movie_status = 'U'
+                                           where movieID = '""" + movid + "'";
                             stm.executeUpdate(stdel);
                         } catch (SQLException ex) {
                             Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
@@ -1494,7 +1631,6 @@ public final class Admin extends javax.swing.JFrame {
         boolean res = chooser.showOpenDialog(Admin.this);
         if (res == true) {
             file = chooser.getSelectedFile();
-            String path = file.getAbsolutePath();
             ImageIcon imgIcon = new ImageIcon(file.getAbsolutePath());
             Rectangle rec = MoviePoster.getBounds();
             Image scaledimg = imgIcon.getImage().getScaledInstance(rec.width, rec.height, Image.SCALE_SMOOTH);
@@ -1508,7 +1644,6 @@ public final class Admin extends javax.swing.JFrame {
                 try (InputStream is = new FileInputStream(file); OutputStream os = new FileOutputStream(destfile)) {
 
                     int len;
-                    float srcfsize = is.available() / 1000.0f;
                     float totalcopied = 0.0f;
                     byte[] byt = new byte[1024];
                     while ((len = is.read(byt)) > 0) {
@@ -1519,7 +1654,6 @@ public final class Admin extends javax.swing.JFrame {
                     }
 
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
 
@@ -1648,6 +1782,98 @@ public final class Admin extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_AddStaff_PhoneNumber_TextField1KeyTyped
 
+    private void sYearChooserPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_sYearChooserPropertyChange
+        setFilter();
+    }//GEN-LAST:event_sYearChooserPropertyChange
+
+    private void sDayChooserPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_sDayChooserPropertyChange
+        setFilter();
+    }//GEN-LAST:event_sDayChooserPropertyChange
+
+    private void paymentFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentFilterActionPerformed
+        setFilter();
+    }//GEN-LAST:event_paymentFilterActionPerformed
+
+    private void sMonthChooserPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_sMonthChooserPropertyChange
+        setFilter();
+    }//GEN-LAST:event_sMonthChooserPropertyChange
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTextField1CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField1CaretUpdate
+        searchFilter = "t.TicketID like '%" + jTextField1.getText() + "%'";
+        setFilter();
+    }//GEN-LAST:event_jTextField1CaretUpdate
+
+    private void dayFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayFilterActionPerformed
+        setFilter();
+    }//GEN-LAST:event_dayFilterActionPerformed
+
+    private void paymentFilterPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_paymentFilterPropertyChange
+        setFilter();
+    }//GEN-LAST:event_paymentFilterPropertyChange
+
+    private void dayFilterPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_dayFilterPropertyChange
+        setFilter();
+    }//GEN-LAST:event_dayFilterPropertyChange
+
+    private void salesTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_salesTableMouseClicked
+        if (evt.getClickCount() == 2) {
+            int i = salesTable.getSelectedRow();
+            String ticketID = salesTmodel.getValueAt(i, 0).toString();
+
+//            String query = """
+//                           select EmployeeID, Fname, Lname, email, Phone, pf_loc
+//                           from staff
+//                           where EmployeeID = '""" + ticketID + "'";
+
+        }
+    }//GEN-LAST:event_salesTableMouseClicked
+
+    private void MovieTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MovieTableMouseClicked
+        if (evt.getClickCount() == 2) {
+            try {
+                selectMovie();
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_MovieTableMouseClicked
+
+    private void empTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_empTableMouseClicked
+        if (evt.getClickCount() == 2) {
+            int i = empTable.getSelectedRow();
+            String empID = empTable.getValueAt(i, 0).toString();
+            EmployeeStat empStatus = new EmployeeStat();
+
+            String query = """
+                           select EmployeeID, Fname, Lname, email, Phone, pf_loc
+                           from staff
+                           where EmployeeID = '""" + empID + "'";
+            try {
+                rs = stmt.executeQuery(query);
+                if (rs.next()) {
+                    empStatus.setDatas(rs.getString("EmployeeID"), rs.getString("Fname"), rs.getString("LName"), rs.getString("email"), rs.getString("Phone"), rs.getString("pf_loc"));
+                    empStatus.setVisible(true);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        }
+    }//GEN-LAST:event_empTableMouseClicked
+
+    private void jTextField2CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField2CaretUpdate
+        
+        searchFilter = jTextField2.getText();
+    }//GEN-LAST:event_jTextField2CaretUpdate
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new LogSummary().setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args
      */
@@ -1680,7 +1906,7 @@ public final class Admin extends javax.swing.JFrame {
         String qry = """
                      select * from staff
                      order by len(EmployeeID), EmployeeID""";
-        ResultSet rs = stmt.executeQuery(qry);
+        rs = stmt.executeQuery(qry);
         while (rs.next()) {
             lempid = rs.getString(1);
         }
@@ -1697,10 +1923,10 @@ public final class Admin extends javax.swing.JFrame {
 
     void get_last_movieid() throws SQLException {
         lmovieid = "";
-        Statement stmt = conn.createStatement();
+        stmt = conn.createStatement();
 
         String qry = "select * from movie order by len(MovieID), MovieID";
-        ResultSet rs = stmt.executeQuery(qry);
+        rs = stmt.executeQuery(qry);
         while (rs.next()) {
             lmovieid = rs.getString(1);
         }
@@ -1716,10 +1942,10 @@ public final class Admin extends javax.swing.JFrame {
 
     void get_last_showtimeid() throws SQLException {
         lshowtimeid = "";
-        Statement stmt = conn.createStatement();
+        stmt = conn.createStatement();
 
         String qry = "select * from showtime order by len(showtimeID), showtimeID";
-        ResultSet rs = stmt.executeQuery(qry);
+        rs = stmt.executeQuery(qry);
         while (rs.next()) {
             lshowtimeid = rs.getString(2);
         }
@@ -1738,19 +1964,17 @@ public final class Admin extends javax.swing.JFrame {
 
             stmt = conn.createStatement();
             this.rs = stmt.executeQuery(sql1);
-            this.vec = new ArrayList<>();
+            this.row = new ArrayList<>();
 
             while (rs != null && rs.next()) {
                 if (!rs.getString(3).equals("D")) {
-                    this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title")});
+                    this.row.add(new Object[]{rs.getString("MovieID"), rs.getString("Title")});
                     System.out.println(rs.getString("MovieID"));
                     System.out.println(rs.getString("Title"));
                 }
             }
 
-            for (Object[] row : vec) {
-                tmodel1.addRow(row);
-            }
+            row.forEach(tmodel1::addRow);
 
         } catch (SQLException e) {
             System.out.println(e);
@@ -1808,13 +2032,12 @@ public final class Admin extends javax.swing.JFrame {
 //        System.out.println(movieID);
 
         String query = "select * from movie where MovieID = '" + movieID + "' order by len(MovieID), MovieID";
-        ResultSet rs = stmt.executeQuery(query);
+        rs = stmt.executeQuery(query);
         if (rs.next()) {
             System.out.println(rs.getString("Title"));
             System.out.println(rs.getString("Genre"));
 
             String MovDetsMovID, MovDetsTitle, MovDetsGenre, MovDetsDir, MovDetsDur, MovDetPrice, MovDetsPLoc, MovDetsMStats;
-            MovieDetails mds = new MovieDetails();
 
             MovDetsMovID = rs.getString(1);
             MovDetsTitle = rs.getString(2);
@@ -1872,7 +2095,6 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JTable MovieTable;
     public static javax.swing.JTable MovieTable1;
     private javax.swing.JTextField PosterName;
-    private javax.swing.JButton Select_Button_Movies;
     private javax.swing.JButton Select_Button_Movies1;
     private javax.swing.JPanel addEmplyee;
     private javax.swing.JPanel addMovies;
@@ -1880,7 +2102,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JButton addStaffsB;
     private javax.swing.JLabel bg_image;
     private javax.swing.JLabel bg_image1;
-    private com.github.lgooddatepicker.components.DatePicker datePicker2;
+    private javax.swing.JComboBox<String> dayFilter;
     private javax.swing.JTable empTable;
     private javax.swing.JPanel employee;
     private javax.swing.JButton jButton1;
@@ -1894,6 +2116,7 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1902,12 +2125,16 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -1923,10 +2150,16 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JLabel m_bg_image;
     private javax.swing.JPanel movies;
     private javax.swing.JButton moviesB;
+    private javax.swing.JComboBox<String> paymentFilter;
+    private com.github.lgooddatepicker.components.DatePicker sDayChooser;
+    private com.toedter.calendar.JMonthChooser sMonthChooser;
+    private com.toedter.calendar.JYearChooser sYearChooser;
+    private javax.swing.JLabel s_bg_image;
     private javax.swing.JPanel sales;
     private javax.swing.JButton salesB1;
     private javax.swing.JTable salesTable;
     private javax.swing.JButton staffsB;
+    private javax.swing.JLabel totalEarnedDis;
     // End of variables declaration//GEN-END:variables
 
 }
