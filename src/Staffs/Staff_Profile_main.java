@@ -107,8 +107,8 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
         while (rs.next()) {
             Statement stmpf1 = ms.mc.createStatement();
             
-            if(decrypt(rs.getString(1)).equals(empid)){
-                if(!decrypt(rs.getString(8)).equals("pf_null.png")){
+            if(rs.getString(1).equals(empid)){
+                if(!rs.getString(8).equals("pf_null.png")){
                     try {
                         String dest = System.getProperty("user.dir" );
                         dest = dest + "\\Staff Profile\\";
@@ -116,7 +116,8 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
                         Path p = Paths.get(loc);
                         Files.delete(p);
                     } catch (IOException ex) {
-                        Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Staff_Profile_main.class.getName())
+                                .log(Level.SEVERE, null, ex);
                     }
                 }
                 String pfin = "UPDATE staff set pf_loc = '"+newpf+"' where employeeid = '"+empid+"'";
