@@ -64,9 +64,11 @@ public class LogInProcess implements Logs, Crypting {
 
         while (rs.next()) {
 
-            String checkUser = rs.getString("username");
-            if (checkUser.equals("a1") || checkUser.equals("e1") || checkUser.equals("e2") || checkUser.equals("e3") || checkUser.equals("e4") || checkUser.equals("e5")) {
-
+            String checkUser = rs.getString(3);
+            if (checkUser.equals("A1") || checkUser.equals("E1") || 
+                    checkUser.equals("E2") || checkUser.equals("E3") || 
+                    checkUser.equals("E4") || checkUser.equals("E5")) {
+                
                 if (userN.equals(rs.getString("username")) && userP.equals(rs.getString("passw"))) {
                     if (userN.charAt(0) == 'a') {
                         flag = 1;
@@ -88,6 +90,8 @@ public class LogInProcess implements Logs, Crypting {
                         flag = 2;
                     }
                     employeeID = rs.getString("EmployeeID");
+
+                    System.out.println(employeeID + "If empid != E1-E5");
                     logs(employeeID);
                     break;
                 } else if (userN.equals(decrypt(rs.getString(1)))) {

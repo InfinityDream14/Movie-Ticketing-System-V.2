@@ -4,6 +4,7 @@
  */
 package Staffs;
 
+import admin.Admin;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.io.*;
@@ -11,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,7 +36,7 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
 
         this.setShape(new RoundRectangle2D.Double(0, 0, (850),
                 (480), 25, 25));
-
+        empid = new Temp_Data().empid;
         left_panel_bg();
         right_panel_bg();
         get_details_fromdb();
@@ -129,7 +131,7 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
         this.setVisible(true);
 
     }
-    static String empid = new Temp_Data().empid;
+    static String empid;
     static String fname, lname, phone, email, passw, pf_loc, usern;
 
     void get_details_fromdb() throws SQLException {
@@ -137,19 +139,42 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
         Statement stmt = ms.mc.createStatement();
 
         String qry = "select * from staff";
-
+        
         ResultSet rs = stmt.executeQuery(qry);
-
+        System.out.println("THis is the tempd eid : " + empid);
         while (rs.next()) {
-            if (decrypt(rs.getString(1)).equals(empid)) {
-                fname = decrypt(rs.getString(2));
-                lname = decrypt(rs.getString(3));
-                email = decrypt(rs.getString(4));
-                phone = decrypt(rs.getString(5));
-                usern = decrypt(rs.getString(6));
-                passw = decrypt(rs.getString(7));
-                pf_loc = decrypt(rs.getString(8));
+            
+            String checkUser = rs.getString(1);
+            if (checkUser.equals("A1") || checkUser.equals("E1") || 
+                    checkUser.equals("E2") || checkUser.equals("E3") || 
+                    checkUser.equals("E4") || checkUser.equals("E5")) {
+                
+                if (rs.getString(1).equals(empid)) {
+                    System.out.println("Default EID");
+                    fname = rs.getString(2);
+                    lname = rs.getString(3);
+                    email = rs.getString(4);
+                    phone = rs.getString(5);
+                    usern = rs.getString(6);
+                    passw = rs.getString(7);
+                    pf_loc = rs.getString(8);
+                }
+                
             }
+            else{
+                
+                if (rs.getString(1).equals(empid)) {
+                    System.out.println("Employee ID not default");
+                    fname = rs.getString(2);
+                    lname = rs.getString(3);
+                    email = decrypt(rs.getString(4));
+                    phone = decrypt(rs.getString(5));
+                    usern = decrypt(rs.getString(6));
+                    passw = decrypt(rs.getString(7));
+                    pf_loc = rs.getString(8);
+                }
+            }
+            
         }
         fnamejtx.setText(fname);
         staff_name.setText(fname);
@@ -225,7 +250,7 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
         staff_name.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         staff_name.setText("Staff name");
         staff_name.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 210, -1, -1));
+        jPanel1.add(staff_name, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 210, 200, -1));
 
         jLabel2.setText("Log out");
         jLabel2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -438,24 +463,46 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
     }// </editor-fold>//GEN-END:initComponents
     static String newfname, newlname, newphone, newemail, newusern;
     private void Edit_profActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_profActionPerformed
+        
         try {
             Statement stmt = ms.mc.createStatement();
             String qry = "select * from staff";
             ResultSet rs = stmt.executeQuery(qry);
-
-            newfname = fnamejtx.getText();
-            newlname = lnamejtx.getText();
-            newemail = emailjtx.getText();
-            newphone = phonejtx.getText();
-            newusern = usernjtx.getText();
-            staff_name.setText(fnamejtx.getText());
-
+            System.out.println("This is the employee ID" + empid);
             while (rs.next()) {
+                
+                String checkUser = rs.getString(1);
+                if (checkUser.equals("A1") || checkUser.equals("E1") || 
+                    checkUser.equals("E2") || checkUser.equals("E3") || 
+                    checkUser.equals("E4") || checkUser.equals("E5")) {
+                    
+                    if(rs.getString(1).equals(empid)){
+                        System.out.println("edited on default");
+                        newfname = fnamejtx.getText();
+                        newlname = lnamejtx.getText();
+                        newemail = emailjtx.getText();
+                        newphone = phonejtx.getText();
+                        newusern = usernjtx.getText();
+                        staff_name.setText(fnamejtx.getText());
+                    }
+                }
+                else{
+                    if(rs.getString(1).equals(empid)){
+                        System.out.println("Edited on encryption");
+                        newfname = fnamejtx.getText();
+                        newlname = lnamejtx.getText();
+                        newemail = encrypt(emailjtx.getText());
+                        newphone = encrypt(phonejtx.getText());
+                        newusern = encrypt(usernjtx.getText());
+                        staff_name.setText(fnamejtx.getText()); 
+                    }
+                }
+                
                 Statement stmt1 = ms.mc.createStatement();
-                if (decrypt(rs.getString(1)).equals(empid)) {
+                if (rs.getString(1).equals(this.empid)) {
                     String rsin = "UPDATE staff \n"
-                            + "set Fname = '" + newfname + "', Lname = '" + newlname + "', email = '" + encrypt(newemail) + "',"
-                            + " phone = '" + encrypt(newphone) + "', username = '" + encrypt(newusern) + "' where EmployeeID = '" + empid + "'";
+                            + "set Fname = '" + newfname + "', Lname = '" + newlname + "', email = '" + newemail + "',"
+                            + " phone = '" + newphone + "', username = '" + newusern + "' where EmployeeID = '" + empid + "'";
 
                     int up = stmt1.executeUpdate(rsin);
                     if (up > 0) {
@@ -509,7 +556,7 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
 
             char[] oldPasswordChars = oldPasswordField.getPassword();
             String oldPassword = new String(oldPasswordChars);
-
+            
             if (oldPassword.equals(passw)) {
 
                 panel = new JPanel();
@@ -523,6 +570,8 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
                 result = JOptionPane.showConfirmDialog(null, panel, "Change Password", JOptionPane.OK_CANCEL_OPTION);
 
                 if (result == JOptionPane.OK_OPTION) {
+                    String checkUser  = empid;
+
 
                     char[] newPasswordChars = newPasswordField.getPassword();
                     char[] confirmedPasswordChars = confirmPasswordField.getPassword();
@@ -532,30 +581,57 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
                     if (newPassword.equals(confirmedPassword)) {
 
                         System.out.println("New password: " + newPassword);
-                        JOptionPane.showMessageDialog(null, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Password changed successfully!", 
+                                "Success", JOptionPane.INFORMATION_MESSAGE);
                         passw = newPassword;
+                        if (checkUser.equals("A1") || checkUser.equals("E1") || 
+                        checkUser.equals("E2") || checkUser.equals("E3") || 
+                        checkUser.equals("E4") || checkUser.equals("E5")) {
 
-                        try {
-                            Statement stmt = ms.mc.createStatement();
-                            String updpass = "UPDATE staff\n"
-                                    + "set passw = '" + encrypt(passw) + "'\n"
-                                    + "where employeeid = '" + empid + "'";
+                            try {
+                                Statement stmt = ms.mc.createStatement();
+                                String updpass = "UPDATE staff\n"
+                                        + "set passw = '" + passw+ "'\n"
+                                        + "where employeeid = '" + empid + "'";
 
-                            int up = stmt.executeUpdate(updpass);
+                                int up = stmt.executeUpdate(updpass);
 
-                            if (up > 0) {
-                                System.out.println("Password Updated");
+                                if (up > 0) {
+                                    System.out.println("Password Updated");
+                                }
+                            } catch (SQLException ex) {
+                                Logger.getLogger(Staff_Profile_main.class.getName()).log(
+                                        Level.SEVERE, null, ex);
                             }
-                        } catch (SQLException ex) {
-                            Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        else{
+                            try {
+                                Statement stmt = ms.mc.createStatement();
+                                String updpass = "UPDATE staff\n"
+                                        + "set passw = '" + encrypt(passw)+ "'\n"
+                                        + "where employeeid = '" + empid + "'";
+
+                                int up = stmt.executeUpdate(updpass);
+
+                                if (up > 0) {
+                                    System.out.println("Password Updated");
+                                }
+                            } catch (SQLException ex) {
+                                Logger.getLogger(Staff_Profile_main.class.getName()).log(
+                                        Level.SEVERE, null, ex);
+                            }
                         }
 
                     } else {
-                        JOptionPane.showMessageDialog(null, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, ""
+                                + "Passwords do not match!", "Error", 
+                                JOptionPane.ERROR_MESSAGE);
                     }
+
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Incorrect old password!", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Incorrect old password!", 
+                        "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_change_password_buttonMouseClicked
@@ -565,7 +641,46 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
     }//GEN-LAST:event_lnamejtxActionPerformed
 
     private void pf_log_out(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pf_log_out
-        System.exit(0);
+        LocalTime lTime = LocalTime.now();
+        Time cTime = Time.valueOf(lTime);
+        new Temp_Data().empid ="";
+        String empID = "", dateLog = "", logIn = "";
+        
+        System.out.println(cTime);
+
+        String q1 = """
+                    select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+                    from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    order by l.DateLog, l.Log_In""";
+
+        try {
+            Statement stmt = ms.mc.createStatement();
+            ResultSet rs = stmt.executeQuery(q1);
+            rs = stmt.executeQuery(q1);
+
+            while (rs.next()) {
+//                System.out.println(rs.getString(1)+", "+rs.getString(3)+ ", "+rs.getString(4));
+                if (rs.getString("Employee_ID").charAt(0) == 'E') {
+                    empID = rs.getString("Employee_ID");
+                    dateLog = rs.getString("DateLog");
+                    logIn = rs.getString("Log_In");
+                }
+            }
+
+            String q2 = "UPDATE logs SET Log_Out = '" + cTime + "' where Employee_ID = '" + empID + "' AND DateLog = '" + dateLog + "' AND Log_In = '" + logIn + "';";
+            stmt.executeQuery(q2);
+
+        } catch (SQLException ex) {
+        }
+        try {
+            new LogIn.LogIn().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        main.Main.choose = 0;
+        dispose();
     }//GEN-LAST:event_pf_log_out
 
     /**

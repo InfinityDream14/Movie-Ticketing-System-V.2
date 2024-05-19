@@ -488,7 +488,7 @@ public class Movie_List extends javax.swing.JFrame {
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         LocalTime lTime = LocalTime.now();
         Time cTime = Time.valueOf(lTime);
-
+        new Temp_Data().empid ="";
         String empID = "", dateLog = "", logIn = "";
 
         System.out.println(cTime);
@@ -534,7 +534,20 @@ public class Movie_List extends javax.swing.JFrame {
     }//GEN-LAST:event_exit_staff
 
     private void mlist_prof_iconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mlist_prof_iconMouseClicked
+
+        
         try {
+            String qry = """
+                    select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+                    from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    order by l.DateLog, l.Log_In""";
+        
+            ResultSet rs = stmt.executeQuery(qry);
+
+            while(rs.next()){
+                empid = rs.getString(1);
+                new Temp_Data().empid = empid;
+            }
             Staff_Profile_main spm =new Staff_Profile_main();
             spm.setVisible(true);
             this.dispose();
