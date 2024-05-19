@@ -9,7 +9,6 @@ package main;
  * @author Christian
  */
 public interface Crypting {
-    public void startcryping();
-    public String encryption(String toEncrypt);
-    public String decryption(String toDecrypt);
+    public String encrypt(String value);
+    public String decrypt(String value);
 }

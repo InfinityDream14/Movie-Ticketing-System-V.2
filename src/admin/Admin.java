@@ -16,7 +16,10 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.RoundingMode;
 import java.security.InvalidKeyException;
+import java.security.Key;
 import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -34,12 +37,17 @@ import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.RowFilter;
@@ -47,12 +55,13 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 import jnafilechooser.api.JnaFileChooser;
 import main.Crypting;
+import java.util.Base64;
 
 /**
  *
  * @author Christian
  */
-public final class Admin extends javax.swing.JFrame implements Crypting {
+public final class Admin extends javax.swing.JFrame implements Crypting{
 
     /**
      * Creates new form AdminII
@@ -93,6 +102,9 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
     private SecretKey myDesKey;
     private KeyGenerator keygenerator;
     private Cipher desCipher;
+
+    final String KEY = "1Hbfh667adfDEJ78";
+    final String ALGORITHM = "AES";
 
     public Admin() throws ClassNotFoundException, SQLException {
         connectToDatabase();
@@ -390,9 +402,11 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         logsTable = new javax.swing.JTable();
+        jPanel11 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         employee = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
@@ -652,7 +666,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
         logsTable.setSurrendersFocusOnKeystroke(true);
         jScrollPane2.setViewportView(logsTable);
 
-        jLabel10.setText("Receipt No.");
+        jLabel10.setText("Employee name:");
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
         jTextField2.addCaretListener(new javax.swing.event.CaretListener() {
@@ -672,27 +686,52 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
             }
         });
 
+        jButton1.setText("Summary");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel10)
+                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2))
+                    .addComponent(jButton1))
+                .addContainerGap(8, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout logsLayout = new javax.swing.GroupLayout(logs);
         logs.setLayout(logsLayout);
         logsLayout.setHorizontalGroup(
             logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(logsLayout.createSequentialGroup()
                 .addGap(33, 33, 33)
-                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 854, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logsLayout.createSequentialGroup()
-                .addGap(277, 277, 277)
-                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logsLayout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, logsLayout.createSequentialGroup()
-                        .addComponent(jButton2)
-                        .addGap(138, 138, 138)))
-                .addGap(270, 270, 270))
+                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 854, Short.MAX_VALUE)
+                    .addComponent(jLabel4)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
         logsLayout.setVerticalGroup(
             logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -701,13 +740,9 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
                 .addComponent(jLabel4)
                 .addGap(47, 47, 47)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(43, 43, 43)
-                .addGroup(logsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         jPanel3.add(logs);
@@ -824,8 +859,8 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
         jPanel1.add(moviesB);
         moviesB.setBounds(10, 210, 130, 27);
 
-        salesB1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         salesB1.setText("Sales");
+        salesB1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         salesB1.setMargin(new java.awt.Insets(2, 20, 3, 20));
         salesB1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1383,7 +1418,9 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
         main.Main.choose = 0;
         dispose();
     }//GEN-LAST:event_logOutActionPerformed
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {
 
+    }
     private void staffsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffsBActionPerformed
         sales.setVisible(false);
         logs.setVisible(false);
@@ -1501,9 +1538,25 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
             Genre = AddMovie_Genre_TextField.getText();
             Director = AddMovie_Director_TextField.getText();
             Duration = AddMovie_Duration_TextField.getText();
-            price = Integer.parseInt(AddMovie_Price_TextField.getText());
+            //price = Integer.parseInt(AddMovie_Price_TextField.getText().trim());
             Movie_Pic_Location = PosterName.getText();
             Mpass = "Admin";
+
+            try {
+                String inputprice = AddMovie_Price_TextField.getText();
+
+                if (!inputprice.isEmpty()) {
+                    price = Integer.parseInt(inputprice);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please Fill In Data");
+                    i--;
+                    break;
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input String" + e.getMessage());
+            }
 
             if (AddMovie_MovieID_TextField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please Fill In Data");
@@ -1519,10 +1572,6 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
                 break;
             } else if (AddMovie_Director_TextField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddMovie_Price_TextField.getText().isEmpty() || AddMovie_Price_TextField.getText().matches("[a-zA-Z]+")) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data Correctly");
                 i--;
                 break;
             } else {
@@ -1679,7 +1728,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
     }//GEN-LAST:event_Add_StaffMouseClicked
 
     private void Add_StaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_StaffActionPerformed
-
+        int flag = 0;
         EmpId = AddStaff_EmployeeID_TextField.getText();
         FName = AddStaff_FirstName_TextField.getText();
         LName = AddStaff_LastName_TextField.getText();
@@ -1689,60 +1738,65 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
         UserPass = " ";
         Mpass = "Admin";
 
-        for (int i = 0; i < 3; i++) {
-            if (AddStaff_EmployeeID_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddStaff_FirstName_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddStaff_LastName_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddStaff_PhoneNumber_TextField1.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else {
-                UserPass = JOptionPane.showInputDialog("Enter Admin Password: ");
-                if (UserPass != null && UserPass.matches(Mpass)) {
-                    System.out.println("Data Added: ");
-                    System.out.println(EmpId);
-                    System.out.println(FName);
-                    System.out.println(LName);
-                    System.out.println(AddStaff_Email_TextField.getText());
-                    System.out.println(PNum);
-                    System.out.println(UserPass = pass);
-                    System.out.println(lnum);
+        if (AddStaff_FirstName_TextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your first name");
+            flag = 1;
+        }
+        if (AddStaff_LastName_TextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your last name");
+            flag = 1;
+        }
+        if (AddStaff_Email_TextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your email");
+            flag = 1;
+        } else if (!(AddStaff_Email_TextField.getText().contains("@") && AddStaff_Email_TextField.getText().contains(".com"))) {
+            JOptionPane.showMessageDialog(null, "Please input a valid email address");
+            flag = 1;
+        }
+        if (AddStaff_PhoneNumber_TextField1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your phone number");
+            flag = 1;
+        } else if (AddStaff_PhoneNumber_TextField1.getText().length() < 10 && AddStaff_PhoneNumber_TextField1.getText().length() > 11) {
+            JOptionPane.showMessageDialog(null, "Please fill-in correct length of Philippine phone number");
+            flag = 1;
+        } else if (!(AddStaff_PhoneNumber_TextField1.getText().startsWith("09") || AddStaff_PhoneNumber_TextField1.getText().startsWith("9"))) {
+            JOptionPane.showMessageDialog(null, "Phone Number Must Start with 09 or 9");
+            flag = 1;
+        }
+        if (flag == 0) {
+            UserPass = JOptionPane.showInputDialog("Enter Admin Password: ");
+            if (UserPass != null && UserPass.matches(Mpass)) {
+                System.out.println("Data Added: ");
+                System.out.println(EmpId);
+                System.out.println(FName);
+                System.out.println(LName);
+                System.out.println(AddStaff_Email_TextField.getText());
+                System.out.println(PNum);
+                System.out.println(UserPass = pass);
+                System.out.println(lnum);
 
-                    try {  // INSERTING VALUES FOR ADDSTAFF
-                        Statement stmt1 = conn.createStatement();
-                        stmt1 = conn.createStatement();
-                        String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
-                                + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
-                                + EmpId + "','" + UserPass + "')";
-                        int rows = stmt.executeUpdate(qry);
-                        if (rows > 0) {
-                            System.out.println("Insert Successful");
-                        }
-
-                    } catch (SQLException ex) {
-                        Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                try {  // INSERTING VALUES FOR ADDSTAFF
+                    Statement stmt1 = conn.createStatement();
+                    stmt1 = conn.createStatement();
+                    String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
+                            + "values('" + EmpId + "','" + FName + "','" + LName + "','" + encrypt(Email) + "','" +(encrypt(PNum) + "','"
+                            + encrypt(EmpId) + "','" + encrypt(UserPass) + "')");
+                    int rows = stmt.executeUpdate(qry);
+                    if (rows > 0) {
+                        System.out.println("Insert Successful");
                     }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Adding of Staff Canceled");
-                }
-                ClearFieldStaff();
 
-                break;
+                } catch (SQLException ex) {
+                    Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Adding of Staff Canceled");
             }
+            ClearFieldStaff();
 
         }
-
-
     }//GEN-LAST:event_Add_StaffActionPerformed
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
@@ -1758,7 +1812,9 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
     private void AddStaff_PhoneNumber_TextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_AddStaff_PhoneNumber_TextField1KeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
-        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)) {
+
+        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)
+                || AddStaff_PhoneNumber_TextField1.getText().length() > 10) {
             evt.consume();
         }
     }//GEN-LAST:event_AddStaff_PhoneNumber_TextField1KeyTyped
@@ -1835,10 +1891,16 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
             try {
                 rs = stmt.executeQuery(query);
                 if (rs.next()) {
-                    empStatus.setDatas(rs.getString("EmployeeID"), rs.getString("Fname"), rs.getString("LName"), rs.getString("email"), rs.getString("Phone"), rs.getString("pf_loc"));
+                    if (rs.getString("EmployeeID").equals("E1") || rs.getString("EmployeeID").equals("E2") || rs.getString("EmployeeID").equals("E3") || rs.getString("EmployeeID").equals("E4") || rs.getString("EmployeeID").equals("E5")) {
+                        empStatus.setDatas(rs.getString("EmployeeID"), rs.getString("Fname"), rs.getString("LName"), rs.getString("email"), rs.getString("Phone"), rs.getString("pf_loc"));
+                    } else {
+                        empStatus.setDatas(rs.getString("EmployeeID"), rs.getString("Fname"), rs.getString("LName"), decrypt(rs.getString("email")), decrypt(rs.getString("Phone")), rs.getString("pf_loc"));
+                    }
                     empStatus.setVisible(true);
                 }
             } catch (SQLException ex) {
+                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (Exception ex) {
                 Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -1850,9 +1912,9 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
         searchFilter = jTextField2.getText();
     }//GEN-LAST:event_jTextField2CaretUpdate
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        new LogSummary().setVisible(true);
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args
@@ -1992,7 +2054,6 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
         AddStaff_LastName_TextField.setText(null);
         AddStaff_Email_TextField.setText(null);
         AddStaff_PhoneNumber_TextField1.setText(null);
-        lnum += 1;
     }
 
     public void ClearFieldMovies() {
@@ -2086,6 +2147,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
     private javax.swing.JComboBox<String> dayFilter;
     private javax.swing.JTable empTable;
     private javax.swing.JPanel employee;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -2106,6 +2168,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -2141,49 +2204,24 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
     private javax.swing.JLabel totalEarnedDis;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void startcryping() {
+
+    public String encrypt(String value) {
         try {
-            keygenerator = KeyGenerator.getInstance("DES");
-            myDesKey = keygenerator.generateKey();
+            return Base64.getEncoder().encodeToString(value.getBytes());
 
-            // Creating object of Cipher
-            desCipher = Cipher.getInstance("DES");
-        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
-        }
-    }
-
-    @Override
-    public String encryption(String toEncrypt) {
-        try {
-            byte[] text = toEncrypt.getBytes("UTF8");
-
-            // Encrypting text
-            desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);
-            byte[] textEncrypted = desCipher.doFinal(text);
-
-            // Converting encrypted byte array to string
-            System.out.println(new String(textEncrypted));
-            return new String(textEncrypted);
-        } catch (UnsupportedEncodingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
-            System.err.println("The encryption failed");
+        } catch (Exception e) {
+            System.err.println("Error in Encrypt: " + e);
         }
         return null;
     }
 
-    @Override
-    public String decryption(String toDecrypt) {
+    public String decrypt(String value) {
         try {
-            byte[] text = toDecrypt.getBytes("UTF8");
-            desCipher.init(Cipher.DECRYPT_MODE, myDesKey);
-            byte[] textDecrypted= desCipher.doFinal(text);
+            byte[] decodedBytes = Base64.getDecoder().decode(value);
+            return new String(decodedBytes);
+        } catch (Exception e) {
 
-            // Converting decrypted byte array to string
-            System.out.println(new String(textDecrypted));
-            return new String(textDecrypted);
-        } catch (UnsupportedEncodingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
         }
         return null;
     }
-
 }

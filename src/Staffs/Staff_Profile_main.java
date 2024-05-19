@@ -7,17 +7,21 @@ package Staffs;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
 import jnafilechooser.api.JnaFileChooser;
-
+import main.*;
 /**
  *
  * @author John Paul
  */
-public class Staff_Profile_main extends javax.swing.JFrame {
+public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
 
     /**
      * Creates new form Staffs_Profile
@@ -89,6 +93,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                
             }
         }
         Statement stmpf = ms.mc.createStatement();
@@ -99,11 +104,21 @@ public class Staff_Profile_main extends javax.swing.JFrame {
 
         while (rs.next()) {
             Statement stmpf1 = ms.mc.createStatement();
-
-            if (rs.getString(1).equals(empid)) {
-
-                String pfin = "UPDATE staff set pf_loc = '" + newpf + "' where employeeid = '" + empid + "'";
-
+            
+            if(decrypt(rs.getString(1)).equals(empid)){
+                if(!decrypt(rs.getString(8)).equals("pf_null.png")){
+                    try {
+                        String dest = System.getProperty("user.dir" );
+                        dest = dest + "\\Staff Profile\\";
+                        String loc = dest + decrypt(rs.getString(8));
+                        Path p = Paths.get(loc);
+                        Files.delete(p);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                String pfin = "UPDATE staff set pf_loc = '"+newpf+"' where employeeid = '"+empid+"'";
+                
                 int row = stmpf1.executeUpdate(pfin);
 
                 if (row > 0) {
@@ -126,14 +141,14 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         ResultSet rs = stmt.executeQuery(qry);
 
         while (rs.next()) {
-            if (rs.getString(1).equals(empid)) {
-                fname = rs.getString(2);
-                lname = rs.getString(3);
-                email = rs.getString(4);
-                phone = rs.getString(5);
-                usern = rs.getString(6);
-                passw = rs.getString(7);
-                pf_loc = rs.getString(8);
+            if (decrypt(rs.getString(1)).equals(empid)) {
+                fname = decrypt(rs.getString(2));
+                lname = decrypt(rs.getString(3));
+                email = decrypt(rs.getString(4));
+                phone = decrypt(rs.getString(5));
+                usern = decrypt(rs.getString(6));
+                passw = decrypt(rs.getString(7));
+                pf_loc = decrypt(rs.getString(8));
             }
         }
         fnamejtx.setText(fname);
@@ -437,10 +452,10 @@ public class Staff_Profile_main extends javax.swing.JFrame {
 
             while (rs.next()) {
                 Statement stmt1 = ms.mc.createStatement();
-                if (rs.getString(1).equals(empid)) {
+                if (decrypt(rs.getString(1)).equals(empid)) {
                     String rsin = "UPDATE staff \n"
-                            + "set Fname = '" + newfname + "', Lname = '" + newlname + "', email = '" + newemail + "',"
-                            + " phone = '" + newphone + "', username = '" + newusern + "' where EmployeeID = '" + empid + "'";
+                            + "set Fname = '" + newfname + "', Lname = '" + newlname + "', email = '" + encrypt(newemail) + "',"
+                            + " phone = '" + encrypt(newphone) + "', username = '" + encrypt(newusern) + "' where EmployeeID = '" + empid + "'";
 
                     int up = stmt1.executeUpdate(rsin);
                     if (up > 0) {
@@ -523,7 +538,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                         try {
                             Statement stmt = ms.mc.createStatement();
                             String updpass = "UPDATE staff\n"
-                                    + "set passw = '" + passw + "'\n"
+                                    + "set passw = '" + encrypt(passw) + "'\n"
                                     + "where employeeid = '" + empid + "'";
 
                             int up = stmt.executeUpdate(updpass);
@@ -585,4 +600,26 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     private javax.swing.JLabel userlabel;
     private javax.swing.JTextField usernjtx;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public String encrypt(String value) {
+        try {
+            return Base64.getEncoder().encodeToString(value.getBytes());
+
+        } catch (Exception e) {
+            System.err.println("Error in Encrypt: " + e);
+        }
+        return null;
+    }
+
+    @Override
+    public String decrypt(String value) {
+        try {
+            byte[] decodedBytes = Base64.getDecoder().decode(value);
+            return new String(decodedBytes);
+        } catch (Exception e) {
+
+        }
+        return null;
+    }
 }
