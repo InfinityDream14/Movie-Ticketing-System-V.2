@@ -87,6 +87,7 @@ public class LogInProcess implements Logs, Crypting {
                         flag = 2;
                     }
                     employeeID = rs.getString("EmployeeID");
+
                     System.out.println(employeeID + "If empid != E1-E5");
                     logs(employeeID);
                     break;

@@ -4,6 +4,7 @@
  */
 package Staffs;
 
+import admin.Admin;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.io.*;
@@ -11,6 +12,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.*;
+import java.time.LocalTime;
 import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -639,7 +641,46 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
     }//GEN-LAST:event_lnamejtxActionPerformed
 
     private void pf_log_out(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pf_log_out
-        System.exit(0);
+        LocalTime lTime = LocalTime.now();
+        Time cTime = Time.valueOf(lTime);
+        new Temp_Data().empid ="";
+        String empID = "", dateLog = "", logIn = "";
+        
+        System.out.println(cTime);
+
+        String q1 = """
+                    select l.Employee_ID, s.Fname +', '+ s.Lname as 'Full Name', l.DateLog, l.Log_In, l.Log_Out
+                    from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
+                    order by l.DateLog, l.Log_In""";
+
+        try {
+            Statement stmt = ms.mc.createStatement();
+            ResultSet rs = stmt.executeQuery(q1);
+            rs = stmt.executeQuery(q1);
+
+            while (rs.next()) {
+//                System.out.println(rs.getString(1)+", "+rs.getString(3)+ ", "+rs.getString(4));
+                if (rs.getString("Employee_ID").charAt(0) == 'E') {
+                    empID = rs.getString("Employee_ID");
+                    dateLog = rs.getString("DateLog");
+                    logIn = rs.getString("Log_In");
+                }
+            }
+
+            String q2 = "UPDATE logs SET Log_Out = '" + cTime + "' where Employee_ID = '" + empID + "' AND DateLog = '" + dateLog + "' AND Log_In = '" + logIn + "';";
+            stmt.executeQuery(q2);
+
+        } catch (SQLException ex) {
+        }
+        try {
+            new LogIn.LogIn().setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        main.Main.choose = 0;
+        dispose();
     }//GEN-LAST:event_pf_log_out
 
     /**
