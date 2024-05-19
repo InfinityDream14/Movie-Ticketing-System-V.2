@@ -60,18 +60,16 @@ public class LogInProcess implements Logs, Crypting {
         ResultSet rs = stmt.executeQuery(query);
 
         while (rs.next()) {
-            System.out.println(rs.getString("username") + ", " + rs.getString("passw") + " dsdsafsd");
 
             String checkUser = rs.getString("username");
             if (checkUser.equals("a1") || checkUser.equals("e1") || checkUser.equals("e2") || checkUser.equals("e3") || checkUser.equals("e4") || checkUser.equals("e5")) {
-                
+
                 if (userN.equals(rs.getString("username")) && userP.equals(rs.getString("passw"))) {
                     if (userN.charAt(0) == 'a') {
                         flag = 1;
                     } else {
                         flag = 2;
                     }
-                    System.out.println(rs.getString("EmployeeID"));
                     employeeID = rs.getString("EmployeeID");
                     logs(employeeID);
                     break;
@@ -86,7 +84,8 @@ public class LogInProcess implements Logs, Crypting {
                     } else {
                         flag = 2;
                     }
-                    employeeID = decrypt(rs.getString("EmployeeID"));
+                    employeeID = rs.getString("EmployeeID");
+
                     logs(employeeID);
                     break;
                 } else if (userN.equals(decrypt(rs.getString(1)))) {
@@ -113,7 +112,7 @@ public class LogInProcess implements Logs, Crypting {
     @Override
     public void logs(String employeeID) {
         LocalTime now = LocalTime.now();
-        System.out.println(employeeID+"  dsdsdfsd");
+        System.out.println(employeeID + "  dsdsdfsd");
         String query = "insert into logs (Employee_ID, Log_In) values ('" + employeeID + "', '" + now + "')";
 
         try {
