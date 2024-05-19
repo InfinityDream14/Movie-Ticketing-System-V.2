@@ -81,7 +81,7 @@ public class LogSummary extends javax.swing.JFrame {
         
         try {
 
-            stmt = mc.createStatement();
+            stmt = Main.mc.createStatement();
             ResultSet rs = stmt.executeQuery(lqry);
             
             row = new ArrayList<>();
@@ -103,43 +103,7 @@ public class LogSummary extends javax.swing.JFrame {
         
     }
     
-    void get_logs_data_year(String year){
-        String lqry = "select ls.EMployee_ID, CONCAT(s.fname,' ', s.lname) as Employee_name, ls.TotalLogs\n" +
-                        "from (SELECT Employee_ID, COUNT(*) AS TotalLogs\n" +
-                        "		FROM LOGS \n" +
-                        "		WHERE datelog like '"+year+"%'\n" +
-                        "		GROUP BY Employee_ID) ls left join staff s \n" +
-                        "on  ls.employee_ID = s.employeeid";
-        
-        tmodel1 = new DefaultTableModel();
-        LogTable.setModel(tmodel1);
-        tmodel1.addColumn("Employee ID");
-        tmodel1.addColumn("Employee Name");
-        tmodel1.addColumn("Total Logs");
-        
-        try {
-
-            stmt = mc.createStatement();
-            ResultSet rs = stmt.executeQuery(lqry);
-            
-            row = new ArrayList<>();
-
-            while (rs != null && rs.next()) {
-                    this.row.add(new Object[]{rs.getString(1), rs.getString(2), rs.getString(3)});
-
-            }
-
-            for (Object[] row : row) {
-                tmodel1.addRow(row);
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e);
-
-        }
-        
-        
-    }
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -281,34 +245,34 @@ public class LogSummary extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) throws ClassNotFoundException {
-        try{
-            String hostname = "localhost";
-            String sqlInstanceName = "MTS"; //computer name 
-            String sqlDatabase = "movieticketsystem";  //sql server database name
-            String sqlUser = "sa";
-            String sqlPassword = "Java"; //passwrod sa account
-
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-            //jdbc:sqlserver://localhost:1433;instance=COMPUTERBERRY;databaseName=Database;
-            String connectURL = "jdbc:sqlserver://" + hostname + ":1433" 
-                    + ";instance=" + sqlInstanceName + ";databaseName=" + sqlDatabase
-                    +";encrypt=true;trustServerCertificate=true";
-
-            Connection conn = DriverManager.getConnection(connectURL, sqlUser, sqlPassword);
-            System.out.println("Connect to database successful!!");
-            mc=conn;
-
-       }catch(SQLException e){
-           e.printStackTrace();
-       }
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LogSummary().setVisible(true);
-            }
-        });
-    }
+//    public static void main(String args[]) throws ClassNotFoundException {
+//        try{
+//            String hostname = "localhost";
+//            String sqlInstanceName = "MTS"; //computer name 
+//            String sqlDatabase = "movieticketsystem";  //sql server database name
+//            String sqlUser = "sa";
+//            String sqlPassword = "Java"; //passwrod sa account
+//
+//            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+//
+//            //jdbc:sqlserver://localhost:1433;instance=COMPUTERBERRY;databaseName=Database;
+//            String connectURL = "jdbc:sqlserver://" + hostname + ":1433" 
+//                    + ";instance=" + sqlInstanceName + ";databaseName=" + sqlDatabase
+//                    +";encrypt=true;trustServerCertificate=true";
+//
+//            Connection conn = DriverManager.getConnection(connectURL, sqlUser, sqlPassword);
+//            System.out.println("Connect to database successful!!");
+//            mc=conn;
+//
+//       }catch(SQLException e){
+//           e.printStackTrace();
+//       }
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new LogSummary().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable LogTable;
