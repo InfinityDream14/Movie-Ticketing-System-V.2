@@ -439,7 +439,6 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
         jPanel15 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         MovieSearchField = new javax.swing.JTextField();
-        jButton3 = new javax.swing.JButton();
         m_bg_image = new javax.swing.JLabel();
         addMovies = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
@@ -1001,8 +1000,6 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
             }
         });
 
-        jButton3.setText("Search");
-
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
@@ -1012,9 +1009,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
                 .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(MovieSearchField, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addContainerGap(335, Short.MAX_VALUE))
+                .addContainerGap(413, Short.MAX_VALUE))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1022,8 +1017,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
                 .addContainerGap(12, Short.MAX_VALUE)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(MovieSearchField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3))
+                    .addComponent(MovieSearchField, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(14, Short.MAX_VALUE))
         );
 
@@ -2287,7 +2281,6 @@ public final class Admin extends javax.swing.JFrame implements Crypting {
     private javax.swing.JTable empTable;
     private javax.swing.JPanel employee;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
