@@ -62,7 +62,7 @@ import java.util.Base64;
  *
  * @author Christian
  */
-public final class Admin extends javax.swing.JFrame implements Crypting{
+public final class Admin extends javax.swing.JFrame implements Crypting {
 
     /**
      * Creates new form AdminII
@@ -258,7 +258,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     }
 
     // for creating and reseting employee table
-    public void createTableEmployee() {
+    public void createTableEmployee() throws SQLException {
         employeeTmodel = new DefaultTableModel();
 
         empTable.setModel(employeeTmodel);
@@ -283,10 +283,10 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     }
 
     // for getting the employee datas from database to the jtable
-    public void getEmployeedata() {
-        String sql = "select EmployeeID, CONCAT(Lname, ', ', Fname) AS FullName"
+    public void getEmployeedata() throws SQLException {
+        String sql = "select EmployeeID, CONCAT(Lname, ', ', Fname) AS FullName, employee_status"
                 + " from staff"
-                +" WHERE CONCAT(Lname, ', ', Fname) LIKE '%"+searchEmployee.getText()+"%' "
+                + " WHERE CONCAT(Lname, ', ', Fname) LIKE '%" + searchEmployee.getText() + "%' "
                 + " order by len(EmployeeID), EmployeeID";
 
         try {
@@ -295,7 +295,9 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
             row = new ArrayList<>();
 
             while (this.rs != null && rs.next()) {
-                row.add(new Object[]{rs.getString("EmployeeID"), rs.getString("FullName")});
+                if (rs.getString("employee_status").equals("A")) {
+                    row.add(new Object[]{rs.getString("EmployeeID"), rs.getString("FullName")});
+                }
             }
             row.forEach(employeeTmodel::addRow);
 
@@ -336,11 +338,11 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         Time logInT, logOutT;
         String newLogIn, newLogOut;
 
-        String sql = "SELECT l.Employee_ID, CONCAT(s.Lname, ', ', s.Fname) AS FullName, l.DateLog, l.Log_In, l.Log_Out " +
-                         "FROM LOGS l " +
-                         "LEFT JOIN staff s ON l.Employee_ID = s.EmployeeID " +
-                         "WHERE CONCAT(s.Lname, ', ', s.Fname) LIKE '%"+searchLogs.getText()+"%' " +
-                         "ORDER BY l.DateLog, l.Log_In";
+        String sql = "SELECT l.Employee_ID, CONCAT(s.Lname, ', ', s.Fname) AS FullName, l.DateLog, l.Log_In, l.Log_Out "
+                + "FROM LOGS l "
+                + "LEFT JOIN staff s ON l.Employee_ID = s.EmployeeID "
+                + "WHERE CONCAT(s.Lname, ', ', s.Fname) LIKE '%" + searchLogs.getText() + "%' "
+                + "ORDER BY l.DateLog, l.Log_In";
 
         try {
             this.stmt = conn.createStatement();
@@ -1475,22 +1477,26 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         }
         try {
             new LogIn.LogIn().setVisible(true);
+
         } catch (SQLException ex) {
-            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Admin.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Admin.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         main.Main.choose = 0;
         dispose();
     }//GEN-LAST:event_logOutActionPerformed
     private void staffsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_staffsBActionPerformed
-        salesB1.setBackground(new Color(255,204,102));
-        logsB.setBackground(new Color(255,204,102));
+        salesB1.setBackground(new Color(255, 204, 102));
+        logsB.setBackground(new Color(255, 204, 102));
         staffsB.setBackground(Color.white);
-        addStaffsB.setBackground(new Color(255,204,102));
-        moviesB.setBackground(new Color(255,204,102));
-        addMoviesB1.setBackground(new Color(255,204,102));
-        
+        addStaffsB.setBackground(new Color(255, 204, 102));
+        moviesB.setBackground(new Color(255, 204, 102));
+        addMoviesB1.setBackground(new Color(255, 204, 102));
+
         set_bg_image(jLabel17);
         sales.setVisible(false);
         logs.setVisible(false);
@@ -1498,17 +1504,21 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
-        createTableEmployee();
+        try {
+            createTableEmployee();
+        } catch (SQLException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_staffsBActionPerformed
 
     private void addStaffsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addStaffsBActionPerformed
-        salesB1.setBackground(new Color(255,204,102));
-        logsB.setBackground(new Color(255,204,102));
-        staffsB.setBackground(new Color(255,204,102));
+        salesB1.setBackground(new Color(255, 204, 102));
+        logsB.setBackground(new Color(255, 204, 102));
+        staffsB.setBackground(new Color(255, 204, 102));
         addStaffsB.setBackground(Color.white);
-        moviesB.setBackground(new Color(255,204,102));
-        addMoviesB1.setBackground(new Color(255,204,102));
-        
+        moviesB.setBackground(new Color(255, 204, 102));
+        addMoviesB1.setBackground(new Color(255, 204, 102));
+
         set_bg_image(bg_image);
         sales.setVisible(false);
         logs.setVisible(false);
@@ -1520,13 +1530,13 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     }//GEN-LAST:event_addStaffsBActionPerformed
 
     private void moviesBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moviesBActionPerformed
-        salesB1.setBackground(new Color(255,204,102));
-        logsB.setBackground(new Color(255,204,102));
-        staffsB.setBackground(new Color(255,204,102));
-        addStaffsB.setBackground(new Color(255,204,102));
+        salesB1.setBackground(new Color(255, 204, 102));
+        logsB.setBackground(new Color(255, 204, 102));
+        staffsB.setBackground(new Color(255, 204, 102));
+        addStaffsB.setBackground(new Color(255, 204, 102));
         moviesB.setBackground(Color.white);
-        addMoviesB1.setBackground(new Color(255,204,102));
-        
+        addMoviesB1.setBackground(new Color(255, 204, 102));
+
         set_bg_image(m_bg_image);
         sales.setVisible(false);
         logs.setVisible(false);
@@ -1538,13 +1548,13 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     }//GEN-LAST:event_moviesBActionPerformed
 
     private void logsBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logsBActionPerformed
-        salesB1.setBackground(new Color(255,204,102));
+        salesB1.setBackground(new Color(255, 204, 102));
         logsB.setBackground(Color.white);
-        staffsB.setBackground(new Color(255,204,102));
-        addStaffsB.setBackground(new Color(255,204,102));
-        moviesB.setBackground(new Color(255,204,102));
-        addMoviesB1.setBackground(new Color(255,204,102));
-        
+        staffsB.setBackground(new Color(255, 204, 102));
+        addStaffsB.setBackground(new Color(255, 204, 102));
+        moviesB.setBackground(new Color(255, 204, 102));
+        addMoviesB1.setBackground(new Color(255, 204, 102));
+
         set_bg_image(jLabel8);
         sales.setVisible(false);
         logs.setVisible(true);
@@ -1553,18 +1563,17 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         addEmplyee.setVisible(false);
         movies.setVisible(false);
         addMovies.setVisible(false);
-        
+
     }//GEN-LAST:event_logsBActionPerformed
 
     private void salesB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_salesB1ActionPerformed
         salesB1.setBackground(Color.white);
-        logsB.setBackground(new Color(255,204,102));
-        staffsB.setBackground(new Color(255,204,102));
-        addStaffsB.setBackground(new Color(255,204,102));
-        moviesB.setBackground(new Color(255,204,102));
-        addMoviesB1.setBackground(new Color(255,204,102));
+        logsB.setBackground(new Color(255, 204, 102));
+        staffsB.setBackground(new Color(255, 204, 102));
+        addStaffsB.setBackground(new Color(255, 204, 102));
+        moviesB.setBackground(new Color(255, 204, 102));
+        addMoviesB1.setBackground(new Color(255, 204, 102));
 
-        
         sales.setVisible(true);
         logs.setVisible(false);
         employee.setVisible(false);
@@ -1574,13 +1583,13 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     }//GEN-LAST:event_salesB1ActionPerformed
 
     private void addMoviesB1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addMoviesB1ActionPerformed
-        salesB1.setBackground(new Color(255,204,102));
-        logsB.setBackground(new Color(255,204,102));
-        staffsB.setBackground(new Color(255,204,102));
-        addStaffsB.setBackground(new Color(255,204,102));
-        moviesB.setBackground(new Color(255,204,102));
+        salesB1.setBackground(new Color(255, 204, 102));
+        logsB.setBackground(new Color(255, 204, 102));
+        staffsB.setBackground(new Color(255, 204, 102));
+        addStaffsB.setBackground(new Color(255, 204, 102));
+        moviesB.setBackground(new Color(255, 204, 102));
         addMoviesB1.setBackground(Color.white);
-        
+
         set_bg_image(bg_image1);
         sales.setVisible(false);
         logs.setVisible(false);
@@ -1609,9 +1618,12 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
             selectMovie();
 
         } catch (SQLException ex) {
-            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Admin.class
+                    .getName()).log(Level.SEVERE, null, ex);
+
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Admin.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_Select_Button_MoviesActionPerformed
 
@@ -1714,7 +1726,8 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
 
                         }
                     } catch (SQLException ex) {
-                        Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Admin.class
+                                .getName()).log(Level.SEVERE, null, ex);
                     }
                     showtimeTime = JOptionPane.showConfirmDialog(this, "Add Show Time? ", "Showtime", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                     if (showtimeTime == JOptionPane.YES_OPTION) {
@@ -1723,7 +1736,8 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                             new Showtime().setVisible(true);
 
                         } catch (SQLException | ClassNotFoundException | ParseException ex) {
-                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(Admin.class
+                                    .getName()).log(Level.SEVERE, null, ex);
                         }
 
                     } else if (showtimeTime == JOptionPane.NO_OPTION || showtimeTime == JOptionPane.CLOSED_OPTION) {
@@ -1737,8 +1751,10 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                                            set Movie_status = 'U'
                                            where movieID = '""" + movid + "'";
                             stm.executeUpdate(stdel);
+
                         } catch (SQLException ex) {
-                            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(Admin.class
+                                    .getName()).log(Level.SEVERE, null, ex);
                         }
                     }
 
@@ -1887,17 +1903,21 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                     Statement stmt1 = conn.createStatement();
                     stmt1 = conn.createStatement();
                     String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
-                            + "values('" + EmpId + "','" + FName + "','" + LName + "','" + encrypt(Email) + "','" +(encrypt(PNum) + "','"
+                            + "values('" + EmpId + "','" + FName + "','" + LName + "','" + encrypt(Email) + "','" + (encrypt(PNum) + "','"
                             + encrypt(EmpId) + "','" + encrypt(UserPass) + "')");
                     int rows = stmt.executeUpdate(qry);
                     if (rows > 0) {
                         System.out.println("Insert Successful");
+
                     }
 
                 } catch (SQLException ex) {
-                    Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Admin.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 } catch (Exception ex) {
-                    Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(Admin.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Adding of Staff Canceled");
@@ -1976,8 +1996,10 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         if (evt.getClickCount() == 2) {
             try {
                 selectMovie();
+
             } catch (SQLException | ClassNotFoundException ex) {
-                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Admin.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_MovieTableMouseClicked
@@ -1995,17 +2017,21 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
             try {
                 rs = stmt.executeQuery(query);
                 if (rs.next()) {
-                    if (rs.getString("EmployeeID").equals("E1") || rs.getString("EmployeeID").equals("E2") || rs.getString("EmployeeID").equals("E3") || rs.getString("EmployeeID").equals("E4") || rs.getString("EmployeeID").equals("E5")) {
+                    if (rs.getString("EmployeeID").equals("A1") || rs.getString("EmployeeID").equals("E1") || rs.getString("EmployeeID").equals("E2") || rs.getString("EmployeeID").equals("E3") || rs.getString("EmployeeID").equals("E4") || rs.getString("EmployeeID").equals("E5")) {
                         empStatus.setDatas(rs.getString("EmployeeID"), rs.getString("Fname"), rs.getString("LName"), rs.getString("email"), rs.getString("Phone"), rs.getString("pf_loc"));
                     } else {
                         empStatus.setDatas(rs.getString("EmployeeID"), rs.getString("Fname"), rs.getString("LName"), decrypt(rs.getString("email")), decrypt(rs.getString("Phone")), rs.getString("pf_loc"));
                     }
                     empStatus.setVisible(true);
+
                 }
             } catch (SQLException ex) {
-                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Admin.class
+                        .getName()).log(Level.SEVERE, null, ex);
+
             } catch (Exception ex) {
-                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Admin.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
 
         }
@@ -2020,7 +2046,11 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void searchEmployeeCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_searchEmployeeCaretUpdate
-        createTableEmployee();
+        try {
+            createTableEmployee();
+        } catch (SQLException ex) {
+            Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_searchEmployeeCaretUpdate
 
     /**
@@ -2031,8 +2061,10 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         java.awt.EventQueue.invokeLater(() -> {
             try {
                 new Admin().setVisible(true);
+
             } catch (SQLException | ClassNotFoundException ex) {
-                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Admin.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
         });
     }
@@ -2312,10 +2344,9 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     private javax.swing.JTable salesTable;
     private javax.swing.JTextField searchEmployee;
     private javax.swing.JTextField searchLogs;
-    private javax.swing.JButton staffsB;
+    public static javax.swing.JButton staffsB;
     private javax.swing.JLabel totalEarnedDis;
     // End of variables declaration//GEN-END:variables
-
 
     public String encrypt(String value) {
         try {

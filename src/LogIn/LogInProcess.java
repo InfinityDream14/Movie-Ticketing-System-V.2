@@ -150,6 +150,7 @@ public class LogInProcess implements Logs, Crypting {
         }
         System.out.println("Past Date: "+pastDate);
         System.out.println("Current Date: "+currentDate);
+
     }
     
     // implementation ng encryption
