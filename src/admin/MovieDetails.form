@@ -237,6 +237,9 @@
           </Constraints>
         </Component>
         <Component class="javax.swing.JLabel" name="MovieDetails_PosterPic">
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="MovieDetails_PosterPicMouseClicked"/>
+          </Events>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
           </AuxValues>

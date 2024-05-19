@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package Staffs;
+
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.io.*;
@@ -17,113 +18,115 @@ import jnafilechooser.api.JnaFileChooser;
  * @author John Paul
  */
 public class Staff_Profile_main extends javax.swing.JFrame {
-       
+
     /**
      * Creates new form Staffs_Profile
      */
     Main_Staff ms = new Main_Staff();
-    public Staff_Profile_main() throws SQLException{
+
+    public Staff_Profile_main() throws SQLException {
         initComponents();
-         setLocationRelativeTo(null);
-        
-        this.setShape(new RoundRectangle2D.Double(0, 0, (850), 
-        (480), 25, 25));
-        
+        setLocationRelativeTo(null);
+
+        this.setShape(new RoundRectangle2D.Double(0, 0, (850),
+                (480), 25, 25));
+
         left_panel_bg();
         right_panel_bg();
         get_details_fromdb();
-      
+
     }
-     void left_panel_bg(){
+
+    void left_panel_bg() {
         ImageIcon lpbg = new ImageIcon("lpbg.png");
         Image image = lpbg.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(570, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        Image newimg = image.getScaledInstance(570, 480, java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
         lpbg = new ImageIcon(newimg);
         lp_bg.setIcon(lpbg);
     }
-    void right_panel_bg(){
+
+    void right_panel_bg() {
 
         ImageIcon rpbg = new ImageIcon("rpbg.png");
         Image image = rpbg.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(570, 480,  java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
+        Image newimg = image.getScaledInstance(570, 480, java.awt.Image.SCALE_DEFAULT); // scale it the smooth way  
         rpbg = new ImageIcon(newimg);
         rp_bg.setIcon(rpbg);
-                
+
     }
-    
-    void change_pf_pic() throws FileNotFoundException, SQLException{
-        
+
+    void change_pf_pic() throws FileNotFoundException, SQLException {
+
         JnaFileChooser jfc = new JnaFileChooser();
         jfc.addFilter("All Files", "*");
         jfc.addFilter("Pictures", "jpg", "jpeg", "png", "gif", "bmp");
         //jfc.setCurrentDirectory(new File("D:\\Users\\Backup\\Desktop"));
         boolean response = jfc.showOpenDialog(null);
-        String fildest = System.getProperty("user.dir" );
+        String fildest = System.getProperty("user.dir");
         fildest = fildest + "\\Staff Profile";
         String newpf = "pf_null.png";
-        if(response == true){
+        if (response == true) {
             File file = new File(jfc.getSelectedFile().getAbsolutePath());
             System.out.println(file);
-            newpf = file.toString().substring(file.toString().lastIndexOf("\\")+1);
+            newpf = file.toString().substring(file.toString().lastIndexOf("\\") + 1);
             System.out.println(newpf);
-            if(file.exists()){
+            if (file.exists()) {
                 File destfile = new File(fildest + File.separator + file.getName());
-                
-                try(InputStream is = new FileInputStream(file);
-                        OutputStream os = new FileOutputStream(destfile)){
-                    
+
+                try (InputStream is = new FileInputStream(file); OutputStream os = new FileOutputStream(destfile)) {
+
                     int len;
                     float srcfsize = is.available() / 1000.0f;
                     float totalcopied = 0.0f;
                     byte[] byt = new byte[1024];
-                    while( (len = is.read(byt)) > 0){
+                    while ((len = is.read(byt)) > 0) {
                         os.write(byt, 0, len);
                         totalcopied += len;
                         System.out.println("\rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
                         //Thread.sleep(5);
                     }
-                    
-                    
-                }catch(IOException e){
+
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
         Statement stmpf = ms.mc.createStatement();
-        
+
         String qry = "select * from staff";
-        
+
         ResultSet rs = stmpf.executeQuery(qry);
-        
-        while(rs.next()){
+
+        while (rs.next()) {
             Statement stmpf1 = ms.mc.createStatement();
-            
-            if(rs.getString(1).equals(empid)){
-                
-                String pfin = "UPDATE staff set pf_loc = '"+newpf+"' where employeeid = '"+empid+"'";
-                
+
+            if (rs.getString(1).equals(empid)) {
+
+                String pfin = "UPDATE staff set pf_loc = '" + newpf + "' where employeeid = '" + empid + "'";
+
                 int row = stmpf1.executeUpdate(pfin);
-                
-                if(row>0){
+
+                if (row > 0) {
                     System.out.println("Profile picture changed");
                 }
             }
         }
         this.setVisible(true);
-        
+
     }
     static String empid = new Temp_Data().empid;
-    static String fname,lname,phone,email,passw,pf_loc,usern;
-    void get_details_fromdb() throws SQLException{
-        
+    static String fname, lname, phone, email, passw, pf_loc, usern;
+
+    void get_details_fromdb() throws SQLException {
+
         Statement stmt = ms.mc.createStatement();
-        
+
         String qry = "select * from staff";
-        
+
         ResultSet rs = stmt.executeQuery(qry);
-        
-        while(rs.next()){
-            if(rs.getString(1).equals(empid)){
+
+        while (rs.next()) {
+            if (rs.getString(1).equals(empid)) {
                 fname = rs.getString(2);
                 lname = rs.getString(3);
                 email = rs.getString(4);
@@ -140,16 +143,15 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         phonejtx.setText(phone);
         usernjtx.setText(usern);
         passwordpf.setText(passw);
-        
+
         String fildest = System.getProperty("user.dir");
-        ImageIcon im = new ImageIcon(fildest +"\\Staff Profile\\"+ pf_loc);
+        ImageIcon im = new ImageIcon(fildest + "\\Staff Profile\\" + pf_loc);
         Image image = im.getImage(); // transform it 
-        Image newimg = image.getScaledInstance(90, 90,  java.awt.Image.SCALE_SMOOTH);
-        ImageIcon nim =new ImageIcon(newimg);
+        Image newimg = image.getScaledInstance(90, 90, java.awt.Image.SCALE_SMOOTH);
+        ImageIcon nim = new ImageIcon(newimg);
         icon_prof.setIcon(nim);
-           
+
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -419,53 +421,55 @@ public class Staff_Profile_main extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(850, 480));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-    static String newfname,newlname,newphone,newemail,newusern;
+    static String newfname, newlname, newphone, newemail, newusern;
     private void Edit_profActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Edit_profActionPerformed
         try {
             Statement stmt = ms.mc.createStatement();
             String qry = "select * from staff";
             ResultSet rs = stmt.executeQuery(qry);
-            
+
             newfname = fnamejtx.getText();
             newlname = lnamejtx.getText();
             newemail = emailjtx.getText();
             newphone = phonejtx.getText();
             newusern = usernjtx.getText();
             staff_name.setText(fnamejtx.getText());
-            
-            while(rs.next()){
+
+            while (rs.next()) {
                 Statement stmt1 = ms.mc.createStatement();
-                if(rs.getString(1).equals(empid)){
-            String rsin = "UPDATE staff \n" +
-                    "set Fname = '"+newfname+"', Lname = '"+newlname+"', email = '"+newemail+"',"
-                    + " phone = '"+newphone+"', username = '"+newusern+"' where EmployeeID = '"+empid+"'";
-            
-            int up = stmt1.executeUpdate(rsin);
-            if(up>0){
-                System.out.println("Staff details updated");
-                JOptionPane.showMessageDialog(null, "Success");
-            }
+                if (rs.getString(1).equals(empid)) {
+                    String rsin = "UPDATE staff \n"
+                            + "set Fname = '" + newfname + "', Lname = '" + newlname + "', email = '" + newemail + "',"
+                            + " phone = '" + newphone + "', username = '" + newusern + "' where EmployeeID = '" + empid + "'";
+
+                    int up = stmt1.executeUpdate(rsin);
+                    if (up > 0) {
+                        System.out.println("Staff details updated");
+                        JOptionPane.showMessageDialog(null, "Success");
+                    }
                 }
-        }    
-            
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_Edit_profActionPerformed
 
     private void icon_profMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_icon_profMouseClicked
-        try {      
-            change_pf_pic();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
+        if (evt.getClickCount() == 2) {
+            try {
+                change_pf_pic();
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            this.setVisible(true);
         }
-        this.setVisible(true);
     }//GEN-LAST:event_icon_profMouseClicked
 
     private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
-       try {
+        try {
             new Movie_List().setVisible(true);
         } catch (SQLException ex) {
             Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
@@ -491,8 +495,7 @@ public class Staff_Profile_main extends javax.swing.JFrame {
             char[] oldPasswordChars = oldPasswordField.getPassword();
             String oldPassword = new String(oldPasswordChars);
 
-
-            if (oldPassword.equals(passw)) { 
+            if (oldPassword.equals(passw)) {
 
                 panel = new JPanel();
                 panel.setLayout(new GridLayout(0, 1));
@@ -511,30 +514,27 @@ public class Staff_Profile_main extends javax.swing.JFrame {
                     String newPassword = new String(newPasswordChars);
                     String confirmedPassword = new String(confirmedPasswordChars);
 
-
                     if (newPassword.equals(confirmedPassword)) {
 
                         System.out.println("New password: " + newPassword);
                         JOptionPane.showMessageDialog(null, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
                         passw = newPassword;
-                        
+
                         try {
                             Statement stmt = ms.mc.createStatement();
-                            String updpass = "UPDATE staff\n" +
-                                        "set passw = '"+passw+"'\n" +
-                                        "where employeeid = '"+empid+"'";
-                        
+                            String updpass = "UPDATE staff\n"
+                                    + "set passw = '" + passw + "'\n"
+                                    + "where employeeid = '" + empid + "'";
+
                             int up = stmt.executeUpdate(updpass);
 
-                            if(up>0)
+                            if (up > 0) {
                                 System.out.println("Password Updated");
+                            }
                         } catch (SQLException ex) {
                             Logger.getLogger(Staff_Profile_main.class.getName()).log(Level.SEVERE, null, ex);
                         }
-                        
-                        
-                        
-                        
+
                     } else {
                         JOptionPane.showMessageDialog(null, "Passwords do not match!", "Error", JOptionPane.ERROR_MESSAGE);
                     }
@@ -552,11 +552,11 @@ public class Staff_Profile_main extends javax.swing.JFrame {
     private void pf_log_out(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_pf_log_out
         System.exit(0);
     }//GEN-LAST:event_pf_log_out
-      
+
     /**
      * @param args the command line arguments
      */
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Edit_prof;
     private javax.swing.JLabel change_password_button;

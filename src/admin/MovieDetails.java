@@ -3,6 +3,12 @@ package admin;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.sql.*;
 import java.text.ParseException;
 import java.util.logging.Level;
@@ -10,6 +16,7 @@ import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import jnafilechooser.api.JnaFileChooser;
 import main.Main;
 
 public class MovieDetails extends javax.swing.JFrame {
@@ -17,10 +24,8 @@ public class MovieDetails extends javax.swing.JFrame {
     static Connection connMD = Main.mc;
     Statement stmtMD;
     DefaultTableModel tmodel1 = new DefaultTableModel();
-    
-    
 
-    public MovieDetails(){
+    public MovieDetails() {
         initComponents();
 
     }
@@ -29,10 +34,7 @@ public class MovieDetails extends javax.swing.JFrame {
             String Price, String PicLoc, String Mov_Status) throws SQLException, ClassNotFoundException {
         initComponents();
         getMovieDets_fromDB();
-        
-       
-        
-        
+
         MovieDetails_MovieIDTx.setText(MovieID);
         MovieDetails_TitleTx.setText(Title);
         MovieDetails_GenreTx.setText(Genre);
@@ -40,13 +42,12 @@ public class MovieDetails extends javax.swing.JFrame {
         MovieDetails_DurationTx.setText(Duration);
         MovieDetails_PriceTx.setText(Price);
         NewMDMStat = Mov_Status;
-        if(NewMDMStat.equals("A")){
+        if (NewMDMStat.equals("A")) {
             Available.setSelected(true);
+        } else {
+            Unavailable.setSelected(true);
         }
-        else{
-           Unavailable.setSelected(true);
-        }
-        
+
         String fildest = System.getProperty("user.dir");
         fildest = fildest + "\\Movie Posters\\";
         ImageIcon imgIcon = new ImageIcon(fildest + PicLoc);
@@ -54,12 +55,10 @@ public class MovieDetails extends javax.swing.JFrame {
         Image scaledimg = imgIcon.getImage().getScaledInstance(rec.width, rec.height, Image.SCALE_SMOOTH);
         imgIcon = new ImageIcon(scaledimg);
         MovieDetails_PosterPic.setIcon(imgIcon);
-        
-        
 
     }
 
-    static String MDTitle, MDGenre, MDDirector, MDDuration, MDPrice, MD_PicLoc ,MDMstat;
+    static String MDTitle, MDGenre, MDDirector, MDDuration, MDPrice, MD_PicLoc, MDMstat;
 
     void getMovieDets_fromDB() throws SQLException {
 
@@ -75,7 +74,7 @@ public class MovieDetails extends javax.swing.JFrame {
                 MDDuration = rs.getString(5);
                 MDPrice = rs.getString(6);
                 MDMstat = rs.getString(8);
-                
+
             }
         }
         MovieDetails_TitleTx.setText(MDTitle);
@@ -84,7 +83,7 @@ public class MovieDetails extends javax.swing.JFrame {
         MovieDetails_DurationTx.setText(MDDuration);
         MovieDetails_PriceTx.setText(MDPrice);
         System.out.println(MDMstat);
-       
+
     }
 
     @SuppressWarnings("unchecked")
@@ -180,6 +179,12 @@ public class MovieDetails extends javax.swing.JFrame {
             }
         });
         jPanel1.add(Save_Details, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 300, 158, 36));
+
+        MovieDetails_PosterPic.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MovieDetails_PosterPicMouseClicked(evt);
+            }
+        });
         jPanel1.add(MovieDetails_PosterPic, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 50, 160, 220));
 
         ShowTimeListBtn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -255,29 +260,27 @@ public class MovieDetails extends javax.swing.JFrame {
             NewMDDirector = MovieDetails_DirectorTx.getText();
             NewMDDuration = MovieDetails_DurationTx.getText();
             NewMDPrice = MovieDetails_PriceTx.getText();
-            if(Available.isSelected()){
-             NewMDMStat = "A";
-            }
-            else if(Unavailable.isSelected()){
-             NewMDMStat = "U";
+            if (Available.isSelected()) {
+                NewMDMStat = "A";
+            } else if (Unavailable.isSelected()) {
+                NewMDMStat = "U";
             }
             while (rs.next()) {
                 Statement stmt1 = connMD.createStatement();
                 if (rs.getString(1).equals(MovieDetails_MovieIDTx.getText())) {
                     String rsin = "UPDATE Movie \n"
                             + "set Title = '" + NewMDTitle + "', Genre = '" + NewMDGenre + "', Director = '" + NewMDDirector + "',"
-                            + " Duration = '" + NewMDDuration + "', Price = " + NewMDPrice + ", Movie_Status = '"+NewMDMStat+"'"
+                            + " Duration = '" + NewMDDuration + "', Price = " + NewMDPrice + ", Movie_Status = '" + NewMDMStat + "'"
                             + "where MovieID = '" + MovieDetails_MovieIDTx.getText() + "'";
-                    
+
                     System.out.println(NewMDMStat);
 
                     int up = stmt1.executeUpdate(rsin);
-                    if (up > 0 ) {
+                    if (up > 0) {
                         System.out.println("Movie details updated");
                         JOptionPane.showMessageDialog(null, "Success");
-                    }
-                    else{
-                     removemoviefromtable();
+                    } else {
+                        removemoviefromtable();
                     }
                 }
             }
@@ -288,14 +291,14 @@ public class MovieDetails extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_Save_DetailsActionPerformed
-    
+
     private void ShowTimeListBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowTimeListBtnActionPerformed
-       
+
         System.out.println("Hello");
         try {
             new ShowtimeList().mid = MovieDetails_MovieIDTx.getText();
             new ShowtimeList().setVisible(true);
-           
+
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(MovieDetails.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -324,14 +327,81 @@ public class MovieDetails extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
-   
-    public void removemoviefromtable() throws SQLException, ClassNotFoundException{
+    private void MovieDetails_PosterPicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MovieDetails_PosterPicMouseClicked
+        String newpf = null;
+        
+        if (evt.getClickCount() == 2) {
+            JnaFileChooser jfc = new JnaFileChooser();
+            jfc.addFilter("All Files", "*");
+            jfc.addFilter("Pictures", "jpg", "jpeg", "png", "gif", "bmp");
+            //jfc.setCurrentDirectory(new File("D:\\Users\\Backup\\Desktop"));
+            boolean response = jfc.showOpenDialog(null);
+            String fildest = System.getProperty("user.dir");
+            fildest = fildest + "\\Movie Posters";
+            newpf = "pf_null.png";
+            if (response == true) {
+                File file = new File(jfc.getSelectedFile().getAbsolutePath());
+                System.out.println(file);
+                newpf = file.toString().substring(file.toString().lastIndexOf("\\") + 1);
+                System.out.println(newpf);
+                if (file.exists()) {
+                    File destfile = new File(fildest + File.separator + file.getName());
+
+                    try (InputStream is = new FileInputStream(file); OutputStream os = new FileOutputStream(destfile)) {
+
+                        int len;
+                        float srcfsize = is.available() / 1000.0f;
+                        float totalcopied = 0.0f;
+                        byte[] byt = new byte[1024];
+                        while ((len = is.read(byt)) > 0) {
+                            os.write(byt, 0, len);
+                            totalcopied += len;
+                            System.out.println("\rcopied" + totalcopied / 1000.0f + "kb/" + file + "kb");
+                            //Thread.sleep(5);
+                        }
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+
+        String qry = "select * from movie";
+        Statement stmpf;
+        ResultSet rs;
+        try {
+            
+            stmpf = Main.mc.createStatement();
+            rs = stmpf.executeQuery(qry);
+            
+            while (rs.next()) {
+                Statement stmpf1 = Main.mc.createStatement();
+
+                if (rs.getString(1).equals(MovieDetails_MovieIDTx.getText())) {
+
+                    String pfin = "UPDATE movie set Movie_pic_loc = '" + newpf + "' where MovieID = '" + MovieDetails_MovieIDTx.getText() + "'";
+
+                    int row = stmpf1.executeUpdate(pfin);
+
+                    if (row > 0) {
+                        System.out.println("Profile picture changed");
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(MovieDetails.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_MovieDetails_PosterPicMouseClicked
+
+    public void removemoviefromtable() throws SQLException, ClassNotFoundException {
         Statement stm = connMD.createStatement();
         String Movid = MovieDetails_MovieIDTx.getText();
         System.out.println(Movid);
         String stdel = "update movie\n"
-                    + "set Movie_status = 'D'\n"
-                    + "where movieID = '" + Movid + "'";
+                + "set Movie_status = 'D'\n"
+                + "where movieID = '" + Movid + "'";
         stm.executeUpdate(stdel);
     }
 

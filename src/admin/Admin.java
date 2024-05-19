@@ -13,7 +13,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.RoundingMode;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -31,18 +34,25 @@ import javax.swing.table.DefaultTableModel;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableRowSorter;
 import jnafilechooser.api.JnaFileChooser;
+import main.Crypting;
 
 /**
  *
  * @author Christian
  */
-public final class Admin extends javax.swing.JFrame {
+public final class Admin extends javax.swing.JFrame implements Crypting {
 
     /**
      * Creates new form AdminII
@@ -80,6 +90,9 @@ public final class Admin extends javax.swing.JFrame {
     private String paymentFiltered;
     private DefaultTableModel employeeTmodel;
     private DefaultTableModel logsTmodel;
+    private SecretKey myDesKey;
+    private KeyGenerator keygenerator;
+    private Cipher desCipher;
 
     public Admin() throws ClassNotFoundException, SQLException {
         connectToDatabase();
@@ -95,6 +108,7 @@ public final class Admin extends javax.swing.JFrame {
         salesTable.setDefaultEditor(Object.class, null);
         MovieTable.setDefaultEditor(Object.class, null);
         empTable.setDefaultEditor(Object.class, null);
+        logsTable.setDefaultEditor(Object.class, null);
 
         dec.setRoundingMode(RoundingMode.CEILING);
         set_bg_image(s_bg_image);
@@ -139,10 +153,10 @@ public final class Admin extends javax.swing.JFrame {
 
         cellSelectionModel.addListSelectionListener((ListSelectionEvent e) -> {
             String selectedData = null;
-            
+
             int[] selectedRow = salesTable.getSelectedRows();
             int[] selectedColumn = salesTable.getSelectedColumns();
-            
+
             for (int i = 0; i < selectedRow.length; i++) {
                 for (int j = 0; j < selectedColumn.length; j++) {
                     selectedData = (String) salesTable.getValueAt(selectedRow[i], selectedColumn[j]);
@@ -177,7 +191,9 @@ public final class Admin extends javax.swing.JFrame {
 
                 this.row.add(new Object[]{rs.getString("TicketID"), "Php " + amount, payemntMethod, dateSell, newTimeSell});
             }
+
             row.forEach(salesTmodel::addRow);
+
             totalEarnedDis.setText("Php " + totalEarned);
         } catch (SQLException e) {
             System.out.println(e);
@@ -740,6 +756,11 @@ public final class Admin extends javax.swing.JFrame {
         jButton4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jButton4.setMargin(new java.awt.Insets(2, 30, 3, 30));
         jButton4.setOpaque(true);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
         employee.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(429, 545, -1, -1));
 
         jPanel3.add(employee);
@@ -1278,8 +1299,8 @@ public final class Admin extends javax.swing.JFrame {
 
         addEmplyee.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, 0));
 
-        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel15.setText("Search: ");
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         addEmplyee.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, 0));
 
         MovieSearchField1.addActionListener(new java.awt.event.ActionListener() {
@@ -1788,7 +1809,6 @@ public final class Admin extends javax.swing.JFrame {
 //                           select EmployeeID, Fname, Lname, email, Phone, pf_loc
 //                           from staff
 //                           where EmployeeID = '""" + ticketID + "'";
-
         }
     }//GEN-LAST:event_salesTableMouseClicked
 
@@ -1826,9 +1846,13 @@ public final class Admin extends javax.swing.JFrame {
     }//GEN-LAST:event_empTableMouseClicked
 
     private void jTextField2CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField2CaretUpdate
-        
+
         searchFilter = jTextField2.getText();
     }//GEN-LAST:event_jTextField2CaretUpdate
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args
@@ -2116,5 +2140,50 @@ public final class Admin extends javax.swing.JFrame {
     private javax.swing.JButton staffsB;
     private javax.swing.JLabel totalEarnedDis;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void startcryping() {
+        try {
+            keygenerator = KeyGenerator.getInstance("DES");
+            myDesKey = keygenerator.generateKey();
+
+            // Creating object of Cipher
+            desCipher = Cipher.getInstance("DES");
+        } catch (NoSuchAlgorithmException | NoSuchPaddingException e) {
+        }
+    }
+
+    @Override
+    public String encryption(String toEncrypt) {
+        try {
+            byte[] text = toEncrypt.getBytes("UTF8");
+
+            // Encrypting text
+            desCipher.init(Cipher.ENCRYPT_MODE, myDesKey);
+            byte[] textEncrypted = desCipher.doFinal(text);
+
+            // Converting encrypted byte array to string
+            System.out.println(new String(textEncrypted));
+            return new String(textEncrypted);
+        } catch (UnsupportedEncodingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+            System.err.println("The encryption failed");
+        }
+        return null;
+    }
+
+    @Override
+    public String decryption(String toDecrypt) {
+        try {
+            byte[] text = toDecrypt.getBytes("UTF8");
+            desCipher.init(Cipher.DECRYPT_MODE, myDesKey);
+            byte[] textDecrypted= desCipher.doFinal(text);
+
+            // Converting decrypted byte array to string
+            System.out.println(new String(textDecrypted));
+            return new String(textDecrypted);
+        } catch (UnsupportedEncodingException | InvalidKeyException | BadPaddingException | IllegalBlockSizeException e) {
+        }
+        return null;
+    }
 
 }

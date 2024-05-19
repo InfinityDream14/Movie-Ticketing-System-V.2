@@ -31,8 +31,8 @@ public class LogInProcess implements Logs {
         
         ResultSet rs = stmt.executeQuery(sql);
         while(rs.next()){
-            empID = rs.getString(1);
-            logOut = rs.getString(5);
+            empID = rs.getString("Employee_ID");
+            logOut = rs.getString("Log_Out");
         }
         if(logOut == null){
             System.out.println(empID);
@@ -61,15 +61,15 @@ public class LogInProcess implements Logs {
         ResultSet rs = stmt.executeQuery(query);
 
         while (rs.next()) {
-            System.out.println(rs.getString(1).charAt(0));
-            if (userN.equals(rs.getString(1)) && userP.equals(rs.getString(2))) {
+            System.out.println(rs.getString("username").charAt(0));
+            if (userN.equals(rs.getString("username")) && userP.equals(rs.getString("passw"))) {
                 if (userN.charAt(0) == 'a') {
                     flag = 1;
                 } else {
                     flag = 2;
                 }
-                System.out.println(rs.getString(3));
-                employeeID = rs.getString(3);
+                System.out.println(rs.getString("EmployeeID"));
+                employeeID = rs.getString("EmployeeID");
                 logs(employeeID);
                 break;
             } else if (userN.equals(rs.getString(1))) {
