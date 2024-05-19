@@ -1278,8 +1278,8 @@ public final class Admin extends javax.swing.JFrame {
 
         addEmplyee.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, 0));
 
-        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel15.setText("Search: ");
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         addEmplyee.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 0, 0));
 
         MovieSearchField1.addActionListener(new java.awt.event.ActionListener() {
