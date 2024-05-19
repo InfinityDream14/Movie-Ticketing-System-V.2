@@ -73,11 +73,10 @@ public final class Admin extends javax.swing.JFrame {
 
     File file = null;
 
-    public Admin() throws ClassNotFoundException, SQLException{
+    public Admin() throws ClassNotFoundException, SQLException {
         connectToDatabase();
         initComponents();
-        
-        
+
         sales.setVisible(true);
         employee.setVisible(false);
         addEmplyee.setVisible(false);
@@ -280,12 +279,13 @@ public final class Admin extends javax.swing.JFrame {
         }
 
     }
-    
-    void set_bg_image(JLabel jl){
+
+    void set_bg_image(JLabel jl) {
         ImageIcon im = new ImageIcon("panel_bg.png");
         jl.setIcon(im);
         jl.setText("");
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -1363,9 +1363,25 @@ public final class Admin extends javax.swing.JFrame {
             Genre = AddMovie_Genre_TextField.getText();
             Director = AddMovie_Director_TextField.getText();
             Duration = AddMovie_Duration_TextField.getText();
-            price = Integer.parseInt(AddMovie_Price_TextField.getText());
+            //price = Integer.parseInt(AddMovie_Price_TextField.getText().trim());
             Movie_Pic_Location = PosterName.getText();
             Mpass = "Admin";
+
+            try {
+                String inputprice = AddMovie_Price_TextField.getText();
+
+                if (!inputprice.isEmpty()) {
+                    price = Integer.parseInt(inputprice);
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Please Fill In Data");
+                    i--;
+                    break;
+                }
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input String" + e.getMessage());
+            }
 
             if (AddMovie_MovieID_TextField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please Fill In Data");
@@ -1381,10 +1397,6 @@ public final class Admin extends javax.swing.JFrame {
                 break;
             } else if (AddMovie_Director_TextField.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddMovie_Price_TextField.getText().isEmpty() || AddMovie_Price_TextField.getText().matches("[a-zA-Z]+")) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data Correctly");
                 i--;
                 break;
             } else {
@@ -1462,7 +1474,7 @@ public final class Admin extends javax.swing.JFrame {
 
     private void AddMovie_Back_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddMovie_Back_ButtonActionPerformed
         // TODO add your handling code here:
-           sales.setVisible(true);
+        sales.setVisible(true);
         logs.setVisible(false);
         employee.setVisible(false);
         addEmplyee.setVisible(false);
@@ -1543,12 +1555,11 @@ public final class Admin extends javax.swing.JFrame {
     private void Add_StaffMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Add_StaffMouseClicked
 
         //String EmpId, FName, LName, Email ,PNum;
-        
+
     }//GEN-LAST:event_Add_StaffMouseClicked
 
     private void Add_StaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Add_StaffActionPerformed
-        
-        
+        int flag = 0;
         EmpId = AddStaff_EmployeeID_TextField.getText();
         FName = AddStaff_FirstName_TextField.getText();
         LName = AddStaff_LastName_TextField.getText();
@@ -1558,76 +1569,81 @@ public final class Admin extends javax.swing.JFrame {
         UserPass = " ";
         Mpass = "Admin";
 
-        for (int i = 0; i < 3; i++) {
-            if (AddStaff_EmployeeID_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddStaff_FirstName_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddStaff_LastName_TextField.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else if (AddStaff_PhoneNumber_TextField1.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(null, "Please Fill In Data");
-                i--;
-                break;
-            } else {
-        UserPass = JOptionPane.showInputDialog("Enter Admin Password: ");
-        if (UserPass != null && UserPass.matches(Mpass)) {
-            System.out.println("Data Added: ");
-            System.out.println(EmpId);
-            System.out.println(FName);
-            System.out.println(LName);
-            System.out.println(AddStaff_Email_TextField.getText());
-            System.out.println(PNum);
-            System.out.println(UserPass = pass);
-            System.out.println(lnum);
+        if (AddStaff_FirstName_TextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your first name");
+            flag = 1;
+        }
+        if (AddStaff_LastName_TextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your last name");
+            flag = 1;
+        }
+        if (AddStaff_Email_TextField.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your email");
+            flag = 1;
+        } else if (!(AddStaff_Email_TextField.getText().contains("@") && AddStaff_Email_TextField.getText().contains(".com"))) {
+            JOptionPane.showMessageDialog(null, "Please input a valid email address");
+            flag = 1;
+        }
+        if (AddStaff_PhoneNumber_TextField1.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please input your phone number");
+            flag = 1;
+        } else if (AddStaff_PhoneNumber_TextField1.getText().length() < 10 && AddStaff_PhoneNumber_TextField1.getText().length() > 11) {
+            JOptionPane.showMessageDialog(null, "Please fill-in correct length of Philippine phone number");
+            flag = 1;
+        } else if (!(AddStaff_PhoneNumber_TextField1.getText().startsWith("09") || AddStaff_PhoneNumber_TextField1.getText().startsWith("9"))) {
+            JOptionPane.showMessageDialog(null, "Phone Number Must Start with 09 or 9");
+            flag = 1;
+        }
+        if (flag == 0) {
+            UserPass = JOptionPane.showInputDialog("Enter Admin Password: ");
+            if (UserPass != null && UserPass.matches(Mpass)) {
+                System.out.println("Data Added: ");
+                System.out.println(EmpId);
+                System.out.println(FName);
+                System.out.println(LName);
+                System.out.println(AddStaff_Email_TextField.getText());
+                System.out.println(PNum);
+                System.out.println(UserPass = pass);
+                System.out.println(lnum);
 
-            try {  // INSERTING VALUES FOR ADDSTAFF
-                Statement stmt1 = conn.createStatement();
-                stmt1 = conn.createStatement();
-                String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
-                        + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
-                        + EmpId + "','" + UserPass + "')";
-                int rows = stmt.executeUpdate(qry);
-                if (rows > 0) {
-                    System.out.println("Insert Successful");
+                try {  // INSERTING VALUES FOR ADDSTAFF
+                    Statement stmt1 = conn.createStatement();
+                    stmt1 = conn.createStatement();
+                    String qry = "insert into Staff (EmployeeID,fname, lname, email, phone,username,passw)"
+                            + "values('" + EmpId + "','" + FName + "','" + LName + "','" + Email + "','" + PNum + "','"
+                            + EmpId + "','" + UserPass + "')";
+                    int rows = stmt.executeUpdate(qry);
+                    if (rows > 0) {
+                        System.out.println("Insert Successful");
+                    }
+
+                } catch (SQLException ex) {
+                    Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-            } catch (SQLException ex) {
-                Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
+            } else {
+                JOptionPane.showMessageDialog(null, "Adding of Staff Canceled");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Adding of Staff Canceled");
-        }
-                 ClearFieldStaff();
-                 
-                 break;
-            }
+            ClearFieldStaff();
 
         }
-        
-        
     }//GEN-LAST:event_Add_StaffActionPerformed
 
     private void BackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BackActionPerformed
         // TODO add your handling code here:
-           sales.setVisible(true);
-           logs.setVisible(false);
-           employee.setVisible(false);
-           addEmplyee.setVisible(false);
-           movies.setVisible(false);
-           addMovies.setVisible(false);
+        sales.setVisible(true);
+        logs.setVisible(false);
+        employee.setVisible(false);
+        addEmplyee.setVisible(false);
+        movies.setVisible(false);
+        addMovies.setVisible(false);
     }//GEN-LAST:event_BackActionPerformed
 
     private void AddStaff_PhoneNumber_TextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_AddStaff_PhoneNumber_TextField1KeyTyped
         // TODO add your handling code here:
         char c = evt.getKeyChar();
-        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)) {
+
+        if (!Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)
+                || AddStaff_PhoneNumber_TextField1.getText().length() > 10) {
             evt.consume();
         }
     }//GEN-LAST:event_AddStaff_PhoneNumber_TextField1KeyTyped
@@ -1640,7 +1656,7 @@ public final class Admin extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             try {
                 new Admin().setVisible(true);
-            } catch (SQLException | ClassNotFoundException  ex) {
+            } catch (SQLException | ClassNotFoundException ex) {
                 Logger.getLogger(Admin.class.getName()).log(Level.SEVERE, null, ex);
             }
         });
@@ -1725,7 +1741,7 @@ public final class Admin extends javax.swing.JFrame {
             this.vec = new ArrayList<>();
 
             while (rs != null && rs.next()) {
-                if(!rs.getString(3).equals("D")){
+                if (!rs.getString(3).equals("D")) {
                     this.vec.add(new Object[]{rs.getString("MovieID"), rs.getString("Title")});
                     System.out.println(rs.getString("MovieID"));
                     System.out.println(rs.getString("Title"));
@@ -1772,7 +1788,6 @@ public final class Admin extends javax.swing.JFrame {
         AddStaff_LastName_TextField.setText(null);
         AddStaff_Email_TextField.setText(null);
         AddStaff_PhoneNumber_TextField1.setText(null);
-        lnum += 1;
     }
 
     public void ClearFieldMovies() {
@@ -1810,8 +1825,8 @@ public final class Admin extends javax.swing.JFrame {
             MovDetsPLoc = rs.getString(7);
             MovDetsMStats = rs.getString(8);
 
-            MovieDetails movieDetails = new MovieDetails(MovDetsMovID, MovDetsTitle, 
-                    MovDetsGenre, MovDetsDir, MovDetsDur, 
+            MovieDetails movieDetails = new MovieDetails(MovDetsMovID, MovDetsTitle,
+                    MovDetsGenre, MovDetsDir, MovDetsDur,
                     MovDetPrice, MovDetsPLoc, MovDetsMStats);
             movieDetails.setVisible(true);
 
