@@ -112,7 +112,7 @@ public class Staff_Profile_main extends javax.swing.JFrame implements Crypting {
                     try {
                         String dest = System.getProperty("user.dir" );
                         dest = dest + "\\Staff Profile\\";
-                        String loc = dest + decrypt(rs.getString(8));
+                        String loc = dest + rs.getString(8);
                         Path p = Paths.get(loc);
                         Files.delete(p);
                     } catch (IOException ex) {
