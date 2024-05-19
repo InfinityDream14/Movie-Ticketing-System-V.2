@@ -284,10 +284,10 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
 
     // for getting the employee datas from database to the jtable
     public void getEmployeedata() {
-        String sql = """
-                     select EmployeeID, Fname + ' ' + Lname as 'FullName'
-                     from staff
-                     order by len(EmployeeID), EmployeeID""";
+        String sql = "select EmployeeID, CONCAT(Lname, ', ', Fname) AS FullName"
+                + " from staff"
+                +" WHERE CONCAT(Lname, ', ', Fname) LIKE '%"+searchEmployee.getText()+"%' "
+                + " order by len(EmployeeID), EmployeeID";
 
         try {
             stmt = conn.createStatement();
@@ -309,8 +309,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
 
         logsTable.setModel(logsTmodel);
         logsTmodel.addColumn("Employee ID");
-        logsTmodel.addColumn("First Name");
-        logsTmodel.addColumn("Last Namew");
+        logsTmodel.addColumn("Full Name");
         logsTmodel.addColumn("Date Logged");
         logsTmodel.addColumn("Log In");
         logsTmodel.addColumn("Log Out");
@@ -337,10 +336,11 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         Time logInT, logOutT;
         String newLogIn, newLogOut;
 
-        String sql = """
-             select l.Employee_ID, s.Fname, s.Lname, l.DateLog, l.Log_In, l.Log_Out
-             	from LOGS l left join staff s on l.Employee_ID = s.EmployeeID
-             	order by l.DateLog, l.Log_In""";
+        String sql = "SELECT l.Employee_ID, CONCAT(s.Lname, ', ', s.Fname) AS FullName, l.DateLog, l.Log_In, l.Log_Out " +
+                         "FROM LOGS l " +
+                         "LEFT JOIN staff s ON l.Employee_ID = s.EmployeeID " +
+                         "WHERE CONCAT(s.Lname, ', ', s.Fname) LIKE '%"+searchLogs.getText()+"%' " +
+                         "ORDER BY l.DateLog, l.Log_In";
 
         try {
             this.stmt = conn.createStatement();
@@ -353,7 +353,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                 logOutT = rs.getTime("Log_Out");
                 newLogOut = (logOutT != null) ? dateFormat.format(logOutT) : "";
 
-                row.add(new Object[]{rs.getString("Employee_ID"), rs.getString("Fname"), rs.getString("Lname"), rs.getString("DateLog"), newLogIn, newLogOut});
+                row.add(new Object[]{rs.getString("Employee_ID"), rs.getString("FullName"), rs.getString("DateLog"), newLogIn, newLogOut});
             }
 
             for (int i = row.size() - 1; i >= 0; i--) {
@@ -405,8 +405,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         logsTable = new javax.swing.JTable();
         jPanel11 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        searchLogs = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jPanel12 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
@@ -418,8 +417,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         jLabel5 = new javax.swing.JLabel();
         jPanel14 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jButton4 = new javax.swing.JButton();
+        searchEmployee = new javax.swing.JTextField();
         jLabel17 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -674,20 +672,9 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         jLabel10.setText("Employee name:");
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jTextField2.addCaretListener(new javax.swing.event.CaretListener() {
+        searchLogs.addCaretListener(new javax.swing.event.CaretListener() {
             public void caretUpdate(javax.swing.event.CaretEvent evt) {
-                jTextField2CaretUpdate(evt);
-            }
-        });
-
-        jButton2.setText("Search");
-        jButton2.setFocusPainted(false);
-        jButton2.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton2.setMargin(new java.awt.Insets(2, 30, 3, 30));
-        jButton2.setOpaque(true);
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                searchLogsCaretUpdate(evt);
             }
         });
 
@@ -706,10 +693,8 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                 .addContainerGap()
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 301, Short.MAX_VALUE)
+                .addComponent(searchLogs, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 415, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -720,10 +705,9 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel10)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton2))
+                        .addComponent(searchLogs, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jButton1))
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         logs.add(jPanel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 530, 870, -1));
@@ -808,14 +792,9 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         jLabel14.setText("Employee Name:");
         jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
 
-        jButton4.setText("Search");
-        jButton4.setFocusPainted(false);
-        jButton4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        jButton4.setMargin(new java.awt.Insets(2, 30, 3, 30));
-        jButton4.setOpaque(true);
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+        searchEmployee.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                searchEmployeeCaretUpdate(evt);
             }
         });
 
@@ -827,20 +806,16 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
                 .addContainerGap()
                 .addComponent(jLabel14)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(21, 21, 21)
-                .addComponent(jButton4)
-                .addContainerGap(316, Short.MAX_VALUE))
+                .addComponent(searchEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(439, Short.MAX_VALUE))
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel14Layout.createSequentialGroup()
                 .addGap(11, 11, 11)
-                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel14)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton4))
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(searchEmployee, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
@@ -1156,8 +1131,8 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         jPanel4.add(AddMovie_Price_TextField);
         AddMovie_Price_TextField.setBounds(343, 289, 309, 32);
 
-        AddMovie_AddMovie_Button.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         AddMovie_AddMovie_Button.setText("Add Movie");
+        AddMovie_AddMovie_Button.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         AddMovie_AddMovie_Button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 AddMovie_AddMovie_ButtonMouseClicked(evt);
@@ -1968,10 +1943,6 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         setFilter();
     }//GEN-LAST:event_sMonthChooserPropertyChange
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jTextField1CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField1CaretUpdate
         searchFilter = "t.TicketID like '%" + jTextField1.getText() + "%'";
         setFilter();
@@ -2040,18 +2011,17 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
         }
     }//GEN-LAST:event_empTableMouseClicked
 
-    private void jTextField2CaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jTextField2CaretUpdate
-
-        searchFilter = jTextField2.getText();
-    }//GEN-LAST:event_jTextField2CaretUpdate
+    private void searchLogsCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_searchLogsCaretUpdate
+        createTableLogs();
+    }//GEN-LAST:event_searchLogsCaretUpdate
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         new LogSummary().setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void searchEmployeeCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_searchEmployeeCaretUpdate
+        createTableEmployee();
+    }//GEN-LAST:event_searchEmployeeCaretUpdate
 
     /**
      * @param args
@@ -2285,9 +2255,7 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     private javax.swing.JTable empTable;
     private javax.swing.JPanel employee;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -2327,8 +2295,6 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField5;
     private javax.swing.JButton logOut;
     private javax.swing.JPanel logs;
     private javax.swing.JButton logsB;
@@ -2344,6 +2310,8 @@ public final class Admin extends javax.swing.JFrame implements Crypting{
     private javax.swing.JPanel sales;
     private javax.swing.JButton salesB1;
     private javax.swing.JTable salesTable;
+    private javax.swing.JTextField searchEmployee;
+    private javax.swing.JTextField searchLogs;
     private javax.swing.JButton staffsB;
     private javax.swing.JLabel totalEarnedDis;
     // End of variables declaration//GEN-END:variables

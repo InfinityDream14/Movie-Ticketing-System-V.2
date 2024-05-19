@@ -380,10 +380,8 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel10" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jTextField2" min="-2" pref="193" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="301" max="32767" attributes="0"/>
+                          <Component id="searchLogs" min="-2" pref="193" max="-2" attributes="0"/>
+                          <EmptySpace pref="415" max="32767" attributes="0"/>
                           <Component id="jButton1" min="-2" pref="113" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -396,12 +394,11 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jLabel10" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="searchLogs" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Component id="jButton1" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="8" max="32767" attributes="0"/>
+                          <EmptySpace pref="10" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -415,25 +412,9 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextField2">
+                <Component class="javax.swing.JTextField" name="searchLogs">
                   <Events>
-                    <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="jTextField2CaretUpdate"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JButton" name="jButton2">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Search"/>
-                    <Property name="focusPainted" type="boolean" value="false"/>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Segoe UI" size="14" style="0"/>
-                    </Property>
-                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[2, 30, 3, 30]"/>
-                    </Property>
-                    <Property name="opaque" type="boolean" value="true"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+                    <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="searchLogsCaretUpdate"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton1">
@@ -603,10 +584,8 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jTextField5" min="-2" pref="295" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                          <Component id="jButton4" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace pref="316" max="32767" attributes="0"/>
+                          <Component id="searchEmployee" min="-2" pref="295" max="-2" attributes="0"/>
+                          <EmptySpace pref="439" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -614,12 +593,9 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField5" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="jButton4" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="searchEmployee" alignment="3" min="-2" pref="30" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="9" max="32767" attributes="0"/>
                       </Group>
@@ -635,22 +611,9 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextField5">
-                </Component>
-                <Component class="javax.swing.JButton" name="jButton4">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Search"/>
-                    <Property name="focusPainted" type="boolean" value="false"/>
-                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-                      <Font name="Segoe UI" size="14" style="0"/>
-                    </Property>
-                    <Property name="margin" type="java.awt.Insets" editor="org.netbeans.beaninfo.editors.InsetsEditor">
-                      <Insets value="[2, 30, 3, 30]"/>
-                    </Property>
-                    <Property name="opaque" type="boolean" value="true"/>
-                  </Properties>
+                <Component class="javax.swing.JTextField" name="searchEmployee">
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+                    <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="searchEmployeeCaretUpdate"/>
                   </Events>
                 </Component>
               </SubComponents>
@@ -659,9 +622,6 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="jLabel17"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
-              </Events>
               <Constraints>
                 <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                   <AbsoluteConstraints x="0" y="0" width="940" height="650"/>

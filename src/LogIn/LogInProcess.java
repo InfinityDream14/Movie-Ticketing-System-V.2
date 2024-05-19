@@ -85,7 +85,6 @@ public class LogInProcess implements Logs, Crypting {
                         flag = 2;
                     }
                     employeeID = rs.getString("EmployeeID");
-
                     logs(employeeID);
                     break;
                 } else if (userN.equals(decrypt(rs.getString(1)))) {
